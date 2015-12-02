@@ -1,0 +1,7 @@
+/music/
+/node_modules/
+/www/
+/format/
+
+/**/*.jh
+*.txt
