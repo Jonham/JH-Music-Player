@@ -1,0 +1,139 @@
+		body {
+			text-align: center;
+			padding: 0;
+			margin: 0;
+			transition: all 3s;
+		}
+		body:hover {
+			transition: all 3s;
+			background-position: top;
+		}
+
+		div#wrap {
+			display: block;
+			text-align: center;
+			
+			max-width: 100%;
+			max-height: 40em;
+			padding-top: 0em;
+			padding-bottom: 0em;
+			overflow: hidden;
+			
+			background-position: center;
+			background-size: auto auto;
+			background-repeat: repeat-x;
+			
+			transition: all 3s;
+		}
+		ul#scrollLrc {
+			text-align: center;
+		}
+		div#alImg:hover {
+			transition: all 8s;
+			transform: rotate(360deg);
+		}
+		div#alImg {
+			display: inline-block;
+			
+			box-shadow: 5px 5px 10px black;
+		
+			background-image: url(OneRepublic.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 100% auto;
+			border-radius: 100%;
+			
+			max-width: 60%;
+			max-height: 60%;
+			height: 200px;
+			width: 200px;
+
+			padding: 0 0;
+			margin: .8em 0;
+			transition: all 4s;
+			
+			vertical-align: middle;
+		}
+		
+		span#w {
+		  display: block;
+			padding: .3em 1em;
+			min-height: 2.4em;
+			background-color: rgba(100,100,100,.5);
+			color: yellow;
+			font-size: 1em;
+			z-index: 99;
+		}
+		div#songMsg {
+			margin: 1em;
+			display: block;
+			height: 3em;
+			color: white;
+		}
+		span#title {
+			display:inline-block;
+			font-size: 1.5em;
+			font-weight: 700;
+			background-color: rgba(0,0,0,.3);
+			border-radius: 20px;
+			padding: .2em 1em;
+		}
+		span#album {
+			font-size: 1.2em;
+			font-weight: 500;
+			background-color: rgba(0,0,0,.3);
+			border-radius: 20px;
+			margin-top: .2em;
+			margin-bottom: 1em;
+			padding: .1em 1em
+		}
+		
+		div#lrc {
+			display: inline-block;
+			text-align: center;
+			min-height: 40%;
+			width: 100%;
+			background-color: rgba(255,255,255,.3);
+			height: 60%;
+			overflow: hidden;
+			
+			transition: all .5s;
+		}
+		div#lrc :hover {
+			transition: all .5s;
+			background-color: rgba(255,255,255,.9);
+		}
+		ul#scrollLrc {
+			position: relative;
+			list-style-type: none;
+			min-height: 25em;
+			padding: 0;
+			margin: 0;
+		}
+		.line {
+			color: #333;
+		}
+		.line:hover {
+			color: blue;
+		}
+		.focus {
+			color: blue;
+			font-weight: 700;
+			background-color: rgba(255,255,255,.9);
+			position: inline-block;
+		}
+		
+		canvas#playMode {
+			position: relative;
+			top: 60px;
+			font-size: 2em;
+			font-weight: 800;
+		}
+		span#playTime {
+			position: relative;
+			top: 70px;
+			color: white;
+			font-size: 2em;
+			font-weight: 800;
+		}
+		

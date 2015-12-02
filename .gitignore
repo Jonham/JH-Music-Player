@@ -1,6 +1,5 @@
-/music/
 /node_modules/
-/www/
+/stayhere/
 /format/
 
 /**/*.jh
