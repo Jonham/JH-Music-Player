@@ -29,15 +29,22 @@
 		<span id="playTime"></span>
 	</div>
 	<br/>
+	<div id="ask">
+		<span class="askmsg">将加载一个音乐文件，耗用流量3.88MB,是否继续？</span>
+		<span class="noBtn btn">不加载</span>
+		<span class="yesBtn btn">加载</span>
+	</div>
 	<!-- <span id="w">Loading...</span> -->
 	
 	<div id="lrc">
 		<ul id="scrollLrc"></ul></div>
 	</div>
 	
-	
-  <audio src="./music/OneRepublic - Good Life.mp3" id="mp3"></audio>
-  
-  <script src="lrcParser.js"></script>
+	<div class="bottom">
+		<span id="message"></span>
+	</div>
+	<audio id="mp3" src=""></audio>
+	<script src="ask.js"></script>
+	<script src="lrcParser.js"></script>
 </body>
 </html>

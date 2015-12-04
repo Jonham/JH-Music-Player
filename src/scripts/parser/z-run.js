@@ -1,4 +1,3 @@
-var jh = loadLrc("OneRepublic - Good Life.lrc", parseLrc);
 
 
 var fileList = [
