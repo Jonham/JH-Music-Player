@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 //  grunt.loadNpmTasks('grunt-contrib-watch');
 //  grunt.loadNpmTasks('grunt-contrib-jshint');
   require('load-grunt-tasks')(grunt);
-  
+
   grunt.initConfig({
     jshint: {
       parser: {
@@ -12,8 +12,8 @@ module.exports = function(grunt) {
     concat: {
       parser: {
         files: {
-          "www/lrcParser.js": 'src/scripts/parser/*.js',
-          "www/ask.js": 'src/scripts/ask/*.js'
+          "lrcParser.js": 'src/scripts/parser/*.js'
+        //   "www/ask.js": 'src/scripts/ask/*.js'
         }
       }
     },
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
       }
     }
   });
-  
+
   grunt.registerTask('default', ['watch:parser']);
   grunt.registerTask('reload', ['watch:reload']);
 };
