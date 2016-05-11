@@ -1,3 +1,4 @@
+// XMLHttpRequest object polyfill
 if (window.XMLHttpRequest === undefined) {
 	window.XMLHttpRequest = function() {
 		try {

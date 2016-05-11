@@ -1,12 +1,12 @@
-var audio = document.getElementById("mp3");
-var span = document.getElementById("w");
-var wrap = document.getElementById("wrap");
-var img = document.getElementById("alImg");
-var songMsg = document.getElementById("songMsg");
-var scrollLrc = document.getElementById("scrollLrc");
-var playMode = document.getElementById("playMode");
-var playTime = document.getElementById("playTime");
-var msgBox = document.getElementById("message");
+var audio = $id("mp3"),
+    span = $id("w"),
+    wrap = $id("wrap"),
+    img = $id("alImg"),
+    songMsg = $id("songMsg"),
+    scrollLrc = $id("scrollLrc"),
+    playMode = $id("playMode"),
+    playTime = $id("playTime"),
+    msgBox = $id("message");
 
 /* draw button on playMode
  * require ctx
@@ -14,8 +14,9 @@ var msgBox = document.getElementById("message");
 */
 var drawBtn = (function() {
     var DrawOnCanvas = function(canvas){
-        this.ctx = canvas.getContext('2d');
-             ctx.fillStyle = "rgba(200,200,200,.8)";
+        var ctx = this.ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = "rgba(200,200,200,.8)";
         this.draw = function(type) {
             switch (type) {
                 case 'pause':
@@ -44,7 +45,6 @@ var drawBtn = (function() {
     return new DrawOnCanvas(playMode);
 })();
 
-
 var updatePercent = function() {
     var audioLoading = function(tag) {
         if (tag && tag.nodeName === 'AUDIO') {
@@ -67,7 +67,7 @@ var updatePercent = function() {
 function startPlay() {
     audio.src = "./music/OneRepublic - Good Life.mp3";
     var state = false;
-    var playandpause = function() {
+    var playOrPause = function() {
 		if (audio.paused) {
 			audio.play();
             img.classList.add('round'); // go round
@@ -79,14 +79,14 @@ function startPlay() {
 			drawBtn.draw('play');
 		}
 	};
-    img.addEventListener("click", playandpause, false);
+    img.addEventListener("click", playOrPause, false);
 
     // initialize
-    drawBtn(ctx, 'play');
+    drawBtn.draw('play');
 
 function addScrollLrc() {
     var lrc = loadedLRClist[0];
-    var timeline = lrc.timeStamps;
+    var timeline = lrc.timeTags;
 
     for (var line = 0; line < timeline.length; line++) {
         var t = lrc[timeline[line]][0];
@@ -104,18 +104,18 @@ audio.addEventListener("canplay", function() {
     updatePercent();
     if (audio.paused) {
         audio.play();
-        drawBtn(ctx, 'pause');
+        drawBtn.draw('pause');
     }
 }, false);
 
 audio.addEventListener("ended",function() {
-    drawBtn(ctx, 'play');
+    drawBtn.draw('play');
 }, false);
 
 audio.addEventListener("timeupdate", function() {
 
 	var lrc = loadedLRClist[0];
-	var timeline = lrc.timeStamps;
+	var timeline = lrc.timeTags;
 	var lrcList = lrc.lrc;
 	var OFFSET = 0.5;
 	var curTime = audio.currentTime + OFFSET;

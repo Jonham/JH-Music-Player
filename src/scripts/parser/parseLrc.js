@@ -6,16 +6,15 @@
 //[by:yvonne]
 //
 function parseLrc(str) {
-  
-  var rg = /[\[\]]/g;
-  var arr = str.split(rg);
-  var arrRT = [];
+    var rg = /[\[\]]/g;
+    var arr = str.split(rg);
+    var aOut = [];
 
-  for (var i =0; i < arr.length; i++) {
-    // mutiline of "\n"
-    var strTMP = arr[i];
-    strTMP.replace("\n", "");
-    arrRT.push(strTMP);
-  }
-  return classifyLrc(arrRT);
+    for (var i =0; i < arr.length; i++) {
+        // mutiline of "\n"
+        var sTMP = arr[i];
+        sTMP.replace("\n", "");
+        aOut.push(sTMP);
+    }
+    return classifyLrc(aOut);
 }

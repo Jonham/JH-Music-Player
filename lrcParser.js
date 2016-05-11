@@ -1,3 +1,28 @@
+function $id(id){ return document.getElementById(id); }
+function $(str, bGetOne) {
+    if(document.querySelector && document.querySelectorAll) {
+        return bGetOne?
+                document.querySelector(str):
+                document.querySelectorAll(str);
+    } else {
+        switch (str.substr(0,1)) {
+            case '#':
+                return document.getElementById(str.substr(1));
+            case '.':
+                var oByCN = document.getElementsByClassName(str.substr(1));
+                return bGetOne?
+                        oByCN[0]:
+                        oByCN;
+            default:
+                var oByTN = document.getElementsByTagName(str.substr(1));
+                return bGetOne?
+                        oByTN[0]:
+                        oByTN;
+        }
+    }
+}
+
+// XMLHttpRequest object polyfill
 if (window.XMLHttpRequest === undefined) {
 	window.XMLHttpRequest = function() {
 		try {
@@ -14,89 +39,87 @@ if (window.XMLHttpRequest === undefined) {
 		}
 	};
 }
+
 function classifyLrc(arr) {
-  // two modes
-  // 1. one TimeStamp one lyrics        normal
-  // 2. several TimeStamps one lyrics   compressd
-  
-  // metamsg RegExp 
-  // ti : title
-  // ar : artist
-  // al : album
-  // by : lyric maker
-  var metamsgRG = /(ti|ar|al|by|offset):(.+)/;
-  
-  // timestamp regexp
-  // 1. mm:ss.ms
-  var timestampRG = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/;
-  
-  // function(timestamp): to transform 
-  // "01:01.01" ==> 60 + 1 + .01
-  var transformTimestamp = function(timestamp) {
-    var oTMP = timestampRG.exec(timestamp);
-    var floatTime = parseInt(oTMP[1]) * 60 + parseInt(oTMP[2]) + parseInt(oTMP[3]) / 100;
-    return floatTime;
-  };
-  
-  // returnArrayObject
-  // prototype objRT[12.34] = []
-  var objRT = {};
-  // store all lyrics and timestamp
-  objRT.lrc = [];
-  objRT.timeStamps = [];
-  
-  // go through the given array
-  for (var i=0; i < arr.length; i++) {
-    if (metamsgRG.test(arr[i])) {
-      // get meta messages
-      var oTMP = metamsgRG.exec(arr[i]);
-//      console.log("metamsg: " + oTMP);
-      objRT[oTMP[1]] = oTMP[2];
-      
-    }
-    else if(timestampRG.test(arr[i])) {
-      // handling timestamp and lyrics
-      
-      // in compress mode:
-      // to collect series of timestamp
-      var arrCurrentTime = [];
-      
-      // collect all timestamps
-      while (timestampRG.test(arr[i])) {
-//        console.log("time: " + arr[i]);
-        var fTime = transformTimestamp(arr[i]);
-        arrCurrentTime.push(fTime);
-        objRT.timeStamps.push(fTime);
-        i++;
-      }
-      
-      // collect all the lyrics
-      var strNextLRC = arr[i];
-//        console.log("lyric: " + arr[i]);
-      objRT.lrc.push(strNextLRC);
-      var curLrcNo = objRT.lrc.length - 1;
-      
-      // restore arrCurrentTime to objRT
-      // objRT[ curTime ] = [ ref to No to lrc ]
-      for (var j=0; j < arrCurrentTime.length; j++) {
-        var curtime = arrCurrentTime[j];
-        if(objRT[curtime]) {
-          objRT[curtime].push(curLrcNo); 
+	// two modes
+	// 1. one TimeStamp one lyrics        normal
+	// 2. several timeTags one lyrics   compressd
+
+	// metamsg RegExp
+	// ti : title
+	// ar : artist
+	// al : album
+	// by : lyric maker
+	var rgMetaMsg = /(ti|ar|al|by|offset):(.+)/;
+
+	// timetag regexp
+	// 1. mm:ss.ms
+	var rgTimetag = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/;
+
+	// function(timetag): to transform
+	// "01:01.01" ==> 60 + 1 + .01
+	var parseTimetag = function(timetag) {
+
+		var aTMP = rgTimetag.exec(timetag);
+		var floatTime = parseInt(aTMP[1]) * 60 + parseInt(aTMP[2]) + parseInt(aTMP[3]) / 100;
+		return floatTime;
+	};
+
+	// returnArrayObject
+	// prototype oOut[12.34] = []
+	var oOut = {};
+	// store all lyrics and timetag
+	oOut.lrc = [];
+	oOut.timeTags = [];
+
+	// go through the given array
+    for (var i=0; i < arr.length; i++) {
+        if (rgMetaMsg.test(arr[i])) {
+            // get meta messages
+            var aTMP = rgMetaMsg.exec(arr[i]);
+            oOut[aTMP[1]] = aTMP[2];
         }
-        else {
-          objRT[curtime] = [curLrcNo];
+        else if(rgTimetag.test(arr[i])) {
+            // handling timestamp and lyrics
+
+            // in compress mode:
+            // to collect series of timestamp
+            var aCurrentTime = [];
+
+            // collect all timeTags
+            while (rgTimetag.test(arr[i])) {
+                var fTime = parseTimetag(arr[i]);
+                aCurrentTime.push(fTime);
+                oOut.timeTags.push(fTime);
+                i++;
+            }
+
+            // collect all the lyrics
+            var strNextLRC = arr[i];
+            oOut.lrc.push(strNextLRC);
+            var curLrcNo = oOut.lrc.length - 1;
+
+            // restore aCurrentTime to oOut
+            // oOut[ sNow ] = [ ref to No to lrc ]
+            for (var j=0; j < aCurrentTime.length; j++) {
+                var sNow = aCurrentTime[j];
+                if(oOut[sNow]) {
+                    oOut[sNow].push(curLrcNo);
+                }
+                else {
+                    oOut[sNow] = [curLrcNo];
+                }
+            }
+
         }
-      }
-      
     }
-  }
-  function sortByNumber(a, b) {
-		return a>b? 1: -1;
-	}
-	objRT.timeStamps.sort(sortByNumber);
-	
-  return objRT;
+    // sort
+	var sortByNumber = function(a, b) { return a>b? 1: -1; };
+	oOut.timeTags.sort(sortByNumber);
+
+	return oOut;
 }
+
 // load lrc file
 // notice: file encoding:
 // utf-8
@@ -107,27 +130,28 @@ function classifyLrc(arr) {
 var loadedLRClist = [];
 
 function loadLrc(file, callback) {
-  var path = location.href + "music/";
-  var url = path + file;
-	var objRT = {};
-  if (callback === undefined) {callback = parseLrc;}
-  
-  var response = "";
-  
-  var xhr = new XMLHttpRequest();
-		xhr.open("get", url, true);
-		xhr.send();
-		xhr.onreadystatechange = function(){
-			if (xhr.readyState == "4" && xhr.status == "200") {
-				response = xhr.responseText;
-        loadedLRClist.push( callback(response) );
-				objRT.lrc = loadedLRClist[loadedLRClist.length - 1];
-				return objRT;
-			}
-      return "xhr Fails";
-		};
-		return objRT;
+    var path = location.href + "music/";
+    var url = path + file;
+    var oOut = {};
+    if (callback === undefined) {callback = parseLrc;}
+
+    var response = "";
+
+    var xhr = new XMLHttpRequest();
+    	xhr.open("get", url, true);
+    	xhr.send();
+    	xhr.onreadystatechange = function(){
+    		if (xhr.readyState == "4" && xhr.status == "200") {
+    			response = xhr.responseText;
+                loadedLRClist.push( callback(response) );
+    			oOut.lrc = loadedLRClist[loadedLRClist.length - 1];
+    			return oOut;
+    		}
+            return "xhr Fails";
+    	};
+    	return oOut;
 }
+
 // parse lrc into Array Object
 // Example
 //[ti:Rolling In The Deep]
@@ -136,19 +160,19 @@ function loadLrc(file, callback) {
 //[by:yvonne]
 //
 function parseLrc(str) {
-  
-  var rg = /[\[\]]/g;
-  var arr = str.split(rg);
-  var arrRT = [];
+    var rg = /[\[\]]/g;
+    var arr = str.split(rg);
+    var aOut = [];
 
-  for (var i =0; i < arr.length; i++) {
-    // mutiline of "\n"
-    var strTMP = arr[i];
-    strTMP.replace("\n", "");
-    arrRT.push(strTMP);
-  }
-  return classifyLrc(arrRT);
+    for (var i =0; i < arr.length; i++) {
+        // mutiline of "\n"
+        var sTMP = arr[i];
+        sTMP.replace("\n", "");
+        aOut.push(sTMP);
+    }
+    return classifyLrc(aOut);
 }
+
 
 
 var fileList = [
@@ -164,15 +188,15 @@ function test() {
     loadLrc(fileList[i], parseLrc);
   }
 }
-var audio = document.getElementById("mp3");
-var span = document.getElementById("w");
-var wrap = document.getElementById("wrap");
-var img = document.getElementById("alImg");
-var songMsg = document.getElementById("songMsg");
-var scrollLrc = document.getElementById("scrollLrc");
-var playMode = document.getElementById("playMode");
-var playTime = document.getElementById("playTime");
-var msgBox = document.getElementById("message");
+var audio = $id("mp3"),
+    span = $id("w"),
+    wrap = $id("wrap"),
+    img = $id("alImg"),
+    songMsg = $id("songMsg"),
+    scrollLrc = $id("scrollLrc"),
+    playMode = $id("playMode"),
+    playTime = $id("playTime"),
+    msgBox = $id("message");
 
 /* draw button on playMode
  * require ctx
@@ -180,8 +204,9 @@ var msgBox = document.getElementById("message");
 */
 var drawBtn = (function() {
     var DrawOnCanvas = function(canvas){
-        this.ctx = canvas.getContext('2d');
-             ctx.fillStyle = "rgba(200,200,200,.8)";
+        var ctx = this.ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = "rgba(200,200,200,.8)";
         this.draw = function(type) {
             switch (type) {
                 case 'pause':
@@ -210,7 +235,6 @@ var drawBtn = (function() {
     return new DrawOnCanvas(playMode);
 })();
 
-
 var updatePercent = function() {
     var audioLoading = function(tag) {
         if (tag && tag.nodeName === 'AUDIO') {
@@ -233,7 +257,7 @@ var updatePercent = function() {
 function startPlay() {
     audio.src = "./music/OneRepublic - Good Life.mp3";
     var state = false;
-    var playandpause = function() {
+    var playOrPause = function() {
 		if (audio.paused) {
 			audio.play();
             img.classList.add('round'); // go round
@@ -245,14 +269,14 @@ function startPlay() {
 			drawBtn.draw('play');
 		}
 	};
-    img.addEventListener("click", playandpause, false);
+    img.addEventListener("click", playOrPause, false);
 
     // initialize
-    drawBtn(ctx, 'play');
+    drawBtn.draw('play');
 
 function addScrollLrc() {
     var lrc = loadedLRClist[0];
-    var timeline = lrc.timeStamps;
+    var timeline = lrc.timeTags;
 
     for (var line = 0; line < timeline.length; line++) {
         var t = lrc[timeline[line]][0];
@@ -270,18 +294,18 @@ audio.addEventListener("canplay", function() {
     updatePercent();
     if (audio.paused) {
         audio.play();
-        drawBtn(ctx, 'pause');
+        drawBtn.draw('pause');
     }
 }, false);
 
 audio.addEventListener("ended",function() {
-    drawBtn(ctx, 'play');
+    drawBtn.draw('play');
 }, false);
 
 audio.addEventListener("timeupdate", function() {
 
 	var lrc = loadedLRClist[0];
-	var timeline = lrc.timeStamps;
+	var timeline = lrc.timeTags;
 	var lrcList = lrc.lrc;
 	var OFFSET = 0.5;
 	var curTime = audio.currentTime + OFFSET;
