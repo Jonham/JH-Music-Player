@@ -24,6 +24,8 @@ var drawBtn = (function() {
                     ctx.clearRect(0,0,80,80);
                     ctx.fillRect(0,0,30,80);
                     ctx.fillRect(50,0,30,80);
+
+                    img.classList.add('round'); // go round
                     break;
                 case 'play':
                     ctx.clearRect(0,0,80,80);
@@ -33,6 +35,8 @@ var drawBtn = (function() {
                     ctx.lineTo(10,80);
                     ctx.closePath();
                     ctx.fill();
+
+                    img.classList.remove('round'); // go round
                     break;
                 default:
                     // do nothing
@@ -70,12 +74,10 @@ function startPlay() {
     var playOrPause = function() {
 		if (audio.paused) {
 			audio.play();
-            img.classList.add('round'); // go round
 			drawBtn.draw('pause');
 		}
 		else{
 			audio.pause();
-            img.classList.remove('round'); // go round
 			drawBtn.draw('play');
 		}
 	};
