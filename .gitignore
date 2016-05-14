@@ -1,0 +1,7 @@
+/node_modules/
+/stayhere/
+/format/
+
+/**/*.jh
+*.txt
+www

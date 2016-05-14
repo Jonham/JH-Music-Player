@@ -1,45 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Jh-lrc by Jonham</title>
+<head>
+  <title>Lyrics Player</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="user-scalable=no, width=device-width" />
+	<link rel="stylesheet" href="style.css"/>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Jh-lrc</h1>
-        <p>a lrc parser and display.</p>
+	<!--UC Fullscreen-->
+	<meta name="browsermode" content="application"/>
 
-        <p class="view"><a href="https://github.com/Jonham/jh-lrc">View the Project on GitHub <small>Jonham/jh-lrc</small></a></p>
+	<meta name="x5-fullscreen" content="true" />
+	<meta name="x5-page-mode" content="app" />
 
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="description" content="Lyric Player" />
+	<meta name="keywords" content="lyrics,lyric"/>
+	<meta name="author" content="Jonham Chen, jonham@qq.com" />
 
-        <ul>
-          <li><a href="https://github.com/Jonham/jh-lrc/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/Jonham/jh-lrc/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/Jonham/jh-lrc">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="jh-lrc" class="anchor" href="#jh-lrc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jh-lrc</h1>
+	<meta name="apple-mobile-web-app-title" content="Lyrics Player">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-<p>a lrc parser and display.
-visit <a href="http://jonham.github.io/jh-lrc/">http://jonham.github.io/jh-lrc/</a> to see the demo.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/Jonham">Jonham</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+</head>
+<body>
+	<div id="wrap">
+	<div id="songMsg"></div>
+	<div id="alImg">
+		<canvas id="playMode" width=80 height=80></canvas><br/>
+		<span id="playTime"></span>
+	</div>
+	<br/>
+	<div id="ask">
+		<span class="askmsg">将加载一个音乐文件，耗用流量3.88MB,是否继续？</span>
+		<span class="noBtn btn">不加载</span>
+		<span class="yesBtn btn">加载</span>
+	</div>
+	<!-- <span id="w">Loading...</span> -->
+
+	<div id="lrc">
+		<ul id="scrollLrc"></ul></div>
+	</div>
+
+	<div class="bottom">
+		<span id="message"></span>
+	</div>
+	<audio id="mp3" src=""></audio>
+	<script src="ask.js"></script>
+	<script src="lrcParser.js"></script>
+</body>
 </html>
