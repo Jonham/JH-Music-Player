@@ -9,7 +9,6 @@ var audio = $id("mp3"),
     msgBox = $id("message");
 
 /* draw button on playMode
- * require ctx
  * Note: this currently only work on one size
 */
 var drawBtn = (function() {
