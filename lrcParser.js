@@ -174,7 +174,7 @@ function parseLrc(str) {
 }
 
 var audio = $id("mp3"),
-    span = $id("w"),
+    // span = $id("w"),
     wrap = $id("wrap"),
     img = $id("alImg"),
     songMsg = $id("songMsg"),
@@ -184,7 +184,6 @@ var audio = $id("mp3"),
     msgBox = $id("message");
 
 /* draw button on playMode
- * require ctx
  * Note: this currently only work on one size
 */
 var drawBtn = (function() {
@@ -223,7 +222,7 @@ var drawBtn = (function() {
 
     return new DrawOnCanvas(playMode);
 })();
-
+// function that invoke when audio is caching.
 var updatePercent = function() {
     var audioLoading = function(tag) {
         if (tag && tag.nodeName === 'AUDIO') {
@@ -294,7 +293,8 @@ audio.addEventListener("timeupdate", function() {
 	var lrc = loadedLRClist[0];
 	var timeline = lrc.timeTags;
 	var lrcList = lrc.lrc;
-	var OFFSET = 0.5;
+	var OFFSET = 0.5; // offset between lrc and audio
+
 	var curTime = audio.currentTime + OFFSET;
 	var offsetTop = "";
 	var originTop = 30;
@@ -326,14 +326,16 @@ audio.addEventListener("timeupdate", function() {
 	playTime.innerHTML = ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
 
 	for (var i=0; i<timeline.length; i++) {
+        // find the index of next line of lyrics: i
 		if (curTime <= timeline[i]) {
 			var arrLrcList = lrc[timeline[i-1]];
 			var aChild = scrollLrc.childNodes;
+            // scroll the lyrics as audio play
 			if (i - 2 >= 0) {
 				aChild[i - 1].className = "line focus";
 				aChild[i - 2].className = "line";
 				scrollLrc.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
-			} else {
+			} else if (i >= 1) {
 				aChild[i - 1].className = "line focus";
 				scrollLrc.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
 			}
@@ -344,8 +346,8 @@ audio.addEventListener("timeupdate", function() {
 				strLrcTMP += lrcList[arrLrcList[j]];
 
 			}
-			//console.log(strLrcTMP);
-			//span.innerHTML = strLrcTMP;
+			// console.log(strLrcTMP);
+			// span.innerHTML = strLrcTMP;
 
 			return strLrcTMP;
 		}

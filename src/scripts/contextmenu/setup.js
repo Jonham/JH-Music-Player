@@ -1,3 +1,2 @@
-var contextMenuElement = scrollLrc || $id('scrollLrc');
-
+var contextMenuElement = $id('scrollLrc');
 contextMenuElement.addEventListener('contextmenu', contextMenuListener, false);

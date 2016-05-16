@@ -12,8 +12,8 @@ module.exports = function(grunt) {
     concat: {
       parser: {
         files: {
-          "lrcParser.js": 'src/scripts/parser/*.js'
-        //   "www/ask.js": 'src/scripts/ask/*.js'
+          "lrcParser.js": 'src/scripts/parser/*.js',
+          "contextMenu.js": 'src/scripts/contextmenu/*.js'
         }
       }
     },

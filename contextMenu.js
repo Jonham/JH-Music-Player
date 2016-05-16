@@ -1,3 +1,4 @@
+
 var contextMenuListener = function(e) {
     var lrc = loadedLRClist[0];
 	var timeline = lrc.timeTags;
@@ -12,3 +13,6 @@ var contextMenuListener = function(e) {
         audio.currentTime = timeline[line] - 0.5;
     }
 };
+
+var contextMenuElement = $id('scrollLrc');
+contextMenuElement.addEventListener('contextmenu', contextMenuListener, false);
