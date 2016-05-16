@@ -144,7 +144,7 @@ function loadLrc(file, callback) {
     		if (xhr.readyState == "4" && xhr.status == "200") {
     			response = xhr.responseText;
                 loadedLRClist.push( callback(response) );
-    			oOut.lrc = loadedLRClist[loadedLRClist.length - 1];
+    			oOut.lrc = loadedLRClist[ loadedLRClist.length - 1 ];
     			return oOut;
     		}
             return "xhr Fails";
@@ -183,6 +183,8 @@ var audio = $id("mp3"),
     playTime = $id("playTime"),
     msgBox = $id("message");
 
+
+    var DRAGING = false;
 /* draw button on playMode
  * Note: this currently only work on one size
 */
@@ -274,7 +276,6 @@ function addScrollLrc() {
     }
 }
 
-var ONCE = true;
 
 audio.addEventListener("canplay", function() {
     updatePercent();
@@ -288,7 +289,9 @@ audio.addEventListener("ended",function() {
     drawBtn.draw('play');
 }, false);
 
-audio.addEventListener("timeupdate", function() {
+var ONCE = true;
+audio.addEventListener("timeupdate", function(e) {
+    if (DRAGING) return false;
 
 	var lrc = loadedLRClist[0];
 	var timeline = lrc.timeTags;
@@ -318,7 +321,7 @@ audio.addEventListener("timeupdate", function() {
 		ONCE = false;
 	}
 
-	var timeS = {};
+	var timeS = {}; // n: now; s: second; m: minute;
 	timeS.n = parseInt(audio.currentTime);
 	timeS.s = timeS.n % 60;
 	timeS.m = parseInt(timeS.n / 60);
@@ -328,7 +331,7 @@ audio.addEventListener("timeupdate", function() {
 	for (var i=0; i<timeline.length; i++) {
         // find the index of next line of lyrics: i
 		if (curTime <= timeline[i]) {
-			var arrLrcList = lrc[timeline[i-1]];
+			var arrLrcList = lrc[timeline[i-1]] || []; // get lyric array by lrc[time]
 			var aChild = scrollLrc.childNodes;
             // scroll the lyrics as audio play
 			if (i - 2 >= 0) {
@@ -343,7 +346,7 @@ audio.addEventListener("timeupdate", function() {
 			var strLrcTMP = "";
 			// 加载多行歌词
 			for (var j=0; j < arrLrcList.length; j++) {
-				strLrcTMP += lrcList[arrLrcList[j]];
+				strLrcTMP += lrcList[ arrLrcList[j] ];
 
 			}
 			// console.log(strLrcTMP);

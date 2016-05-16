@@ -22,7 +22,7 @@ function loadLrc(file, callback) {
     		if (xhr.readyState == "4" && xhr.status == "200") {
     			response = xhr.responseText;
                 loadedLRClist.push( callback(response) );
-    			oOut.lrc = loadedLRClist[loadedLRClist.length - 1];
+    			oOut.lrc = loadedLRClist[ loadedLRClist.length - 1 ];
     			return oOut;
     		}
             return "xhr Fails";

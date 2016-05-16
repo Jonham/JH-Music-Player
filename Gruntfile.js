@@ -13,7 +13,8 @@ module.exports = function(grunt) {
       parser: {
         files: {
           "lrcParser.js": 'src/scripts/parser/*.js',
-          "contextMenu.js": 'src/scripts/contextmenu/*.js'
+          "contextMenu.js": 'src/scripts/contextmenu/*.js',
+          "drag.js": 'src/scripts/drag/*.js'
         }
       }
     },
