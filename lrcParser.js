@@ -290,37 +290,38 @@ audio.addEventListener("ended",function() {
 }, false);
 
 var ONCE = true;
+var lrc = loadedLRClist[0];
+var timeline = lrc.timeTags;
+var lrcList = lrc.lrc;
+var OFFSET = 0.5; // offset between lrc and audio
+var offsetTop = "";
+var originTop = 30;
 audio.addEventListener("timeupdate", function(e) {
-    if (DRAGING) return false;
 
-	var lrc = loadedLRClist[0];
-	var timeline = lrc.timeTags;
-	var lrcList = lrc.lrc;
-	var OFFSET = 0.5; // offset between lrc and audio
-
-	var curTime = audio.currentTime + OFFSET;
-	var offsetTop = "";
-	var originTop = 30;
+    var curTime = audio.currentTime + OFFSET;
 
 	if (ONCE) {
+        // setup backgroundImage, setup title and album message
 		wrap.style.backgroundImage = "url('" + location.href + "OneRepublic.jpg')";
-		var ti = document.createElement("span");
+        // title message
+        var ti = document.createElement("span");
 		ti.id = "title";
 		ti.innerHTML = lrc.ar + " - " + lrc.ti;
 		songMsg.appendChild(ti);
 		songMsg.appendChild(document.createElement("br"));
+        // album message
 		var al = document.createElement("span");
 		al.id = "album";
 		al.innerHTML = lrc.al;
 		songMsg.appendChild(al);
 		offsetTop = scrollLrc.offsetTop;
 
-
 		scrollLrc.style.top = originTop + "px";
 		addScrollLrc();
 		ONCE = false;
 	}
 
+    // current time show like 01:01 under the play&pause button
 	var timeS = {}; // n: now; s: second; m: minute;
 	timeS.n = parseInt(audio.currentTime);
 	timeS.s = timeS.n % 60;
@@ -328,6 +329,8 @@ audio.addEventListener("timeupdate", function(e) {
 
 	playTime.innerHTML = ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
 
+    if (DRAGING) return false;
+    // auto scroll lyrics
 	for (var i=0; i<timeline.length; i++) {
         // find the index of next line of lyrics: i
 		if (curTime <= timeline[i]) {
