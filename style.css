@@ -11,6 +11,7 @@
 	width: 12em;
 
 	text-align: center;
+	text-align: center;
 	overflow: hidden;
 }
 #ask>.askmsg {
@@ -41,156 +42,159 @@
 #ask>.noBtn {
 	background-color: blue;
 }
-		body {
-			text-align: center;
-			padding: 0;
-			margin: 0;
-			transition: all 3s;
-		}
-		body:hover {
-			transition: all 3s;
-			background-position: top;
-		}
 
-		div#wrap {
-			display: block;
-			text-align: center;
+body {
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	transition: all 3s;
+}
+body:hover {
+	transition: all 3s;
+	background-position: top;
+}
 
-			max-width: 100%;
-			max-height: 40em;
-			padding-top: 0em;
-			padding-bottom: 0em;
-			overflow: hidden;
+div#wrap {
+	display: block;
+	text-align: center;
 
-			background-position: center;
-			background-size: auto auto;
-			background-repeat: repeat-x;
+	max-width: 100%;
+	max-height: 40em;
+	padding-top: 0em;
+	padding-bottom: 0em;
+	overflow: hidden;
 
-			transition: all 3s;
-		}
-		ul#scrollLrc {
-			text-align: center;
-		}
+	background-position: center;
+	background-size: auto auto;
+	background-repeat: repeat-x;
 
-		@keyframes goround {
-			from { transform: rotate(0deg); }
-			to   { transform: rotate(360deg); }
-		}
-		@-webkit-keyframes goround {
-			from { transform: rotate(0deg); }
-			to   { transform: rotate(360deg); }
-		}
+	transition: all 3s;
+}
+ul#scrollLrc {
+	text-align: center;
+}
 
-		div.round {
-			animation: goround 6s infinite;
-			-webkit-animation: goround 6s infinite;
-		}
-		div#alImg {
-			display: inline-block;
+@keyframes goround {
+	from { transform: rotate(0deg); }
+	to   { transform: rotate(360deg); }
+}
+@-webkit-keyframes goround {
+	from { transform: rotate(0deg); }
+	to   { transform: rotate(360deg); }
+}
 
-			box-shadow: 5px 5px 10px black;
+div.round {
+	animation: goround 6s infinite;
+	-webkit-animation: goround 6s infinite;
+}
+div#alImg {
+	display: inline-block;
 
-			background-image: url(OneRepublic.jpg);
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: 100% auto;
-			border-radius: 100%;
+	box-shadow: 5px 5px 10px black;
 
-			max-width: 60%;
-			max-height: 60%;
-			height: 120px;
-			width: 120px;
+	background-image: url(OneRepublic.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	border-radius: 100%;
 
-			padding: 0 0;
-			margin: .8em 0;
-			transition: all 4s;
+	max-width: 60%;
+	max-height: 60%;
+	height: 120px;
+	width: 120px;
 
-			vertical-align: middle;
-		}
+	padding: 0 0;
+	margin: .8em 0;
+	transition: all 4s;
 
-		span#w {
-		  display: block;
-			padding: .3em 1em;
-			min-height: 2.4em;
-			background-color: rgba(100,100,100,.5);
-			color: yellow;
-			font-size: 1em;
-			z-index: 99;
-		}
-		div#songMsg {
-      margin-top: .2em;
-      margin-bottom: 1.7em;
-			display: block;
-			height: 3em;
-			color: white;
-		}
-		span#title {
-			display:inline-block;
-			font-size: 1.2em;
-      max-width: 100%;
-			font-weight: 700;
-			background-color: rgba(0,0,0,.3);
-			border-radius: 20px;
-			padding: .2em 1em;
-		}
-		span#album {
-			font-size: 1.2em;
-			font-weight: 500;
-			background-color: rgba(0,0,0,.3);
-			border-radius: 20px;
-			margin-top: .2em;
-			margin-bottom: 1em;
-			padding: .1em 1em
-		}
+	vertical-align: middle;
+}
 
-		div#lrc {
-			display: inline-block;
-			text-align: center;
-			min-height: 40%;
-			width: 100%;
-			background-color: rgba(255,255,255,.3);
-			height: 60%;
-			overflow: hidden;
+span#w {
+  display: block;
+	padding: .3em 1em;
+	min-height: 2.4em;
+	background-color: rgba(100,100,100,.5);
+	color: yellow;
+	font-size: 1em;
+	z-index: 99;
+}
+div#songMsg {
+margin-top: .2em;
+margin-bottom: 1.7em;
+	display: block;
+	height: 3em;
+	color: white;
+}
+span#title {
+	display:inline-block;
+	font-size: 1.2em;
+max-width: 100%;
+	font-weight: 700;
+	background-color: rgba(0,0,0,.3);
+	border-radius: 20px;
+	padding: .2em 1em;
+}
+span#album {
+	font-size: 1.2em;
+	font-weight: 500;
+	background-color: rgba(0,0,0,.3);
+	border-radius: 20px;
+	margin-top: .2em;
+	margin-bottom: 1em;
+	padding: .1em 1em
+}
 
-			transition: all .5s;
-		}
-		div#lrc :hover {
-			transition: all .5s;
-			background-color: rgba(255,255,255,.9);
-		}
-		ul#scrollLrc {
-			position: relative;
-			list-style-type: none;
-			min-height: 25em;
-			padding: 0;
-			margin: 0;
-		}
-		.line {
-			color: #333;
-		}
-		.line:hover {
-			color: blue;
-		}
-		.focus {
-			color: blue;
-			font-weight: 700;
-			background-color: rgba(255,255,255,.9);
-			position: inline-block;
-		}
+div#lrc {
+	display: inline-block;
+	text-align: center;
+	min-height: 40%;
+	width: 100%;
+	background-color: rgba(255,255,255,.3);
+	height: 60%;
+	overflow: hidden;
 
-		canvas#playMode {
-			position: relative;
-			top: 20px;
-			font-size: 2em;
-			font-weight: 800;
-		}
-		span#playTime {
-			position: relative;
-      top: 1em;
-			color: white;
-			font-size: 2em;
-			font-weight: 800;
-		}
+	transition: all .5s;
+}
+div#lrc:hover {
+	transition: all .5s;
+	background-color: rgba(255,255,255,.5);
+}
+ul#scrollLrc {
+	position: relative;
+	list-style-type: none;
+	min-height: 25em;
+	padding: 0;
+	margin: 0;
+}
+.line {
+	color: #333;
+}
+.line:hover {
+	color: blue;
+	background-color: white;
+}
+.focus {
+	color: blue;
+	font-weight: 700;
+	background-color: rgba(255,255,255,.9);
+	position: inline-block;
+}
+
+canvas#playMode {
+	position: relative;
+	top: 20px;
+	font-size: 2em;
+	font-weight: 800;
+}
+span#playTime {
+	position: relative;
+top: 1em;
+	color: white;
+	font-size: 2em;
+	font-weight: 800;
+}
+
 div.bottom {
 	height: 2em;
 	display: block;
