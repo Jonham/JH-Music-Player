@@ -70,9 +70,6 @@ div#wrap {
 
 	transition: all 3s;
 }
-ul#scrollLrc {
-	text-align: center;
-}
 
 @keyframes goround {
 	from { transform: rotate(0deg); }
@@ -104,7 +101,7 @@ div#alImg {
 	width: 120px;
 
 	padding: 0 0;
-	margin: .8em 0;
+	margin: .8em 0 2.5em 0;
 	transition: all 4s;
 
 	vertical-align: middle;
@@ -150,7 +147,7 @@ div#lrc {
 	text-align: center;
 	min-height: 40%;
 	width: 100%;
-	background-color: rgba(255,255,255,.3);
+	background-color: rgba(255,255,255,.1);
 	height: 60%;
 	overflow: hidden;
 
@@ -158,9 +155,11 @@ div#lrc {
 }
 div#lrc:hover {
 	transition: all .5s;
-	background-color: rgba(255,255,255,.5);
+	background-color: rgba(255,255,255,.4);
 }
+
 ul#scrollLrc {
+	text-align: center;
 	position: relative;
 	list-style-type: none;
 	min-height: 25em;
@@ -168,17 +167,25 @@ ul#scrollLrc {
 	margin: 0;
 }
 .line {
-	color: #333;
+	color: white;
+	transition: all 1s;
 }
 .line:hover {
 	color: blue;
 	background-color: white;
+	transition: all 1s;
 }
 .focus {
 	color: blue;
 	font-weight: 700;
 	background-color: rgba(255,255,255,.9);
 	position: inline-block;
+	transition: all 1s;
+}
+.focus + .line {
+	color: blue;
+	background-color: rgba(255, 255, 255, 0.6);
+	transition: all 1s;
 }
 
 canvas#playMode {
