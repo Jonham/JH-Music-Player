@@ -14,7 +14,8 @@ module.exports = function(grunt) {
         files: {
           "lrcParser.js": 'src/scripts/parser/*.js',
           "contextMenu.js": 'src/scripts/contextmenu/*.js',
-          "drag.js": 'src/scripts/drag/*.js'
+          "drag.js": 'src/scripts/drag/*.js',
+          'scroll.js': 'src/scripts/scroll/*.js'
         }
       }
     },
