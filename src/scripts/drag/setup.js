@@ -1,5 +1,6 @@
 (function(){
     var ulLrc = $id('scrollLrc');
+    var timer;
 
     var startP = {x: 0, y: 0};
     var lrcDraging = function(e) {
@@ -38,9 +39,14 @@
             y: e.clientY - startP.y
         };
         if (DRAGING) {
+            ulLrc.style.transition = "none"; // take action immediately
+
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function(){
+                DRAGING = false;
+                ulLrc.style.transition = ''; // resume css transition effect
+            }, 5000);
             document.removeEventListener('mousemove', lrcDraging, false);
-            DRAGING = false;
-            ulLrc.style.transition = '';
         }
 
         window.jh = e;
