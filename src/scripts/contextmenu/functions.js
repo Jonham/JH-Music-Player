@@ -10,6 +10,7 @@ var contextMenuListener = function(e) {
 
         var line = e.target.dataset.line;
         audio.currentTime = timeline[line] - 0.5;
+        DRAGING = false;
 
         // clear any 'focus' value in class
         var domFocus = ulLrc.querySelectorAll('.focus');
