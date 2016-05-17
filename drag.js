@@ -5,6 +5,7 @@
 
     var startP = {x: 0, y: 0};
     var lrcDraging = function(e) {
+        if (e.button !== 0) return; // only works when left button is click
         e.preventDefault();
         e.stopPropagation();
         var offset = {
@@ -15,6 +16,7 @@
         // console.log(DRAGING);
     };
     var lrcDragStart = function(e) {
+        if (e.button !== 0) return; // only works when left button is click
         e.preventDefault();
         e.stopPropagation();
         if (e.target.tagName != 'LI') return;
@@ -28,6 +30,7 @@
         ulLrc.style.transition = "none";
     };
     var lrcDragEnd = function(e) {
+        if (e.button !== 0) return; // only works when left button is click
         e.preventDefault();
         e.stopPropagation();
         // if (e.originalTarget.tagName != 'LI') return;
