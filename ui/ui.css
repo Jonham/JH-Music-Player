@@ -1,0 +1,188 @@
+#main {
+    display: inline-block;
+    position: absolute;
+    height: 667px;
+    width:  400px;
+    border: black 2px solid;
+
+    background-color: rgba(0,0,0,.6);
+    color: white;
+}
+
+#main> .row {
+    display: block;
+}
+
+
+.left {
+    float: left;
+    margin: 10px;
+}
+.right {
+    float: right;
+    margin: 10px;
+}
+
+
+nav {
+    margin-top: 10px;
+    vertical-align: middle;
+}
+span#return, span#share {
+    margin-top: .5em;
+    display: inline-block;
+}
+#song-message,
+#song-artist,
+#song-title {
+    display: inline-block;
+}
+#song-message {
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+#song-artist {
+    color: rgba(255,255,255, .5);
+}
+
+.speaker {
+    margin-left: 2.5em;
+}
+.speaker:before {
+    content: '#';
+}
+
+#volume-range, .empty {
+    width: 280px;
+}
+#volume-range {
+    display: inline-block;
+    position: absolute;
+    margin-left: 1em;
+    padding-top: .5em;
+}
+.empty, .fill {
+    position: absolute;
+    display: inline-block;
+}
+.empty {
+    border: 1px solid rgba(255,255,255,.3);
+}
+.fill {
+    width: 100px;
+    border: 1px solid rgba(255,255,255,.8);
+}
+.range-btn {
+    display: inline-block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255,255,255,.8);
+    border-radius: 5px;
+
+    margin-top: -4px;
+    margin-left: 100px;
+}
+
+
+
+div#lyric-container {
+    height: 20em;
+}
+
+div#lyric-container ul {
+    list-style: none;
+    text-align: center;
+    padding: 0;
+    line-height: 2em;
+}
+
+#option {
+    position: absolute;
+    width: 100%;
+    height: 5em;
+}
+#option-menu {
+    display: inline-block;
+    border-top: 1px solid white;
+    position: absolute;
+    right: 2em;
+    bottom: 1em;
+    background-color: rgba(0,0,0, .5);
+}
+.menu-item {
+    display: list-item;
+    list-style: none;
+    padding: .6em 2em;
+    border-bottom: 1px solid white;
+}
+
+#time-range {
+    display: inline-block;
+    padding-top: -0.4em;
+}
+#current-time, #total-time {
+    display: inline-block;
+    position: absolute;
+}
+#current-time {
+    left: 10px;
+}
+#total-time {
+    right: 10px;
+}
+
+
+div.bottom {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+#time {
+    position: relative;
+    vertical-align: middle;
+    padding-bottom: 1em;
+}
+#time-range {
+    position: absolute;
+    left: 4em;
+    top: .5em;
+}
+#current-time {
+    float: left;
+}
+#total-time {
+    float: right;
+}
+
+#controls {
+    vertical-align: middle;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 1em 0;
+}
+#controls > span {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+span#play-mode, span#song-list {
+    border-radius: 1em;
+    padding: 1em;
+    background-color: black;
+}
+span#pre-song, span#next-song {
+    border-radius: 1.5em;
+    padding: 1.5em;
+    background-color: black;
+}
+span#play {
+    background-color: black;
+    border-radius: 2em;
+    padding: 2em;
+    text-align: center;
+    vertical-align: middle;
+}
