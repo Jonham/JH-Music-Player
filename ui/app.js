@@ -184,14 +184,18 @@ var btnPlay = $id('play'),
 function startPlay() {
     audio.src = '../music/OneRepublic - Good Life.mp3';
     var state = false;
+    var btnIcons = {
+        'play':  "url('icons/play-w.svg')",
+        'pause': "url('icons/pause-w.svg')"
+    };
     var playOrPause = function() {
 		if (audio.paused) {
 			audio.play();
-            btnPlay.innerHTML = 'Pause';
+            btnPlay.style.backgroundImage = btnIcons.pause;
 		}
 		else{
 			audio.pause();
-            btnPlay.innerHTML = 'Play';
+            btnPlay.style.backgroundImage = btnIcons.play;
 		}
 	};
     btnPlay.addEventListener("click", playOrPause, false);
@@ -219,9 +223,9 @@ audio.addEventListener("canplay", function() {
 var OFFSET = 0.5; // offset between lrc and audio
 var offsetTop = "";
 var originTop = 160;
+var ONCE = true;
 
 audio.addEventListener("timeupdate", function(e) {
-    var ONCE = true;
     var lrc = loadedLRClist[0];
     var timeline = lrc.timeTags;
     var lrcList = lrc.lrc;
@@ -284,4 +288,5 @@ window.onload = function() {
     optionMenu.style.display = 'none';
 
     $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';
+    $id('volume').style.opacity = 0;
 };

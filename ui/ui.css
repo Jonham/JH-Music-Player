@@ -40,9 +40,18 @@ nav {
     margin-top: 10px;
     vertical-align: middle;
 }
-span#return, span#share {
+span#back, span#share {
     margin-top: .5em;
     display: inline-block;
+    padding: .7em;
+    background-size: contain;
+    cursor: pointer;
+}
+span#back {
+    background-image: url('icons/back-w.svg');
+}
+span#share {
+    background-image: url('icons/share-w.svg');
 }
 #song-message,
 #song-artist,
@@ -57,11 +66,16 @@ span#return, span#share {
     color: rgba(255,255,255, .5);
 }
 
+div#volume {
+    transition: ease-out 1s;
+}
 .speaker {
     margin-left: 2.5em;
-}
-.speaker:before {
-    content: '#';
+    background-image: url('icons/speaker-w.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding: .6em;
+    padding-top: 0em;
 }
 
 #volume-range, .empty {
@@ -179,24 +193,45 @@ div.bottom {
 #controls > span {
     vertical-align: middle;
     display: inline-block;
+    cursor: pointer;
 }
 
 span#play-mode, span#song-list {
-    border-radius: 1em;
     padding: 1em;
-    background-color: black;
+    background-size: contain;
+    margin-top: 20px;
 }
 span#pre-song, span#next-song {
-    border-radius: 1.5em;
-    padding: 1.5em;
-    background-color: black;
+    border-radius: 1.4em;
+    padding: 1.4em;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: white 2px solid;
 }
 span#play {
-    background-color: black;
+    background-image: url('icons/pause-w.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: white 2px solid;
     border-radius: 2em;
+
     padding: 2em;
     text-align: center;
     vertical-align: middle;
+
+    margin: 0 1em;
+}
+span#play-mode {
+    background-image: url('icons/shuffle-w.svg');
+}
+span#pre-song {
+    background-image: url('icons/pre-w.svg');
+}
+span#next-song {
+    background-image: url('icons/next-w.svg');
+}
+span#song-list {
+    background-image: url('icons/list-w.svg');
 }
 
 
