@@ -173,6 +173,7 @@ var btnPlay = $id('play'),
     audio = document.querySelector('audio'),
     btnPre = $id('pre-song'),
     btnNext = $id('next-song'),
+    btnBack = $id('back'),
     totalTime = $id('total-time'),
     currentTime = $id('current-time'),
     optionMenu = $id('option-menu'),
@@ -185,21 +186,26 @@ var btnPlay = $id('play'),
         'pause': "url('icons/pause-w.svg')"
     };
 function startPlay() {
-    var state = false;
+    var state = false,
+        disk = document.querySelector('span.disk');
+
     var playOrPause = function() {
         if (state) {
             if (audio.paused) {
                 audio.play();
                 btnPlay.style.backgroundImage = btnIcons.pause;
+                disk.style.animationPlayState = 'running';
             }
             else{
                 audio.pause();
                 btnPlay.style.backgroundImage = btnIcons.play;
+                disk.style.animationPlayState = 'paused';
             }
         }
         else { // first time
             state = true;
             btnPlay.style.backgroundImage = btnIcons.pause;
+            disk.style.animationPlayState = 'running';
 
             audio.src = '../music/OneRepublic - Good Life.mp3';
             // auto play
@@ -287,13 +293,36 @@ audio.addEventListener("timeupdate", function(e) {
 			// 加载多行歌词
 			for (var j=0; j < arrLrcList.length; j++) {
 				strLrcTMP += lrcList[ arrLrcList[j] ];
-
 			}
 
 			return strLrcTMP;
 		}
 	}
 }, false);
+
+var onButtonBack = function() {
+    var lyric = $id('lyric-lrc'),
+        album = $id('lyric-album'),
+        main = $id('main'),
+        disk  = album.querySelector('.disk'),
+        page = 0; // lyric-lrc
+
+    var listener = function(e) {
+        if (page == 0) {
+            lyric.style.opacity = 0;
+            album.style.opacity = 1;
+            main.style.backgroundColor = 'rgba(0,0,0,.5)';
+            page = 1;
+        } else {
+            lyric.style.opacity = 1;
+            album.style.opacity = 0;
+            main.style.backgroundColor = 'rgba(0,0,0,.8)';
+            page = 0;
+        }
+    };
+
+    return listener;
+};
 
 window.onload = function() {
 	loadLrc("OneRepublic - Good Life.lrc", parseLrc);
@@ -304,4 +333,6 @@ window.onload = function() {
 
     $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';
     $id('volume').style.opacity = 0;
+
+    btnBack.addEventListener('click', onButtonBack(), false);
 };

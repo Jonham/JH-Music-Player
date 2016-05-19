@@ -19,6 +19,8 @@ body {
 
     background-color: rgba(0,0,0,.8);
     color: white;
+
+    transition: all .5s linear;
 }
 
 #main> .row {
@@ -64,6 +66,16 @@ span#share {
 }
 #song-artist {
     color: rgba(255,255,255, .5);
+}
+
+hr.line {
+    margin: 0;
+    padding: 0;
+    opacity: .2;
+    width: 80%;
+    text-align: center;
+    margin-left: 10%;
+    margin-top: -10px;
 }
 
 div#volume {
@@ -123,8 +135,53 @@ div#lyric-container ul {
     padding: 0;
     line-height: 2em;
 }
+div#lyric-lrc, div#lyric-album {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    transition: all .5s linear;
+}
+
+@keyframes goRound {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+  }
+
+div#lyric-album {
+    position: absolute;
+    top: 10em;
+    text-align: center;
+    vertical-align: middle;
+
+    opacity: 0;
+}
+div#lyric-album span {
+    display: inline-block;
+    padding: 5em;
+    border-radius: 10em;
+    border: black 2.5em solid;
+
+    background-image: url('../OneRepublic.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+
+    animation: goRound 10s linear 0s infinite;
+    animation-play-state: paused;
+}
+
 
 #option {
+    display: none;
     position: absolute;
     width: 100%;
 }
@@ -219,7 +276,7 @@ span#play {
     text-align: center;
     vertical-align: middle;
 
-    margin: 0 1em;
+    margin: 0 1.5em;
 }
 span#play-mode {
     background-image: url('icons/shuffle-w.svg');
