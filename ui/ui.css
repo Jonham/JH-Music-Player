@@ -2,19 +2,18 @@ body {
     padding: 0;
     margin: 0;
 }
-#background {
+#background, #main {
     display: inline-block;
     position: absolute;
-    height: 667px;
-    width:  400px;
+    height: 100%;
+    width:  100%;
+    box-sizing: border-box;
+}
+#background {
     background-repeat: no-repeat;
     background-size: cover;
 }
 #main {
-    display: inline-block;
-    position: absolute;
-    height: 667px;
-    width:  400px;
     border: black 2px solid;
 
     background-color: rgba(0,0,0,.8);
@@ -91,13 +90,16 @@ div#volume {
 }
 
 #volume-range, .empty {
-    width: 280px;
+    width: 100%;
 }
 #volume-range {
     display: inline-block;
     position: absolute;
+
+    text-align: left;
     margin-left: 1em;
     padding-top: .5em;
+    width: 80%;
 }
 .empty, .fill {
     position: absolute;
@@ -119,7 +121,6 @@ div#volume {
     border-radius: 5px;
 
     margin-top: -4px;
-    margin-left: 100px;
 }
 
 
@@ -153,6 +154,7 @@ div#lyric-lrc, div#lyric-album {
     }
     100% {
         transform: rotate(360deg);
+    height: 100%;
     }
   }
 
@@ -161,6 +163,8 @@ div#lyric-album {
     top: 10em;
     text-align: center;
     vertical-align: middle;
+
+    height: 50%;
 
     opacity: 0;
 }
@@ -203,7 +207,17 @@ div#lyric-album span {
 #time-range {
     display: inline-block;
     padding-top: -0.4em;
+    width: 75%;
+    text-align: left;
 }
+
+#time-range .empty{
+
+}
+#time-range .fill {
+
+}
+
 #current-time, #total-time {
     display: inline-block;
     position: absolute;

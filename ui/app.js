@@ -335,4 +335,10 @@ window.onload = function() {
     $id('volume').style.opacity = 0;
 
     btnBack.addEventListener('click', onButtonBack(), false);
+    // polyfill
+    btnNext.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
+    btnPre.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
+
+    $id('lyric-lrc').addEventListener('click', onButtonBack(), false);
+    $id('lyric-album').addEventListener('click', onButtonBack(), false);
 };
