@@ -34,6 +34,19 @@ var onSizeChange = function(e) {
     var OFFSET = 20;
     var length = right - left - OFFSET + 'px';
     timeRange.style.width = length;
+
+    // lyric and album resize
+    var b = document.querySelector('div.bottom');
+    var lyric = $id('lyric-container');
+
+    var bS = getComputedStyle( b );
+
+    // polyfill : lyric.top return auto...
+    var top  = 80;//parseInt( lS['top'] );
+    var bottom = parseInt( bS['top'] );
+
+    var height = bottom - top - 20 + "px";
+    lyric.style.height = height;
 };
 window.addEventListener('resize', onSizeChange, false);
 
