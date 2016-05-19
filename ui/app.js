@@ -142,7 +142,6 @@ function loadLrc(file, callback) {
     		if (xhr.readyState == "4" && xhr.status == "200") {
     			response = xhr.responseText;
                 loadedLRClist.push( callback(response) );
-                console.log('xhr success');
     		}
             return "xhr Fails";
     	};
@@ -181,24 +180,38 @@ var btnPlay = $id('play'),
     title = $id('song-title'),
     artist = $id('song-artist');
 
-function startPlay() {
-    audio.src = '../music/OneRepublic - Good Life.mp3';
-    var state = false;
     var btnIcons = {
         'play':  "url('icons/play-w.svg')",
         'pause': "url('icons/pause-w.svg')"
     };
+function startPlay() {
+    var state = false;
     var playOrPause = function() {
-		if (audio.paused) {
-			audio.play();
+        if (state) {
+            if (audio.paused) {
+                audio.play();
+                btnPlay.style.backgroundImage = btnIcons.pause;
+            }
+            else{
+                audio.pause();
+                btnPlay.style.backgroundImage = btnIcons.play;
+            }
+        }
+        else { // first time
+            state = true;
             btnPlay.style.backgroundImage = btnIcons.pause;
-		}
-		else{
-			audio.pause();
-            btnPlay.style.backgroundImage = btnIcons.play;
-		}
-	};
+
+            audio.src = '../music/OneRepublic - Good Life.mp3';
+            // auto play
+            audio.addEventListener("canplay", function() {
+                totalTime.innerHTML = formatTimestamp(audio.duration);
+                if (audio.paused) { audio.play(); }
+            }, false);
+        }
+    }; // playOrPause()
+
     btnPlay.addEventListener("click", playOrPause, false);
+
 }
 
 function addScrollLrc() {
@@ -216,10 +229,19 @@ function addScrollLrc() {
     }
 }
 
-audio.addEventListener("canplay", function() {
-    if (audio.paused) { audio.play(); }
-}, false);
+function formatTimestamp(time) {
+    // current time show like 01:01 under the play&pause button
+	var timeS = {}; // n: now; s: second; m: minute;
+	timeS.n = parseInt(time);
+	timeS.s = timeS.n % 60;
+	timeS.m = parseInt(timeS.n / 60);
 
+	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+}
+
+audio.addEventListener('end', function() {
+    btnPlay.style.backgroundImage = btnIcons.play;
+}, false);
 var OFFSET = 0.5; // offset between lrc and audio
 var offsetTop = "";
 var originTop = 160;
@@ -243,13 +265,7 @@ audio.addEventListener("timeupdate", function(e) {
 		ONCE = false;
 	}
 
-    // current time show like 01:01 under the play&pause button
-	var timeS = {}; // n: now; s: second; m: minute;
-	timeS.n = parseInt(audio.currentTime);
-	timeS.s = timeS.n % 60;
-	timeS.m = parseInt(timeS.n / 60);
-
-	currentTime.innerHTML = ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+	currentTime.innerHTML = formatTimestamp(audio.currentTime);
 
     // auto scroll lyrics
 	for (var i=0; i<timeline.length; i++) {
@@ -273,8 +289,6 @@ audio.addEventListener("timeupdate", function(e) {
 				strLrcTMP += lrcList[ arrLrcList[j] ];
 
 			}
-			// console.log(strLrcTMP);
-			// span.innerHTML = strLrcTMP;
 
 			return strLrcTMP;
 		}
@@ -283,8 +297,9 @@ audio.addEventListener("timeupdate", function(e) {
 
 window.onload = function() {
 	loadLrc("OneRepublic - Good Life.lrc", parseLrc);
-    console.warn('loadLrc');
+
     startPlay();
+
     optionMenu.style.display = 'none';
 
     $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';

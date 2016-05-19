@@ -209,7 +209,7 @@ span#pre-song, span#next-song {
     border: white 2px solid;
 }
 span#play {
-    background-image: url('icons/pause-w.svg');
+    background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
     border: white 2px solid;
