@@ -1,7 +1,10 @@
 /node_modules/
 /stayhere/
 /format/
+/screenshots
 
 /**/*.jh
 *.txt
 www
+
+.gitignore
