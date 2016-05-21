@@ -128,7 +128,7 @@ function classifyLrc(arr) {
 var loadedLRClist = [];
 
 function loadLrc(file, callback) {
-    var path = "../music/";
+    var path = "./music/";
     var url = path + file;
     var oOut = {};
     if (callback === undefined) {callback = parseLrc;}
@@ -182,8 +182,8 @@ var btnPlay = $id('play'),
     artist = $id('song-artist');
 
     var btnIcons = {
-        'play':  "url('icons/play-w.svg')",
-        'pause': "url('icons/pause-w.svg')"
+        'play':  "url('./style/icons/play-w.svg')",
+        'pause': "url('./style/icons/pause-w.svg')"
     };
 function startPlay() {
     var state = false,
@@ -207,7 +207,7 @@ function startPlay() {
             btnPlay.style.backgroundImage = btnIcons.pause;
             disk.style.animationPlayState = 'running';
 
-            audio.src = '../music/OneRepublic - Good Life.mp3';
+            audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
             audio.addEventListener("canplay", function() {
                 totalTime.innerHTML = formatTimestamp(audio.duration);

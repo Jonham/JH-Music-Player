@@ -15,6 +15,7 @@ body {
 #background {
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: 50%;
 }
 #main {
     border: black 2px solid;

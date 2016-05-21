@@ -2,6 +2,7 @@
 /stayhere/
 /format/
 /screenshots
+/static
 
 /**/*.jh
 *.txt

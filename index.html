@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Lyrics Player</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="user-scalable=no, width=device-width" />
-	<link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <title>Netease Music UI</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
 	<!--UC Fullscreen-->
 	<meta name="browsermode" content="application"/>
@@ -20,33 +19,78 @@
 	<meta name="apple-mobile-web-app-title" content="Lyrics Player">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
+    <link rel="stylesheet" href="style/ui.css">
 </head>
 <body>
-	<div id="wrap">
-	<div id="songMsg"></div>
-	<div id="alImg">
-		<canvas id="playMode" width=80 height=80></canvas><br/>
-		<span id="playTime"></span>
-	</div>
-	<br/>
-	<div id="ask">
-		<span class="askmsg">将加载一个音乐文件，耗用流量3.88MB,是否继续？</span>
-		<span class="noBtn btn">不加载</span>
-		<span class="yesBtn btn">加载</span>
-	</div>
+    <div id="background"></div>
+    <div id="main">
+        <nav class='header row'>
+            <span id="back" class='left'></span>
+            <span id="song-message">
+                <span id="song-title">The Saltwater Room</span> <br>
+                <span id="song-artist">Owl City</span>
+            </span>
+            <span id="share" class='right'></span>
+        </nav>
+        <hr class='line' />
+        <div id="volume" class='row one-second'>
+            <span class="speaker"></span>
+            <div id="volume-range" class='one-second'>
+                <span class="fill"></span>
+                <span class="range-btn"></span>
+                <span class="empty"></span>
+            </div>
+        </div>
 
-	<div id="lrc">
-		<ul id="scrollLrc"></ul></div>
-	</div>
+        <div id="lyric-container" class='row one-second'>
+            <div id='lyric-lrc' class="page">
+                <ul id="lyric" class='one-second'>
+                    <li>I opend my eyes last night and saw you in the low light</li>
+                    <li>昨夜我睁开眼，看见你在昏暗的灯光下</li>
+                    <li> </li>
+                    <li>Walking down by the bay, on the shore.</li>
+                    <li>沿着海湾走下去， 在岸边</li>
+                    <li> </li>
+                    <li>staring up at the planes that aren't there anymore</li>
+                    <li>盯着不再有星星的天空</li>
+                </ul>
+            </div>
+            <div id='lyric-album' class="page">
+                <span class='disk one-second'></span>
+            </div>
+        </div>
+        <div id="option">
+            <div id="option-menu">
+                <span class="menu-item">歌词调整</span>
+                <span class="menu-item">翻译报错</span>
+                <span class="menu-item">歌词报错</span>
+                <span class="menu-item">歌曲报错</span>
+            </div>
+        </div>
+        <div class="bottom">
+            <div id='time' class='container row'>
+                <span id="current-time">00:00</span>
+                <div id="time-range" class='one-second'>
+                    <span class="fill"></span>
+                    <span class="range-btn"></span>
+                    <span class="empty"></span>
+                </div>
+                <span id="total-time">04:55</span>
+            </div>
 
-	<div class="bottom">
-		<span id="message"></span>
-	</div>
-	<audio id="mp3" src=""></audio>
-	<script src="ask.js"></script>
-	<script src="lrcParser.js"></script>
-	<script src="contextMenu.js"></script>
-	<script src="drag.js"></script>
-	<script src="scroll.js"></script>
+            <div id='controls' class="container row one-second">
+                <audio src=""></audio>
+                <span id="play-mode" class='left'></span>
+                <span id="pre-song"></span>
+                <span id="play"></span>
+                <span id="next-song"></span>
+                <span id="song-list" class='right'></span>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/time-range.js"></script>
 </body>
 </html>
