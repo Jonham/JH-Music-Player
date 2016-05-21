@@ -3,7 +3,7 @@ var timeRange = $id('time-range'),
 
 var log = function(msg) { console.log(msg); };
 
-var onTimeRangeGo = function() {
+var onTimeRangeUpdate = function() {
     var me = timeRange,
         fill = timeRange.querySelector('.fill'),
         btn = timeRange.querySelector('.range-btn');
@@ -21,11 +21,28 @@ var onTimeRangeGo = function() {
     return listener;
 };
 
-audio.addEventListener('timeupdate', onTimeRangeGo(), false);
+audio.addEventListener('timeupdate', onTimeRangeUpdate(), false);
 
-timeRange.addEventListener('click', function(e) {
-    alert('AllCH! Don\'t touch me.');
-}, false);
+var onTimeRangeClick = function() {
+    var rectTimerange = timeRange.getBoundingClientRect();
+    var btn = timeRange.querySelector('.range-btn'),
+        fill = timeRange.querySelector('.fill');
+
+    var moveto = function(percent) {
+        btn.style.left = percent + '%';
+        console.log(btn.style.left);
+        fill.style.width = percent + '%';
+        console.log(fill.style.width);
+    };
+    var listener = function(e) {
+        jh = e;
+        var per = (e.clientX - 5 - rectTimerange.left) / rectTimerange.width;
+        moveto(per * 100); // what if outside of 0/100
+        console.log(per * 100);
+    };
+    return listener;
+};
+timeRange.addEventListener('click', onTimeRangeClick(), false);
 
 
 // Resizing Adjustment

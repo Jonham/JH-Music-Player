@@ -331,7 +331,7 @@ window.onload = function() {
 
     optionMenu.style.display = 'none';
 
-    $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';
+    $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
 
     var onB = onButtonBack();
     btnBack.addEventListener('click', onB, false);

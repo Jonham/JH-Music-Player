@@ -95,25 +95,16 @@ hr.line {
     background-repeat: no-repeat;
     padding: .6em;
     padding-top: 0em;
+    opacity: .6;
 }
 
-#volume-range, .empty {
-    width: 100%;
-}
-#volume-range {
-    display: inline-block;
-    position: absolute;
 
-    text-align: left;
-    margin-left: 1em;
-    padding-top: .5em;
-    width: 80%;
-}
 .empty, .fill {
     position: absolute;
     display: inline-block;
 }
 .empty {
+    width: 100%;
     border: 1px solid rgba(255,255,255,.3);
 }
 .fill {
@@ -126,9 +117,29 @@ hr.line {
     height: 10px;
     background-color: rgba(255,255,255,.8);
     border-radius: 5px;
-
     margin-top: -4px;
 }
+#volume-range, #time-range {
+        display: inline-block;
+        position: absolute;
+
+        text-align: left;
+        width: 80%;
+        height: 10px;
+        cursor: pointer;
+}
+
+#volume-range {
+    margin-left: 1em;
+    padding-top: .5em;
+}
+#volume-range .fill {
+    width: 100%;
+}
+#volume-range .range-btn {
+    left: 100%;
+}
+
 
 
 
@@ -241,30 +252,6 @@ div#lyric-album span {
     border-bottom: 1px solid white;
 }
 
-#time-range {
-    display: inline-block;
-    padding-top: -0.4em;
-    width: 75%;
-    text-align: left;
-}
-
-#time-range .empty{
-
-}
-#time-range .fill {
-    border: 1px solid rgb(255, 0, 0);
-}
-
-#current-time, #total-time {
-    display: inline-block;
-    position: absolute;
-}
-#current-time {
-    left: 10px;
-}
-#total-time {
-    right: 10px;
-}
 
 
 div.bottom {
@@ -283,15 +270,25 @@ div.bottom {
     padding-bottom: 1em;
 }
 #time-range {
-    position: absolute;
     left: 4em;
     top: .5em;
+    padding-top: -0.4em;
+}
+#time-range .fill {
+    border: 1px solid rgb(255, 0, 0);
+}
+
+#current-time, #total-time {
+    display: inline-block;
+    position: absolute;
 }
 #current-time {
     float: left;
+    left: 10px;
 }
 #total-time {
     float: right;
+    right: 10px;
 }
 
 #controls {
