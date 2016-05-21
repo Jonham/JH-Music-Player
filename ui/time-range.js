@@ -1,6 +1,9 @@
-var timeRange = $id('time-range');
+var timeRange = $id('time-range'),
+    volumeRange = $id('volume-range');
 
-var onTimeRangeScroll = function() {
+var log = function(msg) { console.log(msg); };
+
+var onTimeRangeGo = function() {
     var me = timeRange,
         fill = timeRange.querySelector('.fill'),
         btn = timeRange.querySelector('.range-btn');
@@ -18,36 +21,58 @@ var onTimeRangeScroll = function() {
     return listener;
 };
 
-audio.addEventListener('timeupdate', onTimeRangeScroll(), false);
+audio.addEventListener('timeupdate', onTimeRangeGo(), false);
 
 timeRange.addEventListener('click', function(e) {
     alert('AllCH! Don\'t touch me.');
 }, false);
 
-// auto addLength
+
+// Resizing Adjustment
 var onSizeChange = function(e) {
-    var cS = getComputedStyle( currentTime );
-    var tS = getComputedStyle( totalTime );
+    var divBottom = document.querySelector('div.bottom');
+    var lyric = $id('lyric-container'),
+        album = $id('lyric-album').querySelector('span');
 
-    var left = parseInt(cS['left']) + parseInt(cS['width']);
-    var right = parseInt(tS['left']);
-    var OFFSET = 20;
-    var length = right - left - OFFSET + 'px';
-    timeRange.style.width = length;
+    var slowdownTimer; // for reducing listener-invoking times
 
-    // lyric and album resize
-    var b = document.querySelector('div.bottom');
-    var lyric = $id('lyric-container');
+    var resizeRange = function() {
+        var ct = currentTime.getBoundingClientRect();
+        var tt = totalTime.getBoundingClientRect();
+        var tr = timeRange.getBoundingClientRect();
 
-    var bS = getComputedStyle( b );
+        // left | ..OFFSET |<--length-->| OFFSET.. | right
+        var left = ct.right;
+        var right = tt.left;
+        var OFFSET = tr.left - left; // make distance between timeRange the same
+        var length = right - left - ( 2*OFFSET );
 
-    // polyfill : lyric.top return auto...
-    var top  = 80;//parseInt( lS['top'] );
-    var bottom = parseInt( bS['top'] );
+        timeRange.style.width = length +'px';
+        volumeRange.style.width = length + 'px';
+    }; // resizeRange()
 
-    var height = bottom - top - 20 + "px";
-    lyric.style.height = height;
+    var resizeLyric = function() {
+        var rectLyric = lyric.getBoundingClientRect();
+        var rectBottom = divBottom.getBoundingClientRect();
+
+        // polyfill : lyric.top return auto...
+        var top  = rectLyric.top;
+        var bottom = rectBottom.top;
+        var height = bottom - top;
+
+        lyric.style.height = height  + "px";
+        album.style.top = (height / 2) - 120 + 'px';
+    }; // resizeLyric()
+
+    var listener = function() {
+        clearTimeout(slowdownTimer);
+        // invoke many times, but only activate 1 second after last invoke
+        slowdownTimer = setTimeout(function(){
+            resizeRange();
+            resizeLyric();
+        }, 1000); // slowdownTimer
+    }; // listener
+
+    return listener;
 };
-window.addEventListener('resize', onSizeChange, false);
-
-onSizeChange();
+window.addEventListener('resize', onSizeChange(), false);

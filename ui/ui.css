@@ -8,6 +8,9 @@ body {
     height: 100%;
     width:  100%;
     box-sizing: border-box;
+
+    min-height: 440px;
+    min-width: 320px;
 }
 #background {
     background-repeat: no-repeat;
@@ -19,21 +22,28 @@ body {
     background-color: rgba(0,0,0,.8);
     color: white;
 
+    -moz-transition: all .5s linear;
+    -webkit-transition: all .5s linear;
     transition: all .5s linear;
 }
 
 #main> .row {
     display: block;
 }
+.one-second {
+    transition: ease-out 1s;
+    -webkit-transition: ease-out 1s;
+    -moz-transition: ease-out 1s;
+}
 
 
 .left {
     float: left;
-    margin: 10px;
+    margin-left: 10px;
 }
 .right {
     float: right;
-    margin: 10px;
+    margin-right: 10px;
 }
 
 
@@ -77,11 +87,8 @@ hr.line {
     margin-top: -10px;
 }
 
-div#volume {
-    transition: ease-out 1s;
-}
 .speaker {
-    margin-left: 2.5em;
+    margin-left: 2em;
     background-image: url('icons/speaker-w.svg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -109,7 +116,6 @@ div#volume {
     border: 1px solid rgba(255,255,255,.3);
 }
 .fill {
-    width: 100px;
     border: 1px solid rgba(255,255,255,.8);
 }
 .range-btn {
@@ -128,6 +134,8 @@ div#volume {
 div#lyric-container {
     height: 28em;
     overflow: hidden;
+    position: relative;
+    min-height: 240px;
 }
 
 div#lyric-container ul {
@@ -135,6 +143,7 @@ div#lyric-container ul {
     text-align: center;
     padding: 0;
     line-height: 2em;
+    z-index: 10;
 }
 div#lyric-lrc, div#lyric-album {
     position: relative;
@@ -142,9 +151,12 @@ div#lyric-lrc, div#lyric-album {
     height: 100%;
     overflow: hidden;
 
+    -webkit-transition: all .5s linear;
+    -moz-transition: all .5s linear;
     transition: all .5s linear;
 }
 
+/*support all*/
 @keyframes goRound {
     from {
         transform: rotate(0deg);
@@ -154,22 +166,42 @@ div#lyric-lrc, div#lyric-album {
     }
     100% {
         transform: rotate(360deg);
-    height: 100%;
     }
-  }
+}
+@-webkit-keyframes goRound {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@-moz-keyframes goRound {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    50% {
+        -moz-transform: rotate(180deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
 
 div#lyric-album {
     position: absolute;
-    top: 10em;
+    top: 0;
     text-align: center;
     vertical-align: middle;
-
-    height: 50%;
-
     opacity: 0;
 }
 div#lyric-album span {
     display: inline-block;
+    position: relative;
+    top: 0;
     padding: 5em;
     border-radius: 10em;
     border: black 2.5em solid;
@@ -179,6 +211,10 @@ div#lyric-album span {
     background-size: cover;
     background-position: 50%;
 
+    -webkit-animation: goRound 10s linear 0s infinite;
+    -webkit-animation-play-state: paused;
+    -moz-animation: goRound 10s linear 0s infinite;
+    -moz-animation-play-state: paused;
     animation: goRound 10s linear 0s infinite;
     animation-play-state: paused;
 }
@@ -215,7 +251,7 @@ div#lyric-album span {
 
 }
 #time-range .fill {
-
+    border: 1px solid rgb(255, 0, 0);
 }
 
 #current-time, #total-time {
@@ -236,6 +272,8 @@ div.bottom {
     text-align: center;
     display: block;
     width: 100%;
+
+    z-index: 100;
 }
 
 #time {
@@ -313,15 +351,11 @@ ul#lyric {
 	min-height: 25em;
 	padding: 0;
 	margin: 0;
-	transition: all 1s;
 }
 .line {
 	color: white;
-	transition: all 1s;
-}
-.line:hover {
-	color: blue;
-	/*background-color: white;*/
+	-webkit-transition: all 1s;
+	-moz-transition: all 1s;
 	transition: all 1s;
 }
 .focus {
@@ -329,10 +363,7 @@ ul#lyric {
 	font-weight: 700;
 	/*background-color: rgba(255,255,255,.9);*/
 	position: inline-block;
+	-webkit-transition: all 1s;
+	-moz-transition: all 1s;
 	transition: all 1s;
 }
-/*.focus + .line {
-	color: blue;
-	/*background-color: rgba(255, 255, 255, 0.6);*/
-	transition: all 1s;
-}*/

@@ -332,13 +332,16 @@ window.onload = function() {
     optionMenu.style.display = 'none';
 
     $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';
-    $id('volume').style.opacity = 0;
 
-    btnBack.addEventListener('click', onButtonBack(), false);
+    var onB = onButtonBack();
+    btnBack.addEventListener('click', onB, false);
+    $id('lyric-lrc').addEventListener('click', onB, false);
+    $id('lyric-album').addEventListener('click', onB, false);
+
     // polyfill
     btnNext.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
     btnPre.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
 
-    $id('lyric-lrc').addEventListener('click', onButtonBack(), false);
-    $id('lyric-album').addEventListener('click', onButtonBack(), false);
+
+    onSizeChange()();
 };
