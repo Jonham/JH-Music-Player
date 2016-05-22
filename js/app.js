@@ -217,6 +217,11 @@ function startPlay() {
                 btnPlay.style.backgroundImage = btnIcons.play;
                 disk.style.animationPlayState = 'paused';
             }, false);
+            // media loaded seekable range
+            var loaded = document.querySelector('span.loaded');
+            audio.addEventListener('progress', function(e){
+              loaded.style.width = this.seekable.length * 100 + '%';
+            }, false)
         }
     }; // playOrPause()
 

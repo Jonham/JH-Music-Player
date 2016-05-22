@@ -101,7 +101,7 @@ hr.line {
 }
 
 
-.empty, .fill {
+.empty, .fill, .loaded {
     position: absolute;
     display: inline-block;
 }
