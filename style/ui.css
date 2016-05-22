@@ -223,12 +223,12 @@ div#lyric-album span {
     background-size: cover;
     background-position: 50%;
 
+    animation: goRound 10s linear 0s infinite;
+    animation-play-state: paused;
     -webkit-animation: goRound 10s linear 0s infinite;
     -webkit-animation-play-state: paused;
     -moz-animation: goRound 10s linear 0s infinite;
     -moz-animation-play-state: paused;
-    animation: goRound 10s linear 0s infinite;
-    animation-play-state: paused;
 }
 
 

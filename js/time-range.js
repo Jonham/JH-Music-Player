@@ -1,6 +1,7 @@
 var timeRange = $id('time-range'),
     volumeRange = $id('volume-range');
 
+// for debug
 var log = function(msg) { console.log(msg); };
 
 var onTimeRangeUpdate = function() {
@@ -23,11 +24,13 @@ var onTimeRangeUpdate = function() {
 audio.addEventListener('timeupdate', onTimeRangeUpdate(), false);
 
 var RangeClickFactory = function(range, type) {
-    var rectTimerange = range.getBoundingClientRect();
-    console.log(type + rectTimerange.width);
+    // length is a value that given by resizeListener
+    var rectRange = range.getBoundingClientRect(),
+        left = rectRange.left,
+        length = rectRange.width;
+
     var btn = range.querySelector('.range-btn'),
         fill = range.querySelector('.fill');
-    var callback; // depends on type
 
     var moveto = function(percent) {
         btn.style.left = percent + '%';
@@ -48,7 +51,7 @@ var RangeClickFactory = function(range, type) {
 
     var listener = function(e) {
         var point = e.clientX - 5;
-        var per = (point - rectTimerange.left) / rectTimerange.width;
+        var per = (point - left) / length;//rectTimerange.width;
         per = per < 0?
                 0 :
                 per > 1?
@@ -90,7 +93,7 @@ var onSizeChange = function(e) {
         timeRange.style.width = length +'px';
         volumeRange.style.width = length + 'px';
 
-        callback();
+        setTimeout( callback, 1100); // transition-duration: 1000
     }; // resizeRange()
 
     var resizeLyric = function() {
@@ -109,21 +112,25 @@ var onSizeChange = function(e) {
     var listener = function() {
         clearTimeout(slowdownTimer);
         // invoke many times, but only activate 1 second after last invoke
-        slowdownTimer = setTimeout(function(){
-            resizeRange( function() {
-                timeRange.removeEventListener('click', timerangelistener);
-                timerangelistener = RangeClickFactory(timeRange, 'time'); // change when the width time-range change
-                timeRange.addEventListener('click', timerangelistener, false);
+        slowdownTimer = setTimeout(
+            function() {
+                var callback = function() {
+                    timeRange.removeEventListener('click', timerangelistener);
+                    timerangelistener = RangeClickFactory(timeRange, 'time', length); // change when the width time-range change
+                    timeRange.addEventListener('click', timerangelistener, false);
 
-                volumeRange.removeEventListener('click', volumerangelistener);
-                volumerangelistener = RangeClickFactory(volumeRange, 'volume');
-                volumeRange.addEventListener('click', volumerangelistener, false);
+                    volumeRange.removeEventListener('click', volumerangelistener);
+                    volumerangelistener = RangeClickFactory(volumeRange, 'volume', length);
+                    volumeRange.addEventListener('click', volumerangelistener, false);
+                };
 
-            });
-            resizeLyric();
+                resizeRange( callback );
+
+                resizeLyric();
         }, 1000); // slowdownTimer
     }; // listener
 
     return listener;
 };
+
 window.addEventListener('resize', onSizeChange(), false);

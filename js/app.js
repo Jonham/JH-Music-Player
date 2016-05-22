@@ -186,26 +186,15 @@ var btnPlay = $id('play'),
         'pause': "url('./style/icons/pause-w.svg')"
     };
 function startPlay() {
-    var state = false,
+    var once = false,
         disk = document.querySelector('span.disk');
 
     var playOrPause = function() {
-        if (state) {
-            if (audio.paused) {
-                audio.play();
-                btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.style.animationPlayState = 'running';
-            }
-            else{
-                audio.pause();
-                btnPlay.style.backgroundImage = btnIcons.play;
-                disk.style.animationPlayState = 'paused';
-            }
+        if (once) {
+            audio.paused ? audio.play() : audio.pause();
         }
         else { // first time
-            state = true;
-            btnPlay.style.backgroundImage = btnIcons.pause;
-            disk.style.animationPlayState = 'running';
+            once = true;
 
             audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
@@ -213,11 +202,18 @@ function startPlay() {
                 totalTime.innerHTML = formatTimestamp(audio.duration);
                 if (audio.paused) { audio.play(); }
             }, false);
+            audio.addEventListener('play', function() {
+                btnPlay.style.backgroundImage = btnIcons.pause;
+                disk.style.animationPlayState = 'running';
+            }, false);
+            audio.addEventListener('pause', function() {
+                btnPlay.style.backgroundImage = btnIcons.play;
+                disk.style.animationPlayState = 'paused';
+            }, false);
         }
     }; // playOrPause()
 
     btnPlay.addEventListener("click", playOrPause, false);
-
 }
 
 function addScrollLrc() {
@@ -245,10 +241,7 @@ function formatTimestamp(time) {
 	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
 }
 
-audio.addEventListener('end', function() {
-    btnPlay.style.backgroundImage = btnIcons.play;
-}, false);
-var OFFSET = 0.5; // offset between lrc and audio
+var OFFSET = 0.5; // offset between lrc and audio : 0.5 for GoodLife.mp3 only
 var offsetTop = "";
 var originTop = 160;
 var ONCE = true;
