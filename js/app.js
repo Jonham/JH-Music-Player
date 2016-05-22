@@ -221,7 +221,7 @@ function startPlay() {
             var loaded = document.querySelector('span.loaded');
             audio.addEventListener('progress', function(e){
               loaded.style.width = this.seekable.length * 100 + '%';
-            }, false)
+            }, false);
         }
     }; // playOrPause()
 
