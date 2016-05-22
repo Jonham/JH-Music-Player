@@ -96,6 +96,8 @@ hr.line {
     padding: .6em;
     padding-top: 0em;
     opacity: .6;
+
+    cursor: pointer;
 }
 
 
@@ -276,6 +278,9 @@ div.bottom {
 }
 #time-range .fill {
     border: 1px solid rgb(255, 0, 0);
+}
+#time-range .loaded {
+    border: 1px solid rgb(255, 255, 255);
 }
 
 #current-time, #total-time {

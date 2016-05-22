@@ -31,7 +31,6 @@ var RangeClickFactory = function(range, type) {
 
     var btn = range.querySelector('.range-btn'),
         fill = range.querySelector('.fill');
-
     var moveto = function(percent) {
         btn.style.left = percent + '%';
         fill.style.width = percent + '%';
@@ -57,11 +56,9 @@ var RangeClickFactory = function(range, type) {
                 per > 1?
                     1 :
                     per;
-        moveto(per * 100);  // move btn and extend fill
         changeAudioSth(per, type);
         // what if outside of 0/100 what if resize
     };
-
     return listener;
 };
 
@@ -70,6 +67,39 @@ timeRange.addEventListener('click', timerangelistener, false);
 
 var volumerangelistener = RangeClickFactory(volumeRange, 'volume');
 volumeRange.addEventListener('click', volumerangelistener, false);
+
+var onAudioVolumeChange = function( range, audio ) {
+    var btn = range.querySelector('.range-btn'),
+        fill = range.querySelector('.fill');
+
+    var move = function(percent) {
+        btn.style.left = percent + '%';
+        fill.style.width = percent + '%';
+    };
+    var listener = function(e) {
+        var a = e.target;
+        move(a.volume * 100);
+    };
+    audio.addEventListener('volumechange', listener, false);
+};
+onAudioVolumeChange( volumeRange, audio);
+var onAudioMute = function( speaker, audio ) {
+    var volume = audio.volume;
+
+    var listener = function(e) {
+        if (!audio.muted) {
+            // set muted
+            volume = audio.volume;
+            audio.volume = 0;
+            audio.muted = true;
+        } else {
+            audio.volume = volume;
+            audio.muted = false;
+        }
+    };
+    speaker.addEventListener('click', listener, false);
+};
+onAudioMute(document.querySelector('#volume .speaker'), audio);
 
 // Resizing Adjustment
 var onSizeChange = function(e) {

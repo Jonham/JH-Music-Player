@@ -126,7 +126,6 @@ function classifyLrc(arr) {
 //      LittleEndian
 
 var loadedLRClist = [];
-
 function loadLrc(file, callback) {
     var path = "./music/";
     var url = path + file;
@@ -181,11 +180,11 @@ var btnPlay = $id('play'),
     title = $id('song-title'),
     artist = $id('song-artist');
 
+function startPlay() {
     var btnIcons = {
         'play':  "url('./style/icons/play-w.svg')",
         'pause': "url('./style/icons/pause-w.svg')"
     };
-function startPlay() {
     var once = false,
         disk = document.querySelector('span.disk');
 
@@ -202,6 +201,14 @@ function startPlay() {
                 totalTime.innerHTML = formatTimestamp(audio.duration);
                 if (audio.paused) { audio.play(); }
             }, false);
+
+            audio.addEventListener("durationchange", function() {
+                totalTime.innerHTML = formatTimestamp(audio.duration);
+            }, false);
+            audio.addEventListener("loadedmetadata", function() {
+                totalTime.innerHTML = formatTimestamp(audio.duration);
+            }, false);
+
             audio.addEventListener('play', function() {
                 btnPlay.style.backgroundImage = btnIcons.pause;
                 disk.style.animationPlayState = 'running';
