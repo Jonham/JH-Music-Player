@@ -315,12 +315,14 @@ var onButtonBack = function() {
     var listener = function(e) {
         if (page == 0) {
             lyric.style.opacity = 0;
+            album.style.display = '';
             album.style.opacity = 1;
             main.style.backgroundColor = 'rgba(0,0,0,.5)';
             page = 1;
         } else {
             lyric.style.opacity = 1;
             album.style.opacity = 0;
+            album.style.display = 'none';
             main.style.backgroundColor = 'rgba(0,0,0,.8)';
             page = 0;
         }
@@ -334,8 +336,6 @@ window.onload = function() {
 
     startPlay();
 
-    optionMenu.style.display = 'none';
-
     $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
 
     var onB = onButtonBack();
@@ -347,6 +347,12 @@ window.onload = function() {
     btnNext.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
     btnPre.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
 
-
     onSizeChange()();
 };
+
+var btnOption = document.querySelector('span#option-btn');
+btnOption.addEventListener('click', function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    optionMenu.classList.toggle('hide-fold');
+}, false);

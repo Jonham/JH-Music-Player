@@ -32,9 +32,9 @@ body {
     display: block;
 }
 .one-second {
-    transition: ease-out 1s;
-    -webkit-transition: ease-out 1s;
-    -moz-transition: ease-out 1s;
+    transition: all ease-out 1s;
+    -webkit-transition: all ease-out 1s;
+    -moz-transition: all ease-out 1s;
 }
 
 
@@ -205,6 +205,25 @@ div#lyric-lrc, div#lyric-album {
     }
 }
 
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+@keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
+@-webkit-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; } }
+@-moz-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+@-moz-keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
+
 div#lyric-album {
     position: absolute;
     top: 0;
@@ -235,17 +254,38 @@ div#lyric-album span {
 
 
 #option {
-    display: none;
+    /*display: none;*/
     position: absolute;
     width: 100%;
+    bottom: 0;
+}
+#option-btn {
+    background-image: url('icons/options-w.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    padding: .5em;
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: .5em;
+
+    display: inline-block;
+    position: absolute;
+
+    right: 1.2em;
+    bottom: .2em;
+    z-index: 99;
 }
 #option-menu {
     display: inline-block;
     border-top: 1px solid white;
     position: absolute;
-    right: 2em;
-    bottom: 1em;
+    right: 1.2em;
+    bottom: 2em;
     background-color: rgba(0,0,0, .5);
+
+    transition: all .6s;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
 }
 .menu-item {
     display: list-item;
@@ -253,8 +293,29 @@ div#lyric-album span {
     padding: .6em 2em;
     border-bottom: 1px solid white;
 }
+.hide-fold {
+    transition: all .6s;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
 
+    transform-origin: right bottom;
+    -webkit-transform-origin: right bottom;
+    -moz-transform-origin: right bottom;
 
+    transform: scale(0);
+    -webkit-transform: -webkit-scale(0);
+    -moz-transform: -moz-scale(0);
+}
+.fade-out {
+    animation: fadeout 1s;
+    -webkit-animation: fadeout 1s;
+    -moz-animation: fadeout 1s;
+}
+.fade-in {
+    animation: fadein 1s;
+    -webkit-animation: fadein 1s;
+    -moz-animation: fadein 1s;
+}
 
 div.bottom {
     position: absolute;

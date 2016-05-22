@@ -1,8 +1,6 @@
 var timeRange = $id('time-range'),
     volumeRange = $id('volume-range');
 
-// for debug
-var log = function(msg) { console.log(msg); };
 
 var onTimeRangeUpdate = function() {
     var me = timeRange,
