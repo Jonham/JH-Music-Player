@@ -32,11 +32,19 @@ body {
     display: block;
 }
 .one-second {
-    transition: all ease-out 1s;
-    -webkit-transition: all ease-out 1s;
-    -moz-transition: all ease-out 1s;
+    transition: all ease-out .6s;
+    -webkit-transition: all ease-out .6s;
+    -moz-transition: all ease-out .6s;
 }
-
+.layer-1 {
+    z-index: 10;
+}
+.layer-2 {
+    z-index: 20;
+}
+.layer-3 {
+    z-index: 30;
+}
 
 .left {
     float: left;
@@ -49,7 +57,7 @@ body {
 
 
 nav {
-    margin-top: 10px;
+    padding-top: 10px;
     vertical-align: middle;
 }
 span#back, span#share {
@@ -72,13 +80,12 @@ span#share {
 }
 #song-message {
     margin-left: 1em;
-    margin-bottom: 1em;
 }
 #song-artist {
     color: rgba(255,255,255, .5);
 }
 
-hr.line {
+hr.divider {
     margin: 0;
     padding: 0;
     opacity: .2;
@@ -115,10 +122,12 @@ hr.line {
 .range-btn {
     display: inline-block;
     position: absolute;
+    background-color: rgba(255,255,255,.8);
+
     width: 10px;
     height: 10px;
-    background-color: rgba(255,255,255,.8);
     border-radius: 5px;
+
     margin-top: -4px;
 }
 #volume-range, #time-range {
@@ -126,7 +135,7 @@ hr.line {
         position: absolute;
 
         text-align: left;
-        width: 80%;
+        width: 50%;
         height: 10px;
         cursor: pointer;
 }
@@ -157,7 +166,6 @@ div#lyric-container ul {
     text-align: center;
     padding: 0;
     line-height: 2em;
-    z-index: 10;
 }
 div#lyric-lrc, div#lyric-album {
     position: relative;
@@ -231,7 +239,7 @@ div#lyric-album {
     vertical-align: middle;
     opacity: 0;
 }
-div#lyric-album span {
+div#lyric-album>span.disk {
     display: inline-block;
     position: relative;
     top: 0;
@@ -251,7 +259,29 @@ div#lyric-album span {
     -moz-animation: goRound 10s linear 0s infinite;
     -moz-animation-play-state: paused;
 }
-
+span.song-opt-grp {
+    position: relative;
+    display: inline-block;
+    bottom: 0;
+    text-align: center;
+}
+span.song-opt-grp > span {
+    display: inline-block;
+    padding: .8em;
+    margin: 0 1em;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
+}
+span.favorite {
+    background-image: url('icons/favorite-w.png');
+}
+span.comments {
+    background-image: url('icons/comments-w.svg');
+}
+span.file-option {
+    background-image: url('icons/options-w.svg');
+}
 
 #option {
     /*display: none;*/
@@ -261,27 +291,29 @@ div#lyric-album span {
 }
 #option-btn {
     background-image: url('icons/options-w.svg');
+    background-color: black;
     background-repeat: no-repeat;
     background-size: contain;
 
-    padding: .5em;
+    padding: .7em;
     border: 1px solid rgba(255,255,255,.8);
-    border-radius: .5em;
+    border-radius: .7em;
 
     display: inline-block;
     position: absolute;
 
     right: 1.2em;
     bottom: .2em;
-    z-index: 99;
+
+    cursor: pointer;
 }
 #option-menu {
     display: inline-block;
     border-top: 1px solid white;
     position: absolute;
     right: 1.2em;
-    bottom: 2em;
-    background-color: rgba(0,0,0, .5);
+    bottom: 2.2em;
+    background-color: rgba(0,0,0, .8);
 
     transition: all .6s;
     -webkit-transition: all .6s;
@@ -292,6 +324,8 @@ div#lyric-album span {
     list-style: none;
     padding: .6em 2em;
     border-bottom: 1px solid white;
+
+    cursor: pointer;
 }
 .hide-fold {
     transition: all .6s;
@@ -323,8 +357,6 @@ div.bottom {
     text-align: center;
     display: block;
     width: 100%;
-
-    z-index: 100;
 }
 
 #time {
@@ -417,13 +449,13 @@ ul#lyric {
 	margin: 0;
 }
 .line {
-	color: white;
-	-webkit-transition: all 1s;
-	-moz-transition: all 1s;
-	transition: all 1s;
+	color: rgba(255,255,255,.5);
+	-webkit-transition: all 0.6s;
+	-moz-transition: all 0.6s;
+	transition: all 0.6s;
 }
 .focus {
-	color: blue;
+	color: white;
 	font-weight: 700;
 	/*background-color: rgba(255,255,255,.9);*/
 	position: inline-block;

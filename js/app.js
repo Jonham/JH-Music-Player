@@ -255,7 +255,7 @@ function formatTimestamp(time) {
 
 var OFFSET = 0.5; // offset between lrc and audio : 0.5 for GoodLife.mp3 only
 var offsetTop = "";
-var originTop = 160;
+var lyricHightlightOriginTop = 160;
 var ONCE = true;
 
 audio.addEventListener("timeupdate", function(e) {
@@ -271,7 +271,7 @@ audio.addEventListener("timeupdate", function(e) {
 		artist.innerHTML = lrc.ar;
 		offsetTop = lyric.offsetTop;
 
-		lyric.style.top = originTop + "px";
+		lyric.style.top = lyricHightlightOriginTop + "px";
 		addScrollLrc();
 		ONCE = false;
 	}
@@ -288,10 +288,10 @@ audio.addEventListener("timeupdate", function(e) {
 			if (i - 2 >= 0) {
 				aChild[i - 1].className = "line focus";
 				aChild[i - 2].className = "line";
-				lyric.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
+				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
 			} else if (i >= 1) {
 				aChild[i - 1].className = "line focus";
-				lyric.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
+				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
 			}
 
 			var strLrcTMP = "";
@@ -306,9 +306,9 @@ audio.addEventListener("timeupdate", function(e) {
 }, false);
 
 var onButtonBack = function() {
-    var lyric = $id('lyric-lrc'),
+    var main = $id('main'),
+        lyric = $id('lyric-lrc'),
         album = $id('lyric-album'),
-        main = $id('main'),
         disk  = album.querySelector('.disk'),
         page = 0; // lyric-lrc
 
@@ -340,8 +340,8 @@ window.onload = function() {
 
     var onB = onButtonBack();
     btnBack.addEventListener('click', onB, false);
-    $id('lyric-lrc').addEventListener('click', onB, false);
-    $id('lyric-album').addEventListener('click', onB, false);
+    // $id('lyric-lrc').addEventListener('click', onB, false);
+    // $id('lyric-album').addEventListener('click', onB, false);
 
     // polyfill
     btnNext.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
@@ -352,7 +352,12 @@ window.onload = function() {
 
 var btnOption = document.querySelector('span#option-btn');
 btnOption.addEventListener('click', function(e){
-    e.stopPropagation();
-    e.preventDefault();
-    optionMenu.classList.toggle('hide-fold');
-}, false);
+        e.stopPropagation();
+        e.preventDefault();
+        optionMenu.classList.toggle('hide-fold');
+    }, false);
+optionMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        optionMenu.classList.toggle('hide-fold');
+        alert(e.target.innerHTML);
+    }, false);

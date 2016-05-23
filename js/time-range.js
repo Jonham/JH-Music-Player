@@ -103,7 +103,7 @@ onAudioMute(document.querySelector('#volume .speaker'), audio);
 var onSizeChange = function(e) {
     var divBottom = document.querySelector('div.bottom');
     var lyric = $id('lyric-container'),
-        album = $id('lyric-album').querySelector('span');
+        albumDisk = $id('lyric-album').querySelector('span');
 
     var slowdownTimer; // for reducing listener-invoking times
 
@@ -134,7 +134,9 @@ var onSizeChange = function(e) {
         var height = bottom - top;
 
         lyric.style.height = height  + "px";
-        album.style.top = (height / 2) - 120 + 'px';
+        lyricHightlightOriginTop = height / 2 - 40;
+        // albumDisk height 240px 15em
+        albumDisk.style.top = (height / 2) - 140 + 'px';
     }; // resizeLyric()
 
     var listener = function() {
