@@ -9,7 +9,7 @@ body {
     width:  100%;
     box-sizing: border-box;
 
-    min-height: 440px;
+    min-height: 470px;
     min-width: 320px;
 }
 #background {
@@ -180,57 +180,56 @@ div#lyric-lrc, div#lyric-album {
 
 /*support all*/
 @keyframes goRound {
-    from {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
+    from { transform: rotate(0deg); }
+    50%  { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }  }
 @-webkit-keyframes goRound {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    50% {
-        -webkit-transform: rotate(180deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
+    from { -webkit-transform: rotate(0deg); }
+    50% { -webkit-transform: rotate(180deg); }
+    100% { -webkit-transform: rotate(360deg); } }
 @-moz-keyframes goRound {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-    50% {
-        -moz-transform: rotate(180deg);
-    }
-    100% {
-        -moz-transform: rotate(360deg);
-    }
-}
+    from { -moz-transform: rotate(0deg); }
+    50%  { -moz-transform: rotate(180deg); }
+    100% { -moz-transform: rotate(360deg); } }
+
+@keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; } }
+@-moz-keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
 
 @keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; } }
-@keyframes fadein {
-    from { opacity: 0;}
-    to { opacity: 1; } }
 @-webkit-keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; } }
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to { opacity: 1; } }
 @-moz-keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; } }
-@-moz-keyframes fadein {
-    from { opacity: 0;}
-    to { opacity: 1; } }
+
+@keyframes btnIn {
+    from { transform: scale(2); }
+    to   { transform: scale(1); } }
+@-webkit-keyframes btnIn {
+    from { -webkit-transform: scale(2); }
+    to   { -webkit-transform: scale(1); } }
+@-moz-keyframes btnIn {
+    from { -moz-transform: scale(2); }
+    to   { -moz-transform: scale(1); } }
+@keyframes btnOut {
+    from { transform: scale(2); }
+    to   { transform: scale(1); } }
+@-webkit-keyframes btnOut {
+    from { -webkit-transform: scale(2); }
+    to   { -webkit-transform: scale(1); } }
+@-moz-keyframes btnOut {
+    from { -moz-transform: scale(2); }
+    to   { -moz-transform: scale(1); } }
 
 div#lyric-album {
     position: absolute;
@@ -260,28 +259,65 @@ div#lyric-album>span.disk {
     -moz-animation-play-state: paused;
 }
 span.song-opt-grp {
-    position: relative;
-    display: inline-block;
+    position: absolute;
     bottom: 0;
+    display: block;
+    width: 100%;
     text-align: center;
 }
 span.song-opt-grp > span {
     display: inline-block;
+    position: relative;
     padding: .8em;
     margin: 0 1em;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50%;
+
+    animation-duration: .3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-direction: alternate;
+    -webkit-animation-duration: .3s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: alternate;
+    -moz-animation-duration: .3s;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-direction: alternate;
 }
 span.favorite {
-    background-image: url('icons/favorite-w.png');
+    background-image: url('icons/favorite-w.svg');
+    animation-name: btnOut;
+    -webkit-animation-name: btnOut;
+    -moz-animation-name: btnOut;
+}
+span.favorited {
+    background-image: url('icons/favorited-w.svg');
+    animation-name: btnIn;
+    -webkit-animation-name: btnIn;
+    -moz-animation-name: btnIn;
 }
 span.comments {
     background-image: url('icons/comments-w.svg');
 }
+span.comments > span { // comments count
+    display: inline;
+    position: absolute;
+
+    top: -2px;
+    right: -2px;
+    font-size: .5em;
+    font-weight: 600;
+    color: black;
+    background-color: white;
+    border-radius: .2em;
+}
 span.file-option {
     background-image: url('icons/options-w.svg');
 }
+
 
 #option {
     /*display: none;*/
@@ -450,6 +486,7 @@ ul#lyric {
 }
 .line {
 	color: rgba(255,255,255,.5);
+    padding: 0 1em;
 	-webkit-transition: all 0.6s;
 	-moz-transition: all 0.6s;
 	transition: all 0.6s;

@@ -201,7 +201,7 @@ function startPlay() {
 
             // turnoff all hightlighted lines when user seekable
             $on(audio, 'seeking', function(e) {
-                var domLIs = lyric.querySelectorAll('.focus');
+                var domLIs = $(lyric, '.focus');
                 var aFocus = Array.prototype.slice.apply(domLIs);
                 aFocus.forEach(function(ele) {ele.className = 'line';});
             });
@@ -293,7 +293,7 @@ var onButtonBack = function() {
     var main = $id('main'),
         lyric = $id('lyric-lrc'),
         album = $id('lyric-album'),
-        disk  = album.querySelector('.disk'),
+        disk  = $(album, '.disk'),
         page = 0; // lyric-lrc
 
     var listener = function(e) {
@@ -346,10 +346,46 @@ $click(optionMenu, function(e) {
     });
 
 var onSongOptionsGroup = function() {
-    var wrapper = $('span.song-opt-grp', true),
-        favorite = wrapper.querySelector('.favorite'),
-        comments = wrapper.querySelector('.comments'),
-        commentsCount = comments.querySelector('span'),
-        fileOpt = wrapper.querySelector('.file-option');
+    var wrapper = $('span.song-opt-grp'),
+        favorite = $(wrapper, '#btnFavorite'),
+        comments = $(wrapper, '.comments'),
+        	commentsCount = $(comments, 'span'),
+        fileOpt = $(wrapper, '.file-option');
 
+	var favoriteState = false,
+		onFavoriteClick = function(e) {
+				favorite.className =
+					favoriteState ?
+						'favorite btnToggle':
+						'favorited btnToggle';
+						// favorite.classList.toggle('favorite');
+						// favorite.classList.toggle('favorited');
+				favoriteState = !favoriteState;
+			},
+		onCommentsClick = function(e) {
+				alert('show comments');
+				commentsCount.innerHTML = 99;
+			},
+		onFileOptionClick = function(e) {
+				alert('show file option menu.');
+			};
+
+	// add listener on their parent and switch on e.target
+	$on(wrapper, 'click', function(e) {
+			e.stopPropagation();
+			switch(e.target) {
+				case favorite:
+					onFavoriteClick(e);
+					break;
+				case comments:
+					onCommentsClick(e);
+					break;
+				case fileOpt:
+					onFileOptionClick(e);
+					break;
+				default:
+					// other elements or public function
+			}
+		});
 };
+onSongOptionsGroup();
