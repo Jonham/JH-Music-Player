@@ -320,6 +320,8 @@ window.onload = function() {
     startPlay();
 
     $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
+	var imgPreload = new Image();
+	imgPreload.src = 'style/icons/favorited-w.svg';
 
     var onB = onButtonBack();
     $click(btnBack, onB);

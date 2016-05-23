@@ -40,6 +40,7 @@ var RangeClickFactory = function(range, type) {
             break;
             case 'volume':
                 audio.volume = per;
+                alert(audio.volume);
             break;
             default:
         }
