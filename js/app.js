@@ -187,11 +187,11 @@ function startPlay() {
 
             $on(audio, 'play', function() {
                 btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.style.animationPlayState = 'running';
+                disk.classList.add('goRound');
             });
             $on(audio, 'pause', function() {
                 btnPlay.style.backgroundImage = btnIcons.play;
-                disk.style.animationPlayState = 'paused';
+				disk.classList.remove('goRound');
             });
             // media loaded seekable range
             var loaded = $('span.loaded');
