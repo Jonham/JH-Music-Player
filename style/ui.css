@@ -383,9 +383,10 @@ span.file-option {
     -moz-transform-origin: right bottom;
 
     transform: scale(0);
-    -webkit-transform: -webkit-scale(0);
-    -moz-transform: -moz-scale(0);
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
 }
+
 .fade-out {
     animation: fadeout 1s;
     -webkit-animation: fadeout 1s;
