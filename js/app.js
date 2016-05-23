@@ -356,6 +356,7 @@ var onSongOptionsGroup = function() {
 
 	var favoriteState = false,
 		onFavoriteClick = function(e) {
+				e.stopPropagation();
 				favorite.className =
 					favoriteState ?
 						'favorite btnToggle':
@@ -365,29 +366,18 @@ var onSongOptionsGroup = function() {
 				favoriteState = !favoriteState;
 			},
 		onCommentsClick = function(e) {
+				e.stopPropagation();
 				alert('show comments');
 				commentsCount.innerHTML = 99;
 			},
 		onFileOptionClick = function(e) {
+				e.stopPropagation();
 				alert('show file option menu.');
 			};
 
 	// add listener on their parent and switch on e.target
-	$on(wrapper, 'click', function(e) {
-			e.stopPropagation();
-			switch(e.target) {
-				case favorite:
-					onFavoriteClick(e);
-					break;
-				case comments:
-					onCommentsClick(e);
-					break;
-				case fileOpt:
-					onFileOptionClick(e);
-					break;
-				default:
-					// other elements or public function
-			}
-		});
+	$click(favorite, onFavoriteClick);
+	$click(comments, onCommentsClick);
+	$click(fileOpt, onFileOptionClick);
 };
 onSongOptionsGroup();

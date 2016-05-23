@@ -56,6 +56,7 @@ var RangeClickFactory = function(range, type) {
                     1 :
                     per;
         changeAudioSth(per, type);
+        alert(type);
         // what if outside of 0/100 what if resize
     };
     return listener;

@@ -374,10 +374,6 @@ span.file-option {
     cursor: pointer;
 }
 .hide-fold {
-    transition: all .6s;
-    -webkit-transition: all .6s;
-    -moz-transition: all .6s;
-
     transform-origin: right bottom;
     -webkit-transform-origin: right bottom;
     -moz-transform-origin: right bottom;
@@ -385,6 +381,10 @@ span.file-option {
     transform: scale(0);
     -webkit-transform: scale(0);
     -moz-transform: scale(0);
+
+    transition: all .6s;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
 }
 
 .fade-out {
