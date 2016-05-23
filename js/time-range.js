@@ -4,8 +4,8 @@ var timeRange = $id('time-range'),
 
 var onTimeRangeUpdate = function() {
     var me = timeRange,
-        fill = timeRange.querySelector('.fill'),
-        btn = timeRange.querySelector('.range-btn');
+        fill = $(timeRange, '.fill'),
+        btn = $(timeRange, '.range-btn');
 
     var audioPercent = function() {
         var total = audio.duration,
@@ -19,7 +19,7 @@ var onTimeRangeUpdate = function() {
 
     return listener;
 };
-audio.addEventListener('timeupdate', onTimeRangeUpdate(), false);
+$on(audio, 'timeupdate', onTimeRangeUpdate());
 
 var RangeClickFactory = function(range, type) {
     // length is a value that given by resizeListener
@@ -27,8 +27,8 @@ var RangeClickFactory = function(range, type) {
         left = rectRange.left,
         length = rectRange.width;
 
-    var btn = range.querySelector('.range-btn'),
-        fill = range.querySelector('.fill');
+    var btn = $(range, '.range-btn'),
+        fill = $(range, '.fill');
     var moveto = function(percent) {
         btn.style.left = percent + '%';
         fill.style.width = percent + '%';
@@ -61,14 +61,14 @@ var RangeClickFactory = function(range, type) {
 };
 
 var timerangelistener = RangeClickFactory(timeRange, 'time');
-timeRange.addEventListener('click', timerangelistener, false);
+$click(timeRange, timerangelistener);
 
 var volumerangelistener = RangeClickFactory(volumeRange, 'volume');
-volumeRange.addEventListener('click', volumerangelistener, false);
+$click(volumeRange, volumerangelistener);
 
 var onAudioVolumeChange = function( range, audio ) {
-    var btn = range.querySelector('.range-btn'),
-        fill = range.querySelector('.fill');
+    var btn = $(range, '.range-btn'),
+        fill = $(range, '.fill');
 
     var move = function(percent) {
         btn.style.left = percent + '%';
@@ -78,7 +78,7 @@ var onAudioVolumeChange = function( range, audio ) {
         var a = e.target;
         move(a.volume * 100);
     };
-    audio.addEventListener('volumechange', listener, false);
+    $on(audio, 'volumechange', listener);
 };
 onAudioVolumeChange( volumeRange, audio);
 var onAudioMute = function( speaker, audio ) {
@@ -95,7 +95,7 @@ var onAudioMute = function( speaker, audio ) {
             audio.muted = false;
         }
     };
-    speaker.addEventListener('click', listener, false);
+    $click(speaker, listener);
 };
 onAudioMute(document.querySelector('#volume .speaker'), audio);
 
@@ -145,13 +145,13 @@ var onSizeChange = function(e) {
         slowdownTimer = setTimeout(
             function() {
                 var callback = function() {
-                    timeRange.removeEventListener('click', timerangelistener);
+                    $off(timeRange, 'click', timerangelistener);
                     timerangelistener = RangeClickFactory(timeRange, 'time', length); // change when the width time-range change
-                    timeRange.addEventListener('click', timerangelistener, false);
+                    $click(timeRange, timerangelistener);
 
-                    volumeRange.removeEventListener('click', volumerangelistener);
+                    $off(volumeRange, 'click', volumerangelistener);
                     volumerangelistener = RangeClickFactory(volumeRange, 'volume', length);
-                    volumeRange.addEventListener('click', volumerangelistener, false);
+                    $click(volumeRange, volumerangelistener);
                 };
 
                 resizeRange( callback );
@@ -163,4 +163,4 @@ var onSizeChange = function(e) {
     return listener;
 };
 
-window.addEventListener('resize', onSizeChange(), false);
+$on(window, 'resize', onSizeChange());

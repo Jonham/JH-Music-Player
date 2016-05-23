@@ -9,6 +9,7 @@
         if (typeof(context) === 'object') {
             ctx = context;
         } else {
+            ctx = typeof(str) === 'object'? str: ctx;
             var str = context;
         }
         if(document.querySelector && document.querySelectorAll) {
