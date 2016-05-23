@@ -251,11 +251,23 @@ div#lyric-album>span.disk {
     background-size: cover;
     background-position: 50%;
 
-    animation: goRound 10s linear 0s infinite;
+    animation-name: goRound;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
     animation-play-state: paused;
-    -webkit-animation: goRound 10s linear 0s infinite;
+    -webkit-animation-name: goRound;
+    -webkit-animation-duration: 10s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: infinite;
     -webkit-animation-play-state: paused;
-    -moz-animation: goRound 10s linear 0s infinite;
+    -moz-animation-name: goRound;
+    -moz-animation-duration: 10s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-delay: 0s;
+    -moz-animation-iteration-count: infinite;
     -moz-animation-play-state: paused;
 }
 span.song-opt-grp {
