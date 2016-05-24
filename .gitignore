@@ -3,6 +3,7 @@
 /format/
 /screenshots
 /static
+/Notes
 
 /**/*.jh
 *.txt

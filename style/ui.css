@@ -9,7 +9,7 @@ body {
     width:  100%;
     box-sizing: border-box;
 
-    min-height: 440px;
+    min-height: 470px;
     min-width: 320px;
 }
 #background {
@@ -32,11 +32,19 @@ body {
     display: block;
 }
 .one-second {
-    transition: ease-out 1s;
-    -webkit-transition: ease-out 1s;
-    -moz-transition: ease-out 1s;
+    transition: all ease-out .6s;
+    -webkit-transition: all ease-out .6s;
+    -moz-transition: all ease-out .6s;
 }
-
+.layer-1 {
+    z-index: 10;
+}
+.layer-2 {
+    z-index: 20;
+}
+.layer-3 {
+    z-index: 30;
+}
 
 .left {
     float: left;
@@ -49,7 +57,7 @@ body {
 
 
 nav {
-    margin-top: 10px;
+    padding-top: 10px;
     vertical-align: middle;
 }
 span#back, span#share {
@@ -72,13 +80,12 @@ span#share {
 }
 #song-message {
     margin-left: 1em;
-    margin-bottom: 1em;
 }
 #song-artist {
     color: rgba(255,255,255, .5);
 }
 
-hr.line {
+hr.divider {
     margin: 0;
     padding: 0;
     opacity: .2;
@@ -95,25 +102,18 @@ hr.line {
     background-repeat: no-repeat;
     padding: .6em;
     padding-top: 0em;
+    opacity: .6;
+
+    cursor: pointer;
 }
 
-#volume-range, .empty {
-    width: 100%;
-}
-#volume-range {
-    display: inline-block;
-    position: absolute;
 
-    text-align: left;
-    margin-left: 1em;
-    padding-top: .5em;
-    width: 80%;
-}
-.empty, .fill {
+.empty, .fill, .loaded {
     position: absolute;
     display: inline-block;
 }
 .empty {
+    width: 100%;
     border: 1px solid rgba(255,255,255,.3);
 }
 .fill {
@@ -122,13 +122,35 @@ hr.line {
 .range-btn {
     display: inline-block;
     position: absolute;
+    background-color: rgba(255,255,255,.8);
+
     width: 10px;
     height: 10px;
-    background-color: rgba(255,255,255,.8);
     border-radius: 5px;
 
     margin-top: -4px;
 }
+#volume-range, #time-range {
+        display: inline-block;
+        position: absolute;
+
+        text-align: left;
+        width: 50%;
+        height: 10px;
+        cursor: pointer;
+}
+
+#volume-range {
+    margin-left: 1em;
+    padding-top: .5em;
+}
+#volume-range .fill {
+    width: 100%;
+}
+#volume-range .range-btn {
+    left: 100%;
+}
+
 
 
 
@@ -144,7 +166,6 @@ div#lyric-container ul {
     text-align: center;
     padding: 0;
     line-height: 2em;
-    z-index: 10;
 }
 div#lyric-lrc, div#lyric-album {
     position: relative;
@@ -159,38 +180,73 @@ div#lyric-lrc, div#lyric-album {
 
 /*support all*/
 @keyframes goRound {
-    from {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
+    from { transform: rotate(0deg); }
+    50%  { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }  }
 @-webkit-keyframes goRound {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    50% {
-        -webkit-transform: rotate(180deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
+    from { -webkit-transform: rotate(0deg); }
+    50% { -webkit-transform: rotate(180deg); }
+    100% { -webkit-transform: rotate(360deg); } }
 @-moz-keyframes goRound {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-    50% {
-        -moz-transform: rotate(180deg);
-    }
-    100% {
-        -moz-transform: rotate(360deg);
-    }
+    from { -moz-transform: rotate(0deg); }
+    50%  { -moz-transform: rotate(180deg); }
+    100% { -moz-transform: rotate(360deg); } }
+.goRound {
+        animation-name: goRound;
+        animation-duration: 10s;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
+        -webkit-animation-name: goRound;
+        -webkit-animation-duration: 10s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-delay: 0s;
+        -webkit-animation-iteration-count: infinite;
+        -moz-animation-name: goRound;
+        -moz-animation-duration: 10s;
+        -moz-animation-timing-function: linear;
+        -moz-animation-delay: 0s;
+        -moz-animation-iteration-count: infinite;
 }
+
+@keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; } }
+@-moz-keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1; } }
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+@-webkit-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+@-moz-keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; } }
+
+@keyframes btnIn {
+    from { transform: scale(1.2); }
+    to   { transform: scale(1); } }
+@-webkit-keyframes btnIn {
+    from { -webkit-transform: scale(1.2); }
+    to   { -webkit-transform: scale(1); } }
+@-moz-keyframes btnIn {
+    from { -moz-transform: scale(1.2); }
+    to   { -moz-transform: scale(1); } }
+@keyframes btnOut {
+    from { transform: scale(1.2); }
+    to   { transform: scale(1); } }
+@-webkit-keyframes btnOut {
+    from { -webkit-transform: scale(1.2); }
+    to   { -webkit-transform: scale(1); } }
+@-moz-keyframes btnOut {
+    from { -moz-transform: scale(1.2); }
+    to   { -moz-transform: scale(1); } }
 
 div#lyric-album {
     position: absolute;
@@ -199,7 +255,7 @@ div#lyric-album {
     vertical-align: middle;
     opacity: 0;
 }
-div#lyric-album span {
+div#lyric-album>span.disk {
     display: inline-block;
     position: relative;
     top: 0;
@@ -211,61 +267,136 @@ div#lyric-album span {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50%;
+}
+span.song-opt-grp {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+span.song-opt-grp > span {
+    display: inline-block;
+    position: relative;
+    padding: .8em;
+    margin: 0 1em;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
 
-    -webkit-animation: goRound 10s linear 0s infinite;
-    -webkit-animation-play-state: paused;
-    -moz-animation: goRound 10s linear 0s infinite;
-    -moz-animation-play-state: paused;
-    animation: goRound 10s linear 0s infinite;
-    animation-play-state: paused;
+    animation-duration: .3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-direction: alternate;
+    -webkit-animation-duration: .3s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: alternate;
+    -moz-animation-duration: .3s;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-direction: alternate;
+}
+span.favorite {
+    background-image: url('icons/favorite-w.svg');
+    animation-name: btnOut;
+    -webkit-animation-name: btnOut;
+    -moz-animation-name: btnOut;
+}
+span.favorited {
+    background-image: url('icons/favorited-w.svg');
+    animation-name: btnIn;
+    -webkit-animation-name: btnIn;
+    -moz-animation-name: btnIn;
+}
+span.comments {
+    background-image: url('icons/comments-w.svg');
+}
+span.comments > span { // comments count
+    display: inline;
+    position: absolute;
+
+    top: -2px;
+    right: -2px;
+    font-size: .5em;
+    font-weight: 600;
+    color: black;
+    background-color: white;
+    border-radius: .2em;
+}
+span.file-option {
+    background-image: url('icons/options-w.svg');
 }
 
 
 #option {
-    display: none;
+    /*display: none;*/
     position: absolute;
     width: 100%;
+    bottom: 0;
+}
+#option-btn {
+    background-image: url('icons/options-w.svg');
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    padding: .7em;
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: .7em;
+
+    display: inline-block;
+    position: absolute;
+
+    right: 1.2em;
+    bottom: .2em;
+
+    cursor: pointer;
 }
 #option-menu {
     display: inline-block;
     border-top: 1px solid white;
     position: absolute;
-    right: 2em;
-    bottom: 1em;
-    background-color: rgba(0,0,0, .5);
+    right: 1.2em;
+    bottom: 2.2em;
+    background-color: rgba(0,0,0, .8);
+
+    transition: all .6s;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
 }
 .menu-item {
     display: list-item;
     list-style: none;
     padding: .6em 2em;
     border-bottom: 1px solid white;
+
+    cursor: pointer;
+}
+.hide-fold {
+    transform-origin: right bottom;
+    -webkit-transform-origin: right bottom;
+    -moz-transform-origin: right bottom;
+
+    transform: scale(0);
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+
+    transition: all .6s;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
 }
 
-#time-range {
-    display: inline-block;
-    padding-top: -0.4em;
-    width: 75%;
-    text-align: left;
+.fade-out {
+    animation: fadeout 1s;
+    -webkit-animation: fadeout 1s;
+    -moz-animation: fadeout 1s;
 }
-
-#time-range .empty{
-
+.fade-in {
+    animation: fadein 1s;
+    -webkit-animation: fadein 1s;
+    -moz-animation: fadein 1s;
 }
-#time-range .fill {
-    border: 1px solid rgb(255, 0, 0);
-}
-
-#current-time, #total-time {
-    display: inline-block;
-    position: absolute;
-}
-#current-time {
-    left: 10px;
-}
-#total-time {
-    right: 10px;
-}
-
 
 div.bottom {
     position: absolute;
@@ -273,8 +404,6 @@ div.bottom {
     text-align: center;
     display: block;
     width: 100%;
-
-    z-index: 100;
 }
 
 #time {
@@ -283,15 +412,28 @@ div.bottom {
     padding-bottom: 1em;
 }
 #time-range {
-    position: absolute;
     left: 4em;
     top: .5em;
+    padding-top: -0.4em;
+}
+#time-range .fill {
+    border: 1px solid rgb(255, 0, 0);
+}
+#time-range .loaded {
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#current-time, #total-time {
+    display: inline-block;
+    position: absolute;
 }
 #current-time {
     float: left;
+    left: 10px;
 }
 #total-time {
     float: right;
+    right: 10px;
 }
 
 #controls {
@@ -354,13 +496,14 @@ ul#lyric {
 	margin: 0;
 }
 .line {
-	color: white;
-	-webkit-transition: all 1s;
-	-moz-transition: all 1s;
-	transition: all 1s;
+	color: rgba(255,255,255,.5);
+    padding: 0 1em;
+	-webkit-transition: all 0.6s;
+	-moz-transition: all 0.6s;
+	transition: all 0.6s;
 }
 .focus {
-	color: blue;
+	color: white;
 	font-weight: 700;
 	/*background-color: rgba(255,255,255,.9);*/
 	position: inline-block;

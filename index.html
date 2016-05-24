@@ -32,45 +32,54 @@
             </span>
             <span id="share" class='right'></span>
         </nav>
-        <hr class='line' />
+
         <div id="volume" class='row one-second'>
-            <span class="speaker"></span>
-            <div id="volume-range" class='one-second'>
+            <span class="speaker layer-2"></span>
+            <div id="volume-range" class='one-second layer-2'>
                 <span class="fill"></span>
                 <span class="range-btn"></span>
                 <span class="empty"></span>
             </div>
+            <span class="value"></span>
         </div>
-
         <div id="lyric-container" class='row one-second'>
+            <!-- page1 -->
             <div id='lyric-lrc' class="page">
-                <ul id="lyric" class='one-second'>
-                    <li>I opend my eyes last night and saw you in the low light</li>
-                    <li>昨夜我睁开眼，看见你在昏暗的灯光下</li>
-                    <li> </li>
-                    <li>Walking down by the bay, on the shore.</li>
-                    <li>沿着海湾走下去， 在岸边</li>
-                    <li> </li>
-                    <li>staring up at the planes that aren't there anymore</li>
-                    <li>盯着不再有星星的天空</li>
+                <ul id="lyric" class='one-second layer-1'>
+                    <li class='line'>I opend my eyes last night and saw you in the low light</li>
+                    <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
+                    <li class='line'> </li>
+                    <li class='line'>Walking down by the bay, on the shore.</li>
+                    <li class='line'>沿着海湾走下去， 在岸边</li>
+                    <li class='line'> </li>
+                    <li class='line'>staring up at the planes that aren't there anymore</li>
+                    <li class='line'>盯着不再有星星的天空</li>
                 </ul>
+                <div id="option" class='layer-2'>
+                    <span id="option-btn"></span>
+                    <div id="option-menu" class='hide-fold'>
+                        <span class="menu-item">歌词调整</span>
+                        <span class="menu-item">翻译报错</span>
+                        <span class="menu-item">歌词报错</span>
+                        <span class="menu-item">歌曲报错</span>
+                    </div>
+                </div>
             </div>
+            <!-- page2 -->
             <div id='lyric-album' class="page">
                 <span class='disk one-second'></span>
-            </div>
-        </div>
-        <div id="option">
-            <div id="option-menu">
-                <span class="menu-item">歌词调整</span>
-                <span class="menu-item">翻译报错</span>
-                <span class="menu-item">歌词报错</span>
-                <span class="menu-item">歌曲报错</span>
+                <span class='song-opt-grp'>
+                    <span id='btnFavorite' class="favorite btnToggle"></span>
+                    <span class="comments"><span>0</span></span>
+                    <span class="file-option"></span>
+                </span>
             </div>
         </div>
         <div class="bottom">
-            <div id='time' class='container row'>
+            <div id='time' class='container row layer-3'>
                 <span id="current-time">00:00</span>
                 <div id="time-range" class='one-second'>
+                    <span class="loaded one-second"></span>
                     <span class="fill"></span>
                     <span class="range-btn"></span>
                     <span class="empty"></span>
@@ -90,6 +99,7 @@
         </div>
     </div>
 
+    <script src="js/$getter.js"></script>
     <script src="js/app.js"></script>
     <script src="js/time-range.js"></script>
 </body>

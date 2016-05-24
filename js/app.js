@@ -1,27 +1,3 @@
-// this is just a draft
-function $id(id){ return document.getElementById(id); }
-function $(str, bGetOne) {
-    if(document.querySelector && document.querySelectorAll) {
-        return bGetOne?
-                document.querySelector(str):
-                document.querySelectorAll(str);
-    } else {
-        switch (str.substr(0,1)) {
-            case '#':
-                return document.getElementById(str.substr(1));
-            case '.':
-                var oByCN = document.getElementsByClassName(str.substr(1));
-                return bGetOne?
-                        oByCN[0]:
-                        oByCN;
-            default:
-                var oByTN = document.getElementsByTagName(str.substr(1));
-                return bGetOne?
-                        oByTN[0]:
-                        oByTN;
-        }
-    }
-}
 // XMLHttpRequest object polyfill
 if (window.XMLHttpRequest === undefined) {
 	window.XMLHttpRequest = function() {
@@ -126,7 +102,6 @@ function classifyLrc(arr) {
 //      LittleEndian
 
 var loadedLRClist = [];
-
 function loadLrc(file, callback) {
     var path = "./music/";
     var url = path + file;
@@ -170,7 +145,7 @@ function parseLrc(str) {
 
 
 var btnPlay = $id('play'),
-    audio = document.querySelector('audio'),
+    audio = $('audio'),
     btnPre = $id('pre-song'),
     btnNext = $id('next-song'),
     btnBack = $id('back'),
@@ -181,49 +156,68 @@ var btnPlay = $id('play'),
     title = $id('song-title'),
     artist = $id('song-artist');
 
+var dConsole; // for mobile browser debug
+var stackShowup = [];
+
+function startPlay() {
     var btnIcons = {
         'play':  "url('./style/icons/play-w.svg')",
         'pause': "url('./style/icons/pause-w.svg')"
     };
-function startPlay() {
-    var state = false,
-        disk = document.querySelector('span.disk');
+    var once = false,
+        disk = $('span.disk');
 
     var playOrPause = function() {
-        if (state) {
-            if (audio.paused) {
-                audio.play();
-                btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.style.animationPlayState = 'running';
-            }
-            else{
-                audio.pause();
-                btnPlay.style.backgroundImage = btnIcons.play;
-                disk.style.animationPlayState = 'paused';
-            }
+        if (once) {
+            audio.paused ? audio.play() : audio.pause();
         }
         else { // first time
-            state = true;
-            btnPlay.style.backgroundImage = btnIcons.pause;
-            disk.style.animationPlayState = 'running';
+            once = true;
 
             audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
-            audio.addEventListener("canplay", function() {
+            $on(audio, "canplay", function() {
                 totalTime.innerHTML = formatTimestamp(audio.duration);
                 if (audio.paused) { audio.play(); }
-            }, false);
+            });
+
+            $on(audio, "durationchange", function() {
+                totalTime.innerHTML = formatTimestamp(audio.duration);
+            });
+            $on(audio, "loadedmetadata", function() {
+                totalTime.innerHTML = formatTimestamp(audio.duration);
+            });
+
+            $on(audio, 'play', function() {
+                btnPlay.style.backgroundImage = btnIcons.pause;
+                disk.classList.add('goRound');
+            });
+            $on(audio, 'pause', function() {
+                btnPlay.style.backgroundImage = btnIcons.play;
+				disk.classList.remove('goRound');
+            });
+            // media loaded seekable range
+            var loaded = $('span.loaded');
+            $on(audio, 'progress', function(e){
+              loaded.style.width = this.seekable.length * 100 + '%';
+            });
+
+            // turnoff all hightlighted lines when user seekable
+            $on(audio, 'seeking', function(e) {
+                var domLIs = $(lyric, '.focus');
+                var aFocus = Array.prototype.slice.apply(domLIs);
+                aFocus.forEach(function(ele) {ele.className = 'line';});
+            });
         }
     }; // playOrPause()
 
-    btnPlay.addEventListener("click", playOrPause, false);
-
+    $on(btnPlay, "click", playOrPause);
 }
 
 function addScrollLrc() {
-    var lrc = loadedLRClist[0];
-    var timeline = lrc.timeTags;
-    lyric.innerHTML = '';
+    var lrc = loadedLRClist[0],
+        timeline = lrc.timeTags,
+        tempUL = document.createElement('ul');
 
     for (var line = 0; line < timeline.length; line++) {
         var t = lrc[timeline[line]][0];
@@ -231,8 +225,9 @@ function addScrollLrc() {
         li.className = "line";
         li.dataset.line = t;
         li.innerHTML = lrc.lrc[t];
-        lyric.appendChild(li);
+        tempUL.appendChild(li);
     }
+    lyric.innerHTML = tempUL.innerHTML;
 }
 
 function formatTimestamp(time) {
@@ -245,15 +240,12 @@ function formatTimestamp(time) {
 	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
 }
 
-audio.addEventListener('end', function() {
-    btnPlay.style.backgroundImage = btnIcons.play;
-}, false);
-var OFFSET = 0.5; // offset between lrc and audio
+var OFFSET = 0.5; // offset between lrc and audio : 0.5 for GoodLife.mp3 only
 var offsetTop = "";
-var originTop = 160;
+var lyricHightlightOriginTop = 160;
 var ONCE = true;
 
-audio.addEventListener("timeupdate", function(e) {
+$on(audio, "timeupdate", function(e) {
     var lrc = loadedLRClist[0];
     var timeline = lrc.timeTags;
     var lrcList = lrc.lrc;
@@ -266,7 +258,7 @@ audio.addEventListener("timeupdate", function(e) {
 		artist.innerHTML = lrc.ar;
 		offsetTop = lyric.offsetTop;
 
-		lyric.style.top = originTop + "px";
+		lyric.style.top = lyricHightlightOriginTop + "px";
 		addScrollLrc();
 		ONCE = false;
 	}
@@ -283,10 +275,10 @@ audio.addEventListener("timeupdate", function(e) {
 			if (i - 2 >= 0) {
 				aChild[i - 1].className = "line focus";
 				aChild[i - 2].className = "line";
-				lyric.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
+				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
 			} else if (i >= 1) {
 				aChild[i - 1].className = "line focus";
-				lyric.style.top = originTop -(aChild[i - 1].offsetTop) + "px";
+				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
 			}
 
 			var strLrcTMP = "";
@@ -298,24 +290,26 @@ audio.addEventListener("timeupdate", function(e) {
 			return strLrcTMP;
 		}
 	}
-}, false);
+});
 
 var onButtonBack = function() {
-    var lyric = $id('lyric-lrc'),
+    var main = $id('main'),
+        lyric = $id('lyric-lrc'),
         album = $id('lyric-album'),
-        main = $id('main'),
-        disk  = album.querySelector('.disk'),
+        disk  = $(album, '.disk'),
         page = 0; // lyric-lrc
 
     var listener = function(e) {
         if (page == 0) {
             lyric.style.opacity = 0;
+            album.style.display = '';
             album.style.opacity = 1;
             main.style.backgroundColor = 'rgba(0,0,0,.5)';
             page = 1;
         } else {
             lyric.style.opacity = 1;
             album.style.opacity = 0;
+            album.style.display = 'none';
             main.style.backgroundColor = 'rgba(0,0,0,.8)';
             page = 0;
         }
@@ -323,25 +317,129 @@ var onButtonBack = function() {
 
     return listener;
 };
-
 window.onload = function() {
 	loadLrc("OneRepublic - Good Life.lrc", parseLrc);
 
     startPlay();
 
-    optionMenu.style.display = 'none';
-
-    $id('background').style.backgroundImage = 'url(../OneRepublic.jpg)';
+    $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
+	var imgPreload = new Image();
+	imgPreload.src = 'style/icons/favorited-w.svg';
 
     var onB = onButtonBack();
-    btnBack.addEventListener('click', onB, false);
-    $id('lyric-lrc').addEventListener('click', onB, false);
-    $id('lyric-album').addEventListener('click', onB, false);
+    $click(btnBack, onB);
+    // $id('lyric-lrc').addEventListener('click', onB, false);
+    // $id('lyric-album').addEventListener('click', onB, false);
 
     // polyfill
-    btnNext.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
-    btnPre.addEventListener('click', function(){audio.currentTime = 0; audio.play();}, false);
-
-
+    $click(btnNext, function(){audio.currentTime = 0; audio.play();});
+    $click(btnPre, function(){audio.currentTime = 0; audio.play();});
+	$click(window, function(e) {
+		while (stackShowup.length) {
+			stackShowup.pop()();
+		}
+	}, false);
     onSizeChange()();
+
+	// elem for dConsole
+	// var elem = $dom('ul#dConsole',{
+	// 	backgroundColor: 'rgba(0,0,0,.6)',
+	// 	color: 'white',
+	// 	listStyle: 'none',
+	// 	position: 'fixed',
+	// 	display: 'inline-block',
+	// 	zIndex: '100'
+	// });
+	var elem = $dom('div#dConsole', {
+		backgroundColor: 'rgba(0,0,0,.6)',
+		color: 'white',
+		display: 'inline-block',
+		zIndex: '100',
+		position: 'fixed',
+		bottom: '0',
+		right: '0'
+	});
+	document.body.appendChild(elem);
+	$click(elem, function(e) {
+		e.stopPropagation();
+
+		elem.style.bottom = '';
+		elem.style.right = '';
+		elem.style.top = '1em';
+		elem.style.left = '5px';
+		elem.style.height = '100%';
+		elem.style.overflowY='auto';
+
+		var ol = $dom('ol');
+		dConsole.messageArray.forEach(function(value) {
+			var li = $dom('li');
+			li.innerHTML = value;
+			ol.appendChild(li);
+		});
+		var tmp = elem.innerHTML;
+		elem.innerHTML = '';
+		elem.appendChild(ol);
+
+		stackShowup.push(function() {
+			elem.style.top = '';
+			elem.style.left = '';
+			elem.style.bottom = 0;
+			elem.style.right = 0;
+			elem.style.height = '';
+			elem.style.overflowY = '';
+			elem.innerHTML = tmp;
+		});
+	});
+	dConsole = new DebugConsole(elem);
 };
+
+var btnOption = $('span#option-btn');
+$click(btnOption, function(e){
+        e.stopPropagation();
+        var list = optionMenu.classList;
+		list.toggle('hide-fold');
+
+		if (!list.contains('hide-fold')) {
+			stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
+		}
+    });
+$click(optionMenu, function(e) {
+        // e.stopPropagation();
+        optionMenu.classList.toggle('hide-fold');
+        dConsole.log(e.target.innerHTML);
+    });
+
+var onSongOptionsGroup = function() {
+    var wrapper = $('span.song-opt-grp'),
+        favorite = $(wrapper, '#btnFavorite'),
+        comments = $(wrapper, '.comments'),
+        	commentsCount = $(comments, 'span'),
+        fileOpt = $(wrapper, '.file-option');
+
+	var favoriteState = false,
+		onFavoriteClick = function(e) {
+				e.stopPropagation();
+				favorite.className =
+					favoriteState ?
+						'favorite btnToggle':
+						'favorited btnToggle';
+						// favorite.classList.toggle('favorite');
+						// favorite.classList.toggle('favorited');
+				favoriteState = !favoriteState;
+			},
+		onCommentsClick = function(e) {
+				e.stopPropagation();
+				dConsole.log('show comments');
+				commentsCount.innerHTML = 99;
+			},
+		onFileOptionClick = function(e) {
+				e.stopPropagation();
+				dConsole.log('show file option menu.');
+			};
+
+	// add listener on their parent and switch on e.target
+	$click(favorite, onFavoriteClick);
+	$click(comments, onCommentsClick);
+	$click(fileOpt, onFileOptionClick);
+};
+onSongOptionsGroup();
