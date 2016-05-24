@@ -15,6 +15,9 @@ if (window.XMLHttpRequest === undefined) {
 		}
 	};
 }
+if (!window.AudioContext) {
+	window.AudioContext = window.webkitAudioContext;
+}
 function classifyLrc(arr) {
 	// two modes
 	// 1. one TimeStamp one lyrics        normal
