@@ -63,6 +63,11 @@
         }
     };
 
+    // setMultiple functions on $.
+    w.$.isDOMElement = isDOMElement;
+    w.$.toArray = toArray;
+    w.$.splitSelectingString = splitSelectingString;
+    
     // create: DOM elements create
     w.$dom = function(str, style){
         var a = splitSelectingString(str);
