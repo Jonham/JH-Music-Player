@@ -133,6 +133,7 @@ var onFileLoad = function() {
         return result !== -1; // return true if contains 'windows'
     };
     if (dragOrSelect() ) {
+        dConsole.log('support drag&drop');
         $on(document, 'dragstart', dragEvent);
         $on(document, 'dragenter', dragEvent);
         $on(document, 'dragover', dragEvent);
@@ -141,6 +142,7 @@ var onFileLoad = function() {
         $on(document, 'drop', onFileDrop);
     }
     else {
+        dConsole.log('use input[type=file] to load file.');
         var fileInput = $dom('input');
             fileInput.type = 'file';
             fileInput.multiple = true;
