@@ -341,35 +341,13 @@ window.onload = function() {
 	}, false);
     onSizeChange()();
 
-	// elem for dConsole
-	// var elem = $dom('ul#dConsole',{
-	// 	backgroundColor: 'rgba(0,0,0,.6)',
-	// 	color: 'white',
-	// 	listStyle: 'none',
-	// 	position: 'fixed',
-	// 	display: 'inline-block',
-	// 	zIndex: '100'
-	// });
-	var elem = $dom('div#dConsole', {
-		backgroundColor: 'rgba(0,0,0,.9)',
-		color: 'white',
-		display: 'inline-block',
-		zIndex: '100',
-		position: 'fixed',
-		bottom: '0',
-		right: '0'
-	});
+	var elem = $dom('div#dConsole');
+		elem.classList.add('dConsole-line');
 	document.body.appendChild(elem);
 	$click(elem, function(e) {
 		e.stopPropagation();
-
-		elem.style.bottom = '';
-		elem.style.right = '';
-		elem.style.top = '1em';
-		elem.style.left = '5px';
-		elem.style.height = '100%';
-		elem.style.width = '98%';
-		elem.style.overflowY='auto';
+		elem.classList.remove('dConsole-line');
+		elem.classList.add('dConsole-window');
 
 		var ol = $dom('ol');
 		dConsole.messageArray.forEach(function(value) {
@@ -382,13 +360,8 @@ window.onload = function() {
 		elem.appendChild(ol);
 
 		stackShowup.push(function() {
-			elem.style.top = '';
-			elem.style.left = '';
-			elem.style.bottom = 0;
-			elem.style.right = 0;
-			elem.style.height = '';
-			elem.style.width = '';
-			elem.style.overflowY = '';
+			elem.classList.remove('dConsole-window');
+			elem.classList.add('dConsole-line');
 			elem.innerHTML = tmp;
 		});
 	});

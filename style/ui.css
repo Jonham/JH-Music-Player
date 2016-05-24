@@ -527,6 +527,26 @@ input[type=file] {
     background-color: gray;
     z-index: 50;
 }
+
+div#dConsole {
+    background-color: rgba(0,0,0,9);
+    color: white;
+    display: inline-block;
+    z-index: 50;
+    position: fixed;
+}
+div.dConsole-line {
+    bottom: 0;
+    right: 0;
+    width: auto;
+}
+div.dConsole-window {
+    top: 3em;
+    left: 5px;
+    width: 98%;
+}
+
+
 input[type=file]:before {
     display: block;
     width: 100%;
