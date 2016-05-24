@@ -65,8 +65,9 @@ var onFileLoad = function() {
             typeMapByMIME( aMIME[0] );
             dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
         } else {
-            dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMap(subfix));
         }
+        // test twice
+        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMap(subfix));
 
         if (!loadingMode) { return false; }
 
