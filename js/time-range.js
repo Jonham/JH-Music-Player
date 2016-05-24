@@ -40,7 +40,7 @@ var RangeClickFactory = function(range, type) {
             break;
             case 'volume':
                 audio.volume = per;
-                alert(audio.volume);
+                dConsole.log(audio.volume);
             break;
             default:
         }
@@ -56,7 +56,6 @@ var RangeClickFactory = function(range, type) {
                     1 :
                     per;
         changeAudioSth(per, type);
-        alert(type);
         // what if outside of 0/100 what if resize
     };
     return listener;
@@ -148,14 +147,13 @@ var onSizeChange = function(e) {
             function() {
                 var callback = function() {
                     $off(timeRange, 'click', timerangelistener);
-                    timerangelistener = RangeClickFactory(timeRange, 'time', length); // change when the width time-range change
+                    timerangelistener = RangeClickFactory(timeRange, 'time'); // change when the width time-range change
                     $click(timeRange, timerangelistener);
 
                     $off(volumeRange, 'click', volumerangelistener);
-                    volumerangelistener = RangeClickFactory(volumeRange, 'volume', length);
+                    volumerangelistener = RangeClickFactory(volumeRange, 'volume');
                     $click(volumeRange, volumerangelistener);
                 };
-
                 resizeRange( callback );
 
                 resizeLyric();
@@ -164,5 +162,4 @@ var onSizeChange = function(e) {
 
     return listener;
 };
-
 $on(window, 'resize', onSizeChange());

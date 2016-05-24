@@ -156,6 +156,9 @@ var btnPlay = $id('play'),
     title = $id('song-title'),
     artist = $id('song-artist');
 
+var dConsole; // for mobile browser debug
+var stackShowup = [];
+
 function startPlay() {
     var btnIcons = {
         'play':  "url('./style/icons/play-w.svg')",
@@ -331,20 +334,79 @@ window.onload = function() {
     // polyfill
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
-
+	$click(window, function(e) {
+		while (stackShowup.length) {
+			stackShowup.pop()();
+		}
+	}, false);
     onSizeChange()();
+
+	// elem for dConsole
+	// var elem = $dom('ul#dConsole',{
+	// 	backgroundColor: 'rgba(0,0,0,.6)',
+	// 	color: 'white',
+	// 	listStyle: 'none',
+	// 	position: 'fixed',
+	// 	display: 'inline-block',
+	// 	zIndex: '100'
+	// });
+	var elem = $dom('div#dConsole', {
+		backgroundColor: 'rgba(0,0,0,.6)',
+		color: 'white',
+		display: 'inline-block',
+		zIndex: '100',
+		position: 'fixed',
+		bottom: '0',
+		right: '0'
+	});
+	document.body.appendChild(elem);
+	$click(elem, function(e) {
+		e.stopPropagation();
+
+		elem.style.bottom = '';
+		elem.style.right = '';
+		elem.style.top = '1em';
+		elem.style.left = '5px';
+		elem.style.height = '100%';
+		elem.style.overflowY='auto';
+
+		var ol = $dom('ol');
+		dConsole.messageArray.forEach(function(value) {
+			var li = $dom('li');
+			li.innerHTML = value;
+			ol.appendChild(li);
+		});
+		var tmp = elem.innerHTML;
+		elem.innerHTML = '';
+		elem.appendChild(ol);
+
+		stackShowup.push(function() {
+			elem.style.top = '';
+			elem.style.left = '';
+			elem.style.bottom = 0;
+			elem.style.right = 0;
+			elem.style.height = '';
+			elem.style.overflowY = '';
+			elem.innerHTML = tmp;
+		});
+	});
+	dConsole = new DebugConsole(elem);
 };
 
 var btnOption = $('span#option-btn');
 $click(btnOption, function(e){
         e.stopPropagation();
-        e.preventDefault();
-        optionMenu.classList.toggle('hide-fold');
+        var list = optionMenu.classList;
+		list.toggle('hide-fold');
+
+		if (!list.contains('hide-fold')) {
+			stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
+		}
     });
 $click(optionMenu, function(e) {
-        e.stopPropagation();
+        // e.stopPropagation();
         optionMenu.classList.toggle('hide-fold');
-        alert(e.target.innerHTML);
+        dConsole.log(e.target.innerHTML);
     });
 
 var onSongOptionsGroup = function() {
@@ -367,12 +429,12 @@ var onSongOptionsGroup = function() {
 			},
 		onCommentsClick = function(e) {
 				e.stopPropagation();
-				alert('show comments');
+				dConsole.log('show comments');
 				commentsCount.innerHTML = 99;
 			},
 		onFileOptionClick = function(e) {
 				e.stopPropagation();
-				alert('show file option menu.');
+				dConsole.log('show file option menu.');
 			};
 
 	// add listener on their parent and switch on e.target

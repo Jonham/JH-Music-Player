@@ -230,22 +230,22 @@ div#lyric-lrc, div#lyric-album {
     to   { opacity: 0; } }
 
 @keyframes btnIn {
-    from { transform: scale(2); }
+    from { transform: scale(1.2); }
     to   { transform: scale(1); } }
 @-webkit-keyframes btnIn {
-    from { -webkit-transform: scale(2); }
+    from { -webkit-transform: scale(1.2); }
     to   { -webkit-transform: scale(1); } }
 @-moz-keyframes btnIn {
-    from { -moz-transform: scale(2); }
+    from { -moz-transform: scale(1.2); }
     to   { -moz-transform: scale(1); } }
 @keyframes btnOut {
-    from { transform: scale(2); }
+    from { transform: scale(1.2); }
     to   { transform: scale(1); } }
 @-webkit-keyframes btnOut {
-    from { -webkit-transform: scale(2); }
+    from { -webkit-transform: scale(1.2); }
     to   { -webkit-transform: scale(1); } }
 @-moz-keyframes btnOut {
-    from { -moz-transform: scale(2); }
+    from { -moz-transform: scale(1.2); }
     to   { -moz-transform: scale(1); } }
 
 div#lyric-album {
