@@ -376,7 +376,6 @@ window.onload = function() {
 			var li = $dom('li');
 			li.innerHTML = value;
 			ol.appendChild(li);
-			console.log(value);
 		});
 		var tmp = elem.innerHTML;
 		elem.innerHTML = '';
