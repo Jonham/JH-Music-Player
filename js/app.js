@@ -351,7 +351,7 @@ window.onload = function() {
 	// 	zIndex: '100'
 	// });
 	var elem = $dom('div#dConsole', {
-		backgroundColor: 'rgba(0,0,0,.6)',
+		backgroundColor: 'rgba(0,0,0,.9)',
 		color: 'white',
 		display: 'inline-block',
 		zIndex: '100',
@@ -368,6 +368,7 @@ window.onload = function() {
 		elem.style.top = '1em';
 		elem.style.left = '5px';
 		elem.style.height = '100%';
+		elem.style.width = '98%';
 		elem.style.overflowY='auto';
 
 		var ol = $dom('ol');
@@ -375,6 +376,7 @@ window.onload = function() {
 			var li = $dom('li');
 			li.innerHTML = value;
 			ol.appendChild(li);
+			console.log(value);
 		});
 		var tmp = elem.innerHTML;
 		elem.innerHTML = '';
@@ -386,6 +388,7 @@ window.onload = function() {
 			elem.style.bottom = 0;
 			elem.style.right = 0;
 			elem.style.height = '';
+			elem.style.width = '';
 			elem.style.overflowY = '';
 			elem.innerHTML = tmp;
 		});

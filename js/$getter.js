@@ -100,10 +100,6 @@
 			if (me.output) {
                 me.output.innerHTML = msg;
                 me.output.style.display = 'inline-block';
-                setTimeout(function(){
-                    me.output.style.display = 'none';
-                    console.log(me);
-                }, 3000);
             }
             me.messageArray.push(msg);
 		};
@@ -116,10 +112,10 @@
 			o = newBox;
 		};
 
-        $on(window, 'error', function(e) {
-            e.preventDefault();
-            me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        });
+        // $on(window, 'error', function(e) {
+        //     e.preventDefault();
+        //     me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        // });
 		return this;
 	};
 })(window);
