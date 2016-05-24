@@ -67,7 +67,7 @@ var onFileLoad = function() {
         } else {
         }
         // test twice
-        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMap(subfix));
+        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
 
         if (!loadingMode) { return false; }
 
