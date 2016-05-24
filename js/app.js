@@ -393,6 +393,8 @@ window.onload = function() {
 		});
 	});
 	dConsole = new DebugConsole(elem);
+
+	onFileLoad();
 };
 
 var btnOption = $('span#option-btn');

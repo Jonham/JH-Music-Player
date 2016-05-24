@@ -67,7 +67,7 @@
     w.$.isDOMElement = isDOMElement;
     w.$.toArray = toArray;
     w.$.splitSelectingString = splitSelectingString;
-    
+
     // create: DOM elements create
     w.$dom = function(str, style){
         var a = splitSelectingString(str);
@@ -117,10 +117,10 @@
 			o = newBox;
 		};
 
-        // $on(window, 'error', function(e) {
-        //     e.preventDefault();
-        //     me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        // });
+        $on(window, 'error', function(e) {
+            e.preventDefault();
+            me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        });
 		return this;
 	};
 })(window);

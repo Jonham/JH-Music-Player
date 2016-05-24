@@ -511,3 +511,24 @@ ul#lyric {
 	-moz-transition: all 1s;
 	transition: all 1s;
 }
+
+input[type=file] {
+    /* browser don't support drag */
+    display: block;
+    position: fixed;
+
+    top: 15%;
+    height: 50%;
+    width: 100%;
+    background-color: gray;
+    z-index: 50;
+}
+input[type=file]:before {
+    display: block;
+    width: 100%;
+    padding: .5em 1em;
+    font-size: 1.4em;
+    background-color: black;
+    color: white;
+    content: 'Click to select an Audio file!';
+}
