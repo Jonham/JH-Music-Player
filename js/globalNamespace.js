@@ -45,11 +45,17 @@
         }
     };
 
+    var supportAudioContext = function() {
+        return !!window.AudioContext;
+    };
 
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
     ns.stackShowup = [];
+
+    ns.supports = {};
+    ns.supports.audioContext = supportAudioContext();
 })(window);
 
 // initial global parameters
