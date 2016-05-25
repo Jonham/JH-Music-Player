@@ -177,7 +177,7 @@ var onFileLoad = function() {
     };
     var dragOrSelect = function() {
         var ug = navigator.userAgent;
-        var result = ug.search(/windows|x11|Mac/i);
+        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
         dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
         return result !== -1; // return true if contains 'windows'
     };
