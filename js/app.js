@@ -140,7 +140,7 @@ var btnPlay = $id('play'),
     artist = $id('song-artist');
 
 var dConsole; // for mobile browser debug
-var stackShowup = [];
+NS.stackShowup = [];
 
 function startPlay() {
     var btnIcons = {
@@ -318,8 +318,8 @@ window.onload = function() {
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
 	$click(window, function(e) {
-		while (stackShowup.length) {
-			stackShowup.pop()();
+		while (NS.stackShowup.length) {
+			NS.stackShowup.pop()();
 		}
 	}, false);
     onSizeChange()();
@@ -342,7 +342,7 @@ window.onload = function() {
 		elem.innerHTML = '';
 		elem.appendChild(ol);
 
-		stackShowup.push(function() {
+		NS.stackShowup.push(function() {
 			elem.classList.remove('dConsole-window');
 			elem.classList.add('dConsole-line');
 			elem.innerHTML = tmp;
@@ -360,7 +360,7 @@ $click(btnOption, function(e){
 		list.toggle('hide-fold');
 
 		if (!list.contains('hide-fold')) {
-			stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
+			NS.stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
 		}
     });
 $click(optionMenu, function(e) {
