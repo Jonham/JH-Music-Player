@@ -13,7 +13,7 @@
             add: function(str) { this._array.push(str); return this; },
             remove: function(str) {
                 var a = this._array;
-                this._array = _.filter(a, // remove those equal to str 
+                this._array = _.filter(a, // remove those equal to str
                     function(value){ return value !== str; });
                 return this;
             },
@@ -49,4 +49,12 @@
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
+    ns.stackShowup = [];
+})(window);
+
+// initial global parameters
+(function(w) {
+    w.dConsole = null; // for mobile browser debug
+    // for loaded lrc
+    w.loadedLRClist = [];
 })(window);

@@ -84,7 +84,6 @@ function classifyLrc(arr) {
 // UCS2 BigEndian
 //      LittleEndian
 
-var loadedLRClist = [];
 function loadLrc(file, callback) {
     var path = "./music/";
     var url = path + file;
@@ -138,9 +137,6 @@ var btnPlay = $id('play'),
     lyric = $id('lyric'),
     title = $id('song-title'),
     artist = $id('song-artist');
-
-var dConsole; // for mobile browser debug
-NS.stackShowup = [];
 
 function startPlay() {
     var btnIcons = {

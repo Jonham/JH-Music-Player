@@ -202,7 +202,7 @@ var onFileLoad = function() {
                 onFileSelect(fileInput);
             }
         });
-        NS.stackShowupShowup.push(function() {
+        NS.stackShowup.push(function() {
             fileInput.style.display = 'none';
         });
     }
