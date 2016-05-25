@@ -116,16 +116,24 @@
 
 		var me = this;
         me.messageArray = [];
+        me.debugingArray = [];
+
 		me.output = null;
 		if (isDOMElement(box)) { me.output = box; }
 
+        // log msg on me.messageArray
 		me.log = function(msg) {
 			if (me.output) {
                 me.output.innerHTML = msg;
-                me.output.style.display = 'inline-block';
             }
             me.messageArray.push(msg);
 		};
+
+        // debug will also store message on debugingArray for quick view when debuging
+        me.debug = function(msg) {
+            me.debugingArray.push(msg);
+            me.log(msg);
+        }
 		me.init = function(newBox) {
 			if (!isDOMElement(newBox)) { return false; }
 			// remove previous box
@@ -135,6 +143,8 @@
 			o = newBox;
 		};
 
+        // redirect all error message onto me.log
+        // mainly for mobile device without console
         // $on(window, 'error', function(e) {
         //     e.preventDefault();
         //     me.log(e.filename + ":" + e.colno + '>>' + e.message);
