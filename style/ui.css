@@ -361,10 +361,6 @@ span.file-option {
     bottom: 2.2em;
     background-color: rgba(0,0,0, .8);
 
-    transform: scale(0);
-    -webkit-transform: scale(0);
-    -moz-transform: scale(0);
-
     transition: all .6s;
     -webkit-transition: all .6s;
     -moz-transition: all .6s;
