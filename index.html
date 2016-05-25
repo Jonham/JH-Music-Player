@@ -24,7 +24,7 @@
 </head>
 <body>
     <div id="background"></div>
-    <div id="main">
+    <div id="main" class="half-ten">
         <nav class='header row'>
             <span id="back" class='left'></span>
             <span id="song-message">
@@ -45,7 +45,7 @@
         </div>
         <div id="lyric-container" class='row one-second'>
             <!-- page1 -->
-            <div id='lyric-lrc' class="page">
+            <div id='lyric-lrc'>
                 <ul id="lyric" class='one-second layer-1'>
                     <li class='line'>I opend my eyes last night and saw you in the low light</li>
                     <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
@@ -67,7 +67,7 @@
                 </div>
             </div>
             <!-- page2 -->
-            <div id='lyric-album' class="page">
+            <div id='lyric-album'>
                 <span class='disk one-second'></span>
                 <span class='song-opt-grp'>
                     <span id='btnFavorite' class="favorite btnToggle"></span>
@@ -100,9 +100,30 @@
         </div>
     </div>
 
+    <div id="menu-songlist" class="menu test-color-blue half-ten menu-hide">
+        <ul id="songlist"></ul>
+        <span class="test-identify">MENU-songlist</span>
+    </div>
+
+    <div id="menu-share" class="menu test-color-yellow half-ten menu-hide">
+        <ul id="share"></ul>
+        <span class="test-identify">MENU-share</span>
+    </div>
+
+    <div id="page-system" class="page test-color-red half-ten page-hide">
+        <span class="test-identify">PAGE-system</span>
+
+    </div>
+    <div id="sidebar-left" class="sidebar test-color-green half-ten sidebar-hide">
+        <span class="test-identify">SIDEBAR-left</span>
+
+    </div>
+
+
     <script src="js/lib/underscore-min.js"></script>
-    <script src="js/globalNamespace.js"></script>
+
     <script src="js/cross-browser.js"></script>
+    <script src="js/globalNamespace.js"></script>
     <script src="js/$getter.js"></script>
     <script src="js/app.js"></script>
     <script src="js/time-range.js"></script>
