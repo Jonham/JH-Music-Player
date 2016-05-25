@@ -3,12 +3,12 @@ var onFileLoad = function() {
         e.stopPropagation();
         e.preventDefault();
         // console.log(e);
-        jh = e;
+        // jh = e;
     };
     var onFileDrop = function(e) {
         e.stopPropagation();
         e.preventDefault();
-        jh = e.dataTransfer.files[0];
+        window.$.debugjh = e.dataTransfer.files[0];
         onFileRead(e.dataTransfer.files[0], onFileDecode);
     };
     var onFileSelect = function(dom) {
@@ -81,8 +81,8 @@ var onFileLoad = function() {
             fr.readAsText(file);
             break;
             case 3:
-            dConsole.log('FileReader: readAsArrayBuffer==>loading ' + file.name);
-            fr.readAsArrayBuffer(file);
+            dConsole.log('FileReader: readAsDataURL==>loading ' + file.name);
+            fr.readAsDataURL(file);
             break;
             default:
         }
@@ -95,8 +95,14 @@ var onFileLoad = function() {
     };
     var onFileDecode = function( fileBuffer, loadingMode ) {
         var audioLoader = function( fileBuffer ) {
-            a = new AudioContext();
-            src = a.createBufferSource();
+            if (!window.a) {
+                window.a = new AudioContext();
+                window.songs = [];
+            }
+            if (songs.length > 0) {
+
+            }
+            var src = a.createBufferSource();
             src.connect(a.destination);
 
             a.decodeAudioData(fileBuffer, function( audioBuffer ) {
@@ -110,7 +116,8 @@ var onFileLoad = function() {
             dConsole.log(fileBuffer);
         };
         var imageLoader = function( fileBuffer ) {
-            dConsole.log(fileBuffer);
+            dConsole.log('imageLoader: converting image.');
+            $wrap('#background').backgroundImage(fileBuffer);
         };
 
         // handling logic
@@ -129,7 +136,7 @@ var onFileLoad = function() {
     };
     var dragOrSelect = function() {
         var ug = navigator.userAgent;
-        var result = ug.search(/windows/i);
+        var result = ug.search(/windows|x11|Mac/i);
         dConsole.log('dragOrSelect: ' + result +' || -1 for select');
         return result !== -1; // return true if contains 'windows'
     };
