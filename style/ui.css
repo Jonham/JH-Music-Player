@@ -230,7 +230,7 @@ hr.divider {
 }
 
 
-.empty, .fill, .loaded {
+.empty, .range-fill, .loaded {
     position: absolute;
     display: inline-block;
 }
@@ -239,7 +239,7 @@ hr.divider {
     box-sizing: border-box;
     border: 1px solid rgba(255,255,255,.3);
 }
-.fill {
+.range-fill {
     border: 1px solid rgba(255,255,255,.8);
 }
 .range-btn {
@@ -267,7 +267,7 @@ hr.divider {
     margin-left: 1em;
     padding-top: .5em;
 }
-#range-volume .fill {
+#range-volume .range-fill {
     width: 100%;
 }
 #range-volume .range-btn {
@@ -441,7 +441,7 @@ div.bottom {
     top: .5em;
     padding-top: -0.4em;
 }
-#time-range .fill {
+#time-range .range-fill {
     border: 1px solid rgb(255, 0, 0);
 }
 #time-range .loaded {

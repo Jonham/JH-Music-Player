@@ -4,7 +4,7 @@ var rangeTime = $id('time-range'),
 
 var onRangeTimeUpdate = function() {
     var me = rangeTime,
-        fill = $(rangeTime, '.fill'),
+        fill = $(rangeTime, '.range-fill'),
         btn = $(rangeTime, '.range-btn');
 
     var audioPercent = function() {
@@ -28,7 +28,7 @@ var RangeClickFactory = function(range, type) {
         length = rectRange.width;
 
     var btn = $(range, '.range-btn'),
-        fill = $(range, '.fill');
+        fill = $(range, '.range-fill');
     var moveto = function(percent) {
         btn.style.left = percent + '%';
         fill.style.width = percent + '%';
@@ -69,7 +69,7 @@ $click(rangeVolume, rangeVolumelistener);
 
 var onAudioVolumeChange = function( range, audio ) {
     var btn = $(range, '.range-btn'),
-        fill = $(range, '.fill');
+        fill = $(range, '.range-fill');
 
     var move = function(percent) {
         btn.style.left = percent + '%';
