@@ -23,6 +23,9 @@
 
     // event listener add and remove
     w.$on = function (elem, method, callback) { return elem.addEventListener(method, callback, false); };
+    w.$stopPropagation = function(elem, method) {var fn = function(e) {e.stopPropagation();};  w.$on(elem, method, fn);};
+    w.$preventDefault = function(elem, method) {var fn = function(e) {e.preventDefault();};  w.$on(elem, method, fn);};
+
     w.$click = function (elem, callback) { return $on(elem, 'click', callback); };
     w.$off = function (elem, method, callback) { return elem.removeEventListener(method, callback); };
 
@@ -152,3 +155,11 @@
 		return this;
 	};
 })(window);
+
+
+
+var btnPlay = $id('play'),
+    audio = $('audio'),
+    totalTime = $id('total-time'),
+    currentTime = $id('current-time'),
+    lyric = $id('lyric');

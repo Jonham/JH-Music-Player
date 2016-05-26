@@ -20,12 +20,31 @@
             length: function() { return this._array.length; }
         };
 
+        var IndexTree = function() {
+            // name artist album
+            return this;
+        };
+        IndexTree.prototype = {
+            add: function(file) {
+                var name = file.name,
+                    arr  = name.split('-'),
+                    artist = arr[0],
+                    title  = arr[1];
+
+            },
+            set: function() {},
+            get: function() {},
+            remove: function() {},
+        };
         this.audio =  new FileContainer();
-        this.image =  new FileContainer();
         this.lyric =  new FileContainer();
+        this.image =  new FileContainer();
 
         // this _tree records all
-        this._tree = [];
+        this._treeTitle = {};
+        this._treeArtist = {};
+        this._treeAlbum = {};
+
         return this;
     };
     LocalFileList.prototype = {
@@ -39,6 +58,14 @@
                     this.audio.add(file);
                     var index = this.audio.length - 1;
                     break;
+                case this.LYRIC:
+                    this.lyric.add(file);
+                    var index = this.audio.length - 1;
+                    break;
+                case this.IMAGE:
+                    this.image.add(file);
+                    var index = this.audio.length - 1;
+                    break;
                 default:
 
             }
@@ -48,19 +75,32 @@
     var supportAudioContext = function() {
         return !!window.AudioContext;
     };
+    var mobileOrDestop = function() {
+
+    };
 
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
     ns.stackShowup = [];
+    ns.stackShowup.releaseALl = function() {
+        while (ns.stackShowup.length) {
+            ns.stackShowup.pop()();
+        }
+    };
 
     ns.supports = {};
     ns.supports.audioContext = supportAudioContext();
+    ns.supports.mobile = mobileOrDestop();
 })(window);
 
 // initial global parameters
 (function(w) {
-    w.dConsole = null; // for mobile browser debug
+    // for mobile browser debug
+    var elem = $dom('div#dConsole');
+	document.body.appendChild(elem);
+	w.dConsole = new DebugConsole(elem);
+
     // for loaded lrc
     w.loadedLRClist = [];
 })(window);
