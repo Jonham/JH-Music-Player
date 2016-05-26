@@ -20,103 +20,106 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
     <!-- using ?xxxx to make browser update css file 1 -->
-    <link rel="stylesheet" href="style/ui.css?0002">
+    <link rel="stylesheet" href="style/ui.css?0003">
 </head>
 <body>
-    <div id="background"></div>
-    <div id="main" class="half-ten">
-        <nav class='header row'>
-            <span id="back" class='left'></span>
-            <span id="song-message">
-                <span id="song-title">The Saltwater Room</span> <br>
-                <span id="song-artist">Owl City</span>
-            </span>
-            <span id="share" class='right'></span>
-        </nav>
+    <div id="viewport">
+        <div id="page-main" class="page ease-p3">
+            <div id="main">
+                <nav class='header row'>
+                    <span id="back" class='left'></span>
+                    <span id="song-message">
+                        <span id="song-title">The Saltwater Room</span> <br>
+                        <span id="song-artist">Owl City</span>
+                    </span>
+                    <span id="share" class='right'></span>
+                </nav>
 
-        <div id="volume" class='row one-second'>
-            <span class="speaker layer-2"></span>
-            <div id="volume-range" class='one-second layer-2'>
-                <span class="fill"></span>
-                <span class="range-btn"></span>
-                <span class="empty"></span>
-            </div>
-            <span class="value"></span>
-        </div>
-        <div id="lyric-container" class='row one-second'>
-            <!-- page1 -->
-            <div id='lyric-lrc'>
-                <ul id="lyric" class='one-second layer-1'>
-                    <li class='line'>I opend my eyes last night and saw you in the low light</li>
-                    <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
-                    <li class='line'> </li>
-                    <li class='line'>Walking down by the bay, on the shore.</li>
-                    <li class='line'>沿着海湾走下去， 在岸边</li>
-                    <li class='line'> </li>
-                    <li class='line'>staring up at the planes that aren't there anymore</li>
-                    <li class='line'>盯着不再有星星的天空</li>
-                </ul>
-                <div id="option" class='layer-2'>
-                    <span id="option-btn"></span>
-                    <div id="option-menu" class='hide-fold'>
-                        <span class="menu-item">歌词调整</span>
-                        <span class="menu-item">翻译报错</span>
-                        <span class="menu-item">歌词报错</span>
-                        <span class="menu-item">歌曲报错</span>
+                <div id="volume" class='row ease-p6'>
+                    <span class="speaker layer-2"></span>
+                    <div id="volume-range" class='ease-p6 layer-2'>
+                        <span class="fill"></span>
+                        <span class="range-btn"></span>
+                        <span class="empty"></span>
+                    </div>
+                    <span class="value"></span>
+                </div>
+                <div id="lyric-container" class='row ease-p6'>
+                    <!-- page1 -->
+                    <div id='lyric-lrc'>
+                        <ul id="lyric" class='ease-p6 layer-1'>
+                            <li class='line'>I opend my eyes last night and saw you in the low light</li>
+                            <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
+                            <li class='line'> </li>
+                            <li class='line'>Walking down by the bay, on the shore.</li>
+                            <li class='line'>沿着海湾走下去， 在岸边</li>
+                            <li class='line'> </li>
+                            <li class='line'>staring up at the planes that aren't there anymore</li>
+                            <li class='line'>盯着不再有星星的天空</li>
+                        </ul>
+                        <div id="option" class='layer-2'>
+                            <span id="option-btn"></span>
+                            <div id="option-menu" class='ease-p6 hidetoRB'>
+                                <span class="menu-item">歌词调整</span>
+                                <span class="menu-item">翻译报错</span>
+                                <span class="menu-item">歌词报错</span>
+                                <span class="menu-item">歌曲报错</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- page2 -->
+                    <div id='lyric-album'>
+                        <span class='disk ease-p6'></span>
+                        <span class='song-opt-grp'>
+                            <span id='btnFavorite' class="favorite btnToggle"></span>
+                            <span class="comments"><span>0</span></span>
+                            <span class="file-option"></span>
+                        </span>
                     </div>
                 </div>
-            </div>
-            <!-- page2 -->
-            <div id='lyric-album'>
-                <span class='disk one-second'></span>
-                <span class='song-opt-grp'>
-                    <span id='btnFavorite' class="favorite btnToggle"></span>
-                    <span class="comments"><span>0</span></span>
-                    <span class="file-option"></span>
-                </span>
-            </div>
-        </div>
-        <div class="bottom">
-            <div id='time' class='container row layer-3'>
-                <span id="current-time">00:00</span>
-                <div id="time-range" class='one-second'>
-                    <span class="loaded one-second"></span>
-                    <span class="fill"></span>
-                    <span class="range-btn"></span>
-                    <span class="empty"></span>
+                <div class="bottom">
+                    <div id='time' class='container row layer-3'>
+                        <span id="current-time">00:00</span>
+                        <div id="time-range" class='ease-p6'>
+                            <span class="loaded ease-p6"></span>
+                            <span class="fill"></span>
+                            <span class="range-btn"></span>
+                            <span class="empty"></span>
+                        </div>
+                        <span id="total-time">04:55</span>
+                    </div>
+
+                    <div id='controls' class="container row ease-p6">
+                        <audio src=""></audio>
+                        <span id="play-mode" class='left'></span>
+                        <span id="pre-song"></span>
+                        <span id="play"></span>
+                        <span id="next-song"></span>
+                        <span id="song-list" class='right'></span>
+                    </div>
+
                 </div>
-                <span id="total-time">04:55</span>
             </div>
+        </div>
 
-            <div id='controls' class="container row one-second">
-                <audio src=""></audio>
-                <span id="play-mode" class='left'></span>
-                <span id="pre-song"></span>
-                <span id="play"></span>
-                <span id="next-song"></span>
-                <span id="song-list" class='right'></span>
-            </div>
+        <div id="page-system" class="page test-color-red ease-p3 page-hide">
+            <span class="test-identify">PAGE-system</span>
+        </div>
+
+        <div id="menu-songlist" class="menu test-color-blue ease-p3 menu-hide">
+            <ul id="songlist"></ul>
+            <span class="test-identify">MENU-songlist</span>
+        </div>
+
+        <div id="menu-share" class="menu test-color-yellow ease-p3 menu-hide">
+            <ul id="share"></ul>
+            <span class="test-identify">MENU-share</span>
+        </div>
+
+        <div id="sidebar-left" class="sidebar test-color-green ease-p3 sidebar-hide">
+            <span class="test-identify">SIDEBAR-left</span>
 
         </div>
-    </div>
-
-    <div id="menu-songlist" class="menu test-color-blue half-ten menu-hide">
-        <ul id="songlist"></ul>
-        <span class="test-identify">MENU-songlist</span>
-    </div>
-
-    <div id="menu-share" class="menu test-color-yellow half-ten menu-hide">
-        <ul id="share"></ul>
-        <span class="test-identify">MENU-share</span>
-    </div>
-
-    <div id="page-system" class="page test-color-red half-ten page-hide">
-        <span class="test-identify">PAGE-system</span>
-
-    </div>
-    <div id="sidebar-left" class="sidebar test-color-green half-ten sidebar-hide">
-        <span class="test-identify">SIDEBAR-left</span>
-
     </div>
 
 

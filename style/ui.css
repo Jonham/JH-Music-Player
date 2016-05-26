@@ -1,18 +1,167 @@
-body {
+/* shared properties */
+/* transitions */
+.ease-p6 {
+	-webkit-transition: all ease-out .6s;
+	   -moz-transition: all ease-out .6s;
+	    -ms-transition: all ease-out .6s;
+	     -o-transition: all ease-out .6s;
+            transition: all ease-out .6s;
+}
+.ease-p3 {
+	-webkit-transition: all ease-in-out 0.3s;
+	   -moz-transition: all ease-in-out 0.3s;
+	    -ms-transition: all ease-in-out 0.3s;
+	     -o-transition: all ease-in-out 0.3s;
+            transition: all ease-in-out 0.3s;
+}
+
+/* z-index */
+.layer-1 {
+    z-index: 10;
+}
+.layer-2 {
+    z-index: 20;
+}
+.layer-3 {
+    z-index: 30;
+}
+
+/* float */
+.left {
+    float: left;
+    margin-left: 10px;
+}
+.right {
+    float: right;
+    margin-right: 10px;
+}
+
+/* goRound */
+@keyframes goRound {
+    from { transform: rotate(0deg); }
+    50%  { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }  }
+@-webkit-keyframes goRound {
+    from { -webkit-transform: rotate(0deg); }
+    50%  { -webkit-transform: rotate(180deg); }
+    100% { -webkit-transform: rotate(360deg); } }
+@-moz-keyframes goRound {
+    from { -moz-transform: rotate(0deg); }
+    50%  { -moz-transform: rotate(180deg); }
+    100% { -moz-transform: rotate(360deg); } }
+.goRound {
+        animation-name: goRound;
+        animation-duration: 10s;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
+        -webkit-animation-name: goRound;
+        -webkit-animation-duration: 10s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-delay: 0s;
+        -webkit-animation-iteration-count: infinite;
+        -moz-animation-name: goRound;
+        -moz-animation-duration: 10s;
+        -moz-animation-timing-function: linear;
+        -moz-animation-delay: 0s;
+        -moz-animation-iteration-count: infinite;
+}
+/* fadein */
+.fade-in {
+        animation: fadein 1s;
+-webkit-animation: fadein 1s;
+   -moz-animation: fadein 1s;
+}
+        @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@-webkit-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+   @-moz-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+/* fadeout */
+.fade-out {
+        animation: fadeout 1s;
+-webkit-animation: fadeout 1s;
+   -moz-animation: fadeout 1s;
+}
+        @keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
+@-webkit-keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
+   @-moz-keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
+/* btnIn */
+@keyframes         btnIn { from {         transform: scale(1.2); } to{         transform: scale(1); } }
+@-webkit-keyframes btnIn { from { -webkit-transform: scale(1.2); } to{ -webkit-transform: scale(1); } }
+@-moz-keyframes    btnIn { from {    -moz-transform: scale(1.2); } to{    -moz-transform: scale(1); } }
+/* btnOut */
+@keyframes         btnOut { from{         transform: scale(1.2); } to{         transform: scale(1); } }
+@-webkit-keyframes btnOut { from{ -webkit-transform: scale(1.2); } to{ -webkit-transform: scale(1); } }
+@-moz-keyframes    btnOut { from{    -moz-transform: scale(1.2); } to{    -moz-transform: scale(1); } }
+
+/* hide */
+.hidetoRB { /* hide to right bottom side */
+    -webkit-transform-origin: right bottom;
+        -moz-transform-origin:right bottom;
+        -ms-transform-origin: right bottom;
+            transform-origin: right bottom;
+
+    -webkit-transform: scale(0);
+        -moz-transform:scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0);
+
+	-webkit-transition: all 0.6s;
+	   -moz-transition: all 0.6s;
+	    -ms-transition: all 0.6s;
+	     -o-transition: all 0.6s;
+            transition: all 0.6s;
+}
+.menu-hide {
+    -webkit-transform: translateY(100%);
+        -moz-transform:translateY(100%);
+        -ms-transform: translateY(100%);
+            transform: translateY(100%);
+}
+.page-hide {
+    -webkit-transform: translateX(-100%);
+        -moz-transform:translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
+}
+.mainpage-hide {
+    -webkit-transform: translateX(100%);
+        -moz-transform:translateX(100%);
+        -ms-transform: translateX(100%);
+            transform: translateX(100%);
+}
+.sidebar-hide {
+    -webkit-transform: translateX(-100%);
+        -moz-transform:translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
+}
+
+
+/* main body */
+body, #viewport {
     padding: 0;
     margin: 0;
 }
-#background, #main {
+#viewport {
+    box-sizing: border-box;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    min-height: 470px;
+    min-width: 320px;
+
+    overflow: hidden;
+}
+#page-main, #main {
     display: inline-block;
     position: absolute;
     height: 100%;
     width:  100%;
     box-sizing: border-box;
-
-    min-height: 470px;
-    min-width: 320px;
 }
-#background {
+#page-main {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50%;
@@ -27,46 +176,23 @@ body {
 #main> .row {
     display: block;
 }
-.one-second {
-    transition: all ease-out .6s;
-    -webkit-transition: all ease-out .6s;
-    -moz-transition: all ease-out .6s;
-}
-.layer-1 {
-    z-index: 10;
-}
-.layer-2 {
-    z-index: 20;
-}
-.layer-3 {
-    z-index: 30;
-}
-
-.left {
-    float: left;
-    margin-left: 10px;
-}
-.right {
-    float: right;
-    margin-right: 10px;
-}
 
 
 nav {
     padding-top: 10px;
     vertical-align: middle;
 }
-span#back, span#share {
+#back, #share {
     margin-top: .5em;
     display: inline-block;
     padding: .7em;
     background-size: contain;
     cursor: pointer;
 }
-span#back {
+#back {
     background-image: url('icons/back-w.svg');
 }
-span#share {
+#share {
     background-image: url('icons/share-w.svg');
 }
 #song-message,
@@ -97,7 +223,7 @@ hr.divider {
     background-size: contain;
     background-repeat: no-repeat;
     padding: .6em;
-    padding-top: 0em;
+    padding-top: 0;
     opacity: .6;
 
     cursor: pointer;
@@ -110,6 +236,7 @@ hr.divider {
 }
 .empty {
     width: 100%;
+    box-sizing: border-box;
     border: 1px solid rgba(255,255,255,.3);
 }
 .fill {
@@ -148,110 +275,40 @@ hr.divider {
 }
 
 
-
-
-div#lyric-container {
+#lyric-container {
     height: 28em;
     overflow: hidden;
     position: relative;
     min-height: 240px;
 }
 
-div#lyric-container ul {
+#lyric-container ul {
     list-style: none;
     text-align: center;
     padding: 0;
     line-height: 2em;
 }
-div#lyric-lrc, div#lyric-album {
+#lyric-lrc, #lyric-album {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
 
-    -webkit-transition: all .5s linear;
-    -moz-transition: all .5s linear;
-    transition: all .5s linear;
+	-webkit-transition: all linear 0.5s;
+	   -moz-transition: all linear 0.5s;
+	    -ms-transition: all linear 0.5s;
+	     -o-transition: all linear 0.5s;
+            transition: all linear 0.5s;
 }
 
-/*support all*/
-@keyframes goRound {
-    from { transform: rotate(0deg); }
-    50%  { transform: rotate(180deg); }
-    100% { transform: rotate(360deg); }  }
-@-webkit-keyframes goRound {
-    from { -webkit-transform: rotate(0deg); }
-    50% { -webkit-transform: rotate(180deg); }
-    100% { -webkit-transform: rotate(360deg); } }
-@-moz-keyframes goRound {
-    from { -moz-transform: rotate(0deg); }
-    50%  { -moz-transform: rotate(180deg); }
-    100% { -moz-transform: rotate(360deg); } }
-.goRound {
-        animation-name: goRound;
-        animation-duration: 10s;
-        animation-timing-function: linear;
-        animation-delay: 0s;
-        animation-iteration-count: infinite;
-        -webkit-animation-name: goRound;
-        -webkit-animation-duration: 10s;
-        -webkit-animation-timing-function: linear;
-        -webkit-animation-delay: 0s;
-        -webkit-animation-iteration-count: infinite;
-        -moz-animation-name: goRound;
-        -moz-animation-duration: 10s;
-        -moz-animation-timing-function: linear;
-        -moz-animation-delay: 0s;
-        -moz-animation-iteration-count: infinite;
-}
-
-@keyframes fadein {
-    from { opacity: 0;}
-    to { opacity: 1; } }
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to { opacity: 1; } }
-@-moz-keyframes fadein {
-    from { opacity: 0;}
-    to { opacity: 1; } }
-
-@keyframes fadeout {
-    from { opacity: 1; }
-    to   { opacity: 0; } }
-@-webkit-keyframes fadeout {
-    from { opacity: 1; }
-    to   { opacity: 0; } }
-@-moz-keyframes fadeout {
-    from { opacity: 1; }
-    to   { opacity: 0; } }
-
-@keyframes btnIn {
-    from { transform: scale(1.2); }
-    to   { transform: scale(1); } }
-@-webkit-keyframes btnIn {
-    from { -webkit-transform: scale(1.2); }
-    to   { -webkit-transform: scale(1); } }
-@-moz-keyframes btnIn {
-    from { -moz-transform: scale(1.2); }
-    to   { -moz-transform: scale(1); } }
-@keyframes btnOut {
-    from { transform: scale(1.2); }
-    to   { transform: scale(1); } }
-@-webkit-keyframes btnOut {
-    from { -webkit-transform: scale(1.2); }
-    to   { -webkit-transform: scale(1); } }
-@-moz-keyframes btnOut {
-    from { -moz-transform: scale(1.2); }
-    to   { -moz-transform: scale(1); } }
-
-div#lyric-album {
+#lyric-album {
     position: absolute;
     top: 0;
     text-align: center;
     vertical-align: middle;
     opacity: 0;
 }
-div#lyric-album>span.disk {
+#lyric-album > span.disk {
     display: inline-block;
     position: relative;
     top: 0;
@@ -280,26 +337,26 @@ span.song-opt-grp > span {
     background-size: contain;
     background-position: 50%;
 
-    animation-duration: .3s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 1;
-    animation-direction: alternate;
+            animation-duration: .3s;
     -webkit-animation-duration: .3s;
+        -moz-animation-duration:.3s;
+            animation-timing-function: ease-in-out;
     -webkit-animation-timing-function: ease-in-out;
+        -moz-animation-timing-function:ease-in-out;
+            animation-iteration-count: 1;
     -webkit-animation-iteration-count: 1;
+        -moz-animation-iteration-count:1;
+            animation-direction: alternate;
     -webkit-animation-direction: alternate;
-    -moz-animation-duration: .3s;
-    -moz-animation-timing-function: ease-in-out;
-    -moz-animation-iteration-count: 1;
-    -moz-animation-direction: alternate;
+        -moz-animation-direction:alternate;
 }
-span.favorite {
+.favorite {
     background-image: url('icons/favorite-w.svg');
     animation-name: btnOut;
     -webkit-animation-name: btnOut;
     -moz-animation-name: btnOut;
 }
-span.favorited {
+.favorited {
     background-image: url('icons/favorited-w.svg');
     animation-name: btnIn;
     -webkit-animation-name: btnIn;
@@ -308,7 +365,7 @@ span.favorited {
 span.comments {
     background-image: url('icons/comments-w.svg');
 }
-span.comments > span { // comments count
+span.comments > span { /* comments count */
     display: inline;
     position: absolute;
 
@@ -356,10 +413,6 @@ span.file-option {
     right: 1.2em;
     bottom: 2.2em;
     background-color: rgba(0,0,0, .8);
-
-    transition: all .6s;
-    -webkit-transition: all .6s;
-    -moz-transition: all .6s;
 }
 .menu-item {
     display: list-item;
@@ -368,30 +421,6 @@ span.file-option {
     border-bottom: 1px solid white;
 
     cursor: pointer;
-}
-.hide-fold {
-    transform-origin: right bottom;
-    -webkit-transform-origin: right bottom;
-    -moz-transform-origin: right bottom;
-
-    transform: scale(0);
-    -webkit-transform: scale(0);
-    -moz-transform: scale(0);
-
-    transition: all .6s;
-    -webkit-transition: all .6s;
-    -moz-transition: all .6s;
-}
-
-.fade-out {
-    animation: fadeout 1s;
-    -webkit-animation: fadeout 1s;
-    -moz-animation: fadeout 1s;
-}
-.fade-in {
-    animation: fadein 1s;
-    -webkit-animation: fadein 1s;
-    -moz-animation: fadein 1s;
 }
 
 div.bottom {
@@ -444,19 +473,19 @@ div.bottom {
     cursor: pointer;
 }
 
-span#play-mode, span#song-list {
+#play-mode, #song-list {
     padding: 1em;
     background-size: contain;
     margin-top: 20px;
 }
-span#pre-song, span#next-song {
+#pre-song, #next-song {
     border-radius: 1.4em;
     padding: 1.4em;
     background-repeat: no-repeat;
     background-position: 50%;
     border: white 2px solid;
 }
-span#play {
+#play {
     background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
@@ -469,16 +498,16 @@ span#play {
 
     margin: 0 1.5em;
 }
-span#play-mode {
+#play-mode {
     background-image: url('icons/shuffle-w.svg');
 }
-span#pre-song {
+#pre-song {
     background-image: url('icons/pre-w.svg');
 }
-span#next-song {
+#next-song {
     background-image: url('icons/next-w.svg');
 }
-span#song-list {
+#song-list {
     background-image: url('icons/list-w.svg');
 }
 
@@ -494,89 +523,70 @@ ul#lyric {
 .line {
 	color: rgba(255,255,255,.5);
     padding: 0 1em;
+
 	-webkit-transition: all 0.6s;
-	-moz-transition: all 0.6s;
-	transition: all 0.6s;
+	   -moz-transition: all 0.6s;
+	    -ms-transition: all 0.6s;
+	     -o-transition: all 0.6s;
+            transition: all 0.6s;
 }
 .focus {
 	color: white;
 	font-weight: 700;
-	/*background-color: rgba(255,255,255,.9);*/
-	position: inline-block;
+	display: inline-block;
+
 	-webkit-transition: all 1s;
-	-moz-transition: all 1s;
-	transition: all 1s;
+	   -moz-transition: all 1s;
+	    -ms-transition: all 1s;
+	     -o-transition: all 1s;
+            transition: all 1s;
 }
 
-div.page {
+.page {
     height: 100%;
     width: 100%;
     display: block;
     position: absolute;
 }
-div.menu {
+.menu {
     width: 100%;
     display: block;
     position: absolute;
 }
-div.sidebar {
+.sidebar {
     height: 100%;
     display: block;
     position: absolute;
 }
 
-div#menu-songlist {
+#menu-songlist {
     height: 60%;
 
     top: 40%;
     text-align: left;
 }
-div#menu-share {
+#menu-share {
     height: 40%;
 
     top:60%;
     text-align: left;
 }
-div#page-system {
+#page-system {
 
 }
-div#sidebar-left {
+#sidebar-left {
     width: 75%;
     left: 0;
     top: 0;
 }
-.half-ten {
-    transition: .3s ease-in-out;
-    -webkit-transition: .3s ease-in-out;
-    -moz-transition: .3s ease-in-out;
-}
-
-
-.menu-hide {
-    transform: translateY(100%);
-    -webkit-transform: translateY(100%);
-    -moz-transform: translateY(100%);
-}
-.page-hide {
-    transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-}
-.mainpage-hide {
-    transform: translateX(100%);
-    -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-}
-.sidebar-hide {
-    transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-}
 
 
 
 
-span.test-identify {
+
+
+/* classs for testing */
+.test-identify {
     font-size: 3em;
     color: black;
     background: white;
@@ -595,7 +605,10 @@ span.test-identify {
 }
 
 
-/* DOM elements generated by JavaScript */
+
+
+
+/* plugin DOM elements generated by JavaScript */
 input[type=file] {
     /* browser don't support drag */
     display: block;
@@ -616,20 +629,19 @@ input[type=file]:before {
     color: white;
     content: 'Click to select an Audio file!';
 }
-
-div#dConsole {
-    background-color: rgba(0,0,0,9);
+#dConsole {
+    background-color: rgba(0,0,0, 0.9);
     color: white;
     display: inline-block;
     z-index: 50;
     position: fixed;
 }
-div.dConsole-line {
+.dConsole-line {
     bottom: 0;
     right: 0;
     width: auto;
 }
-div.dConsole-window {
+.dConsole-window {
     top: 3em;
     left: 5px;
     width: 98%;

@@ -301,7 +301,7 @@ window.onload = function() {
 
     startPlay();
 
-    $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
+    $id('page-main').style.backgroundImage = 'url(./OneRepublic.jpg)';
 	var imgPreload = new Image();
 	imgPreload.src = 'style/icons/favorited-w.svg';
 
