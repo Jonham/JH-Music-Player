@@ -29,7 +29,7 @@ var onFileLoad = function() {
         // dConsole.log('is a file of ' + type + ' || size:' + size);
 
         // test type support
-        var loadingMode = false;
+        var loadingMode = -1;
         var typeMapBySubfix = function( subfix ) {
             switch (subfix) {
                 case 'mp3':
@@ -65,11 +65,11 @@ var onFileLoad = function() {
         if (type !== '') {
             var aMIME = type.split('/');
             typeMapByMIME( aMIME[0] );
-            // dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
+            dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
         } else {
         }
         // test twice
-        // dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
+        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
 
         if (!loadingMode) { return false; }
 
@@ -158,7 +158,7 @@ var onFileLoad = function() {
         };
         var imageLoader = function( fileBuffer ) {
             dConsole.log('imageLoader: set image as new background.');
-            $wrap('#background').backgroundImage(fileBuffer);
+            $wrap('#page-main').backgroundImage(fileBuffer);
         };
 
         // handling logic

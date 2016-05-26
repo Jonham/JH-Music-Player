@@ -1,11 +1,11 @@
-var timeRange = $id('time-range'),
-    volumeRange = $id('volume-range');
+var rangeTime = $id('time-range'),
+    rangeVolume = $('#range-volume');
 
 
-var onTimeRangeUpdate = function() {
-    var me = timeRange,
-        fill = $(timeRange, '.fill'),
-        btn = $(timeRange, '.range-btn');
+var onRangeTimeUpdate = function() {
+    var me = rangeTime,
+        fill = $(rangeTime, '.fill'),
+        btn = $(rangeTime, '.range-btn');
 
     var audioPercent = function() {
         var total = audio.duration,
@@ -19,7 +19,7 @@ var onTimeRangeUpdate = function() {
 
     return listener;
 };
-$on(audio, 'timeupdate', onTimeRangeUpdate());
+$on(audio, 'timeupdate', onRangeTimeUpdate());
 
 var RangeClickFactory = function(range, type) {
     // length is a value that given by resizeListener
@@ -49,7 +49,7 @@ var RangeClickFactory = function(range, type) {
 
     var listener = function(e) {
         var point = e.clientX - 5;
-        var per = (point - left) / length;//rectTimerange.width;
+        var per = (point - left) / length;//rectrangeTime.width;
         per = per < 0?
                 0 :
                 per > 1?
@@ -61,11 +61,11 @@ var RangeClickFactory = function(range, type) {
     return listener;
 };
 
-var timerangelistener = RangeClickFactory(timeRange, 'time');
-$click(timeRange, timerangelistener);
+var rangeTimelistener = RangeClickFactory(rangeTime, 'time');
+$click(rangeTime, rangeTimelistener);
 
-var volumerangelistener = RangeClickFactory(volumeRange, 'volume');
-$click(volumeRange, volumerangelistener);
+var rangeVolumelistener = RangeClickFactory(rangeVolume, 'volume');
+$click(rangeVolume, rangeVolumelistener);
 
 var onAudioVolumeChange = function( range, audio ) {
     var btn = $(range, '.range-btn'),
@@ -81,7 +81,7 @@ var onAudioVolumeChange = function( range, audio ) {
     };
     $on(audio, 'volumechange', listener);
 };
-onAudioVolumeChange( volumeRange, audio);
+onAudioVolumeChange( rangeVolume, audio);
 var onAudioMute = function( speaker, audio ) {
     var volume = audio.volume;
 
@@ -109,18 +109,18 @@ var onSizeChange = function(e) {
     var slowdownTimer; // for reducing listener-invoking times
 
     var resizeRange = function( callback ) {
-        var ct = currentTime.getBoundingClientRect();
-        var tt = totalTime.getBoundingClientRect();
-        var tr = timeRange.getBoundingClientRect();
+        var ct = tagCurrentTime.getBoundingClientRect();
+        var tt = tagTotalTime.getBoundingClientRect();
+        var tr = rangeTime.getBoundingClientRect();
 
         // left | ..OFFSET |<--length-->| OFFSET.. | right
         var left = ct.right;
         var right = tt.left;
-        var OFFSET = tr.left - left; // make distance between timeRange the same
+        var OFFSET = tr.left - left; // make distance between rangeTime the same
         var length = right - left - ( 2*OFFSET );
 
-        timeRange.style.width = length +'px';
-        volumeRange.style.width = length + 'px';
+        rangeTime.style.width = length +'px';
+        rangeVolume.style.width = length + 'px';
 
         setTimeout( callback, 1100); // transition-duration: 1000
     }; // resizeRange()
@@ -146,13 +146,13 @@ var onSizeChange = function(e) {
         slowdownTimer = setTimeout(
             function() {
                 var callback = function() {
-                    $off(timeRange, 'click', timerangelistener);
-                    timerangelistener = RangeClickFactory(timeRange, 'time'); // change when the width time-range change
-                    $click(timeRange, timerangelistener);
+                    $off(rangeTime, 'click', rangeTimelistener);
+                    rangeTimelistener = RangeClickFactory(rangeTime, 'time'); // change when the width time-range change
+                    $click(rangeTime, rangeTimelistener);
 
-                    $off(volumeRange, 'click', volumerangelistener);
-                    volumerangelistener = RangeClickFactory(volumeRange, 'volume');
-                    $click(volumeRange, volumerangelistener);
+                    $off(rangeVolume, 'click', rangeVolumelistener);
+                    rangeVolumelistener = RangeClickFactory(rangeVolume, 'volume');
+                    $click(rangeVolume, rangeVolumelistener);
                 };
                 resizeRange( callback );
 

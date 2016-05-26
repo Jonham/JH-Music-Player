@@ -69,7 +69,7 @@
     // wrapper
     var Wrapper = function(elem) {
         if (typeof(elem) === 'string') { return new Wrapper( $(elem) ); }
-        if (!isDOMElement(elem)) { console.error('Wrapper takes only DOM elements or DOM CSS3 selector string.'); return false;}
+        if (!isDOMElement(elem)) { console.error('JH:Wrapper takes only DOM elements or DOM CSS3 selector string.'); return false;}
         if (this == window) { return new Wrapper(elem); }
         this._NODE = elem;
         return this;
@@ -158,8 +158,8 @@
 
 
 
-var btnPlay = $id('play'),
+var btnPlay = $('#btn-play'),
     audio = $('audio'),
-    totalTime = $id('total-time'),
-    currentTime = $id('current-time'),
+    tagTotalTime = $('#tag-totalTime'),
+    tagCurrentTime = $('#tag-currentTime'),
     lyric = $id('lyric');
