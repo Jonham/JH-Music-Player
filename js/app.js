@@ -501,8 +501,41 @@ window.onload = function() {
     startPlay();
 
     $id('page-main').style.backgroundImage = 'url(./OneRepublic.jpg)';
-	var imgPreload = new Image();
-	imgPreload.src = 'style/icons/favorited-w.svg';
+
+    var preloadImage = function( urlArray ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            console.log('loaded ' + index);
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    var aImageURL = [
+        'style/icons/favorited-w.svg',
+        'style/icons/mode-loop-w.svg',
+        'style/icons/mode-repeatone-w.svg'
+    ];
+    preloadImage(aImageURL);
 
     // bugs here: when to turn lrc to album
     var lyricAlbum = $('#lyric-album'),
