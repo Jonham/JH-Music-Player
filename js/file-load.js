@@ -181,7 +181,7 @@ var onFileLoad = function() {
         dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
         // return true if userAgent fulfill desktop-browser conditions
         //   and browser support AudioContext() [webkitAudioContext() included]
-        return NS.supports.audioContext && result !== -1; 
+        return NS.supports.audioContext && result !== -1;
     };
     if (dragOrSelect() ) {
         // dConsole.log('support drag&drop');
@@ -197,15 +197,143 @@ var onFileLoad = function() {
         var fileInput = $dom('input');
             fileInput.type = 'file';
             fileInput.multiple = true;
-            fileInput.accept = 'audio/*';
         document.body.appendChild(fileInput);
         $on(fileInput, 'change', function(e) {
             if (fileInput.files.length >= 1) {
                 onFileSelect(fileInput);
             }
         });
+        $stopPropagation(fileInput, 'click');
+
         NS.stackShowup.push(function() {
             fileInput.style.display = 'none';
         });
     }
 };
+
+function classifyLrc(arr) {
+	// two modes
+	// 1. one TimeStamp one lyrics        normal
+	// 2. several timeTags one lyrics   compressd
+
+	// metamsg RegExp
+	// ti : title
+	// ar : artist
+	// al : album
+	// by : lyric maker
+	var rgMetaMsg = /(ti|ar|al|by|offset):(.+)/;
+
+	// timetag regexp
+	// 1. mm:ss.ms
+	var rgTimetag = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/;
+
+	// function(timetag): to transform
+	// "01:01.01" ==> 60 + 1 + .01
+	var parseTimetag = function(timetag) {
+
+		var aTMP = rgTimetag.exec(timetag);
+		var floatTime = parseInt(aTMP[1]) * 60 + parseInt(aTMP[2]) + parseInt(aTMP[3]) / 100;
+		return floatTime;
+	};
+
+	// returnArrayObject
+	// prototype oOut[12.34] = []
+	var oOut = {};
+	// store all lyrics and timetag
+	oOut.lrc = [];
+	oOut.timeTags = [];
+
+	// go through the given array
+    for (var i=0; i < arr.length; i++) {
+        if (rgMetaMsg.test(arr[i])) {
+            // get meta messages
+            var aTMP = rgMetaMsg.exec(arr[i]);
+            oOut[aTMP[1]] = aTMP[2];
+        }
+        else if(rgTimetag.test(arr[i])) {
+            // handling timestamp and lyrics
+
+            // in compress mode:
+            // to collect series of timestamp
+            var aCurrentTime = [];
+
+            // collect all timeTags
+            while (rgTimetag.test(arr[i])) {
+                var fTime = parseTimetag(arr[i]);
+                aCurrentTime.push(fTime);
+                oOut.timeTags.push(fTime);
+                i++;
+            }
+
+            // collect all the lyrics
+            var strNextLRC = arr[i];
+            oOut.lrc.push(strNextLRC);
+            var curLrcNo = oOut.lrc.length - 1;
+
+            // restore aCurrentTime to oOut
+            // oOut[ sNow ] = [ ref to No to lrc ]
+            for (var j=0; j < aCurrentTime.length; j++) {
+                var sNow = aCurrentTime[j];
+                if(oOut[sNow]) {
+                    oOut[sNow].push(curLrcNo);
+                }
+                else {
+                    oOut[sNow] = [curLrcNo];
+                }
+            }
+
+        }
+    }
+    // sort
+	var sortByNumber = function(a, b) { return a>b? 1: -1; };
+	oOut.timeTags.sort(sortByNumber);
+
+	return oOut;
+}
+// load lrc file
+// notice: file encoding:
+// utf-8
+// ANSI
+// UCS2 BigEndian
+//      LittleEndian
+
+function loadLrc(file, callback) {
+    var path = "./music/";
+    var url = path + file;
+    var oOut = {};
+    if (callback === undefined) {callback = parseLrc;}
+
+    var response = "";
+
+    var xhr = new XMLHttpRequest();
+    	xhr.open("get", url, true);
+    	xhr.send();
+    	xhr.onreadystatechange = function(){
+    		if (xhr.readyState == "4" && xhr.status == "200") {
+    			response = xhr.responseText;
+                loadedLRClist.push( callback(response) );
+    		}
+            return "xhr Fails";
+    	};
+    	return oOut;
+}
+// parse lrc into Array Object
+// Example
+//[ti:Rolling In The Deep]
+//[ar:Adele]
+//[al:21]
+//[by:yvonne]
+//
+function parseLrc(str) {
+    var rg = /[\[\]]/g;
+    var arr = str.split(rg);
+    var aOut = [];
+
+    for (var i =0; i < arr.length; i++) {
+        // mutiline of "\n"
+        var sTMP = arr[i];
+        sTMP.replace("\n", "");
+        aOut.push(sTMP);
+    }
+    return classifyLrc(aOut);
+}

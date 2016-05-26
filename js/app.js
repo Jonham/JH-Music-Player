@@ -1,142 +1,312 @@
-function classifyLrc(arr) {
-	// two modes
-	// 1. one TimeStamp one lyrics        normal
-	// 2. several timeTags one lyrics   compressd
-
-	// metamsg RegExp
-	// ti : title
-	// ar : artist
-	// al : album
-	// by : lyric maker
-	var rgMetaMsg = /(ti|ar|al|by|offset):(.+)/;
-
-	// timetag regexp
-	// 1. mm:ss.ms
-	var rgTimetag = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/;
-
-	// function(timetag): to transform
-	// "01:01.01" ==> 60 + 1 + .01
-	var parseTimetag = function(timetag) {
-
-		var aTMP = rgTimetag.exec(timetag);
-		var floatTime = parseInt(aTMP[1]) * 60 + parseInt(aTMP[2]) + parseInt(aTMP[3]) / 100;
-		return floatTime;
-	};
-
-	// returnArrayObject
-	// prototype oOut[12.34] = []
-	var oOut = {};
-	// store all lyrics and timetag
-	oOut.lrc = [];
-	oOut.timeTags = [];
-
-	// go through the given array
-    for (var i=0; i < arr.length; i++) {
-        if (rgMetaMsg.test(arr[i])) {
-            // get meta messages
-            var aTMP = rgMetaMsg.exec(arr[i]);
-            oOut[aTMP[1]] = aTMP[2];
+;;
+var addDOMElementNodeProperty = function() {
+    var attachNodeTo = function(elem, attr) {
+        if (!$.isDOMElement(elem) || !_.isObject(attr)) return false;
+        if (elem.node !== undefined) {
+            console.error(elem + ' already got a node attribute.');
+            return false;
         }
-        else if(rgTimetag.test(arr[i])) {
-            // handling timestamp and lyrics
+        elem.node = attr;
+        return elem;
+    };
 
-            // in compress mode:
-            // to collect series of timestamp
-            var aCurrentTime = [];
+    var pageMain     = $('#page-main'),
+        pageSystem   = $('#page-system'),
+        sidebarLeft  = $('#sidebar-left'),
+        menuSonglist = $('#menu-songlist'),
+        menuShare    = $('#menu-share'),
+        menuFileOption = $('#menu-fileOpt'),
+        menuOption   = $('#menu-option'),
+        elemDConsole = $('#dConsole');
 
-            // collect all timeTags
-            while (rgTimetag.test(arr[i])) {
-                var fTime = parseTimetag(arr[i]);
-                aCurrentTime.push(fTime);
-                oOut.timeTags.push(fTime);
-                i++;
-            }
+    var timers = {};
+    if (NS.dom === undefined) { NS.dom = {}; }
+    NS.dom.pageMain = attachNodeTo( pageMain, {
+        hide: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.add('mainpage-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.remove('mainpage-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.toggle('mainpage-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.pageSystem = attachNodeTo( pageSystem, {
+        hide: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.add('page-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.remove('page-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.toggle('page-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.sidebarLeft = attachNodeTo( sidebarLeft, {
+        hide: function(second) {
+            window.clearTimeout( timers.sidebarLeft );
+            timers.sidebarLeft =
+                window.setTimeout(
+                    function(){ sidebarLeft.classList.add('sidebar-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.sidebarLeft );
+            timers.sidebarLeft =
+                window.setTimeout(
+                    function(){ sidebarLeft.classList.remove('sidebar-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.sidebarLeft );
+            timers.sidebarLeft =
+                window.setTimeout(
+                    function(){ sidebarLeft.classList.toggle('sidebar-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.menuShare = attachNodeTo( menuShare, {
+        hide: function(second) {
+            window.clearTimeout( timers.menuShare );
+            timers.menuShare =
+                window.setTimeout(
+                    function(){ menuShare.classList.add('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.menuShare );
+            timers.menuShare =
+                window.setTimeout(
+                    function(){ menuShare.classList.remove('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.menuShare );
+            timers.menuShare =
+                window.setTimeout(
+                    function(){ menuShare.classList.toggle('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.menuFileOption = attachNodeTo( menuFileOption, {
+        hide: function(second) {
+            window.clearTimeout( timers.menuFileOption );
+            timers.menuFileOption =
+                window.setTimeout(
+                    function(){ menuFileOption.classList.add('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.menuFileOption );
+            timers.menuFileOption =
+                window.setTimeout(
+                    function(){ menuFileOption.classList.remove('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.menuFileOption );
+            timers.menuFileOption =
+                window.setTimeout(
+                    function(){ menuFileOption.classList.toggle('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.menuSonglist = attachNodeTo( menuSonglist, {
+        hide: function(second) {
+            window.clearTimeout( timers.menuSonglist );
+            timers.menuSonglist =
+                window.setTimeout(
+                    function(){ menuSonglist.classList.add('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.menuSonglist );
+            timers.menuSonglist =
+                window.setTimeout(
+                    function(){ menuSonglist.classList.remove('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.menuSonglist );
+            timers.menuSonglist =
+                window.setTimeout(
+                    function(){ menuSonglist.classList.toggle('menu-hide'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.menuOption = attachNodeTo( menuOption, {
+        hide: function(second) {
+            window.clearTimeout( timers.menuOption );
+            timers.menuOption =
+                window.setTimeout(
+                    function(){ menuOption.classList.add('menu-hidetoRB'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.menuOption );
+            timers.menuOption =
+                window.setTimeout(
+                    function(){ menuOption.classList.remove('menu-hidetoRB'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.menuOption );
+            timers.menuOption =
+                window.setTimeout(
+                    function(){ menuOption.classList.toggle('menu-hidetoRB'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.elemDConsole = attachNodeTo( elemDConsole, {
+        state: false, // true for maxed, false for mined
+        MAX: true,
+        MIN: false,
+        min: function(second) {
+            window.clearTimeout( timers.elemDConsole );
+            timers.elemDConsole =
+                window.setTimeout(
+                    function(){
+                        var a = dConsole.messageArray;
+                        elemDConsole.classList.remove('dConsole-window');
+                        elemDConsole.innerHTML = a[ a.length -1 ];
 
-            // collect all the lyrics
-            var strNextLRC = arr[i];
-            oOut.lrc.push(strNextLRC);
-            var curLrcNo = oOut.lrc.length - 1;
+                        // set status as MIN
+                        elemDConsole.node.state = false;
+                    },
+                    _.isNumber(second)? second: 0
+                ); },
+        max: function(second) {
+            window.clearTimeout( timers.elemDConsole );
+            timers.elemDConsole =
+                window.setTimeout(
+                    function(){
+                        elemDConsole.classList.add('dConsole-window');
+                        // add log messages as ol
+                        var ol = $dom('ol');
+                		_.each( dConsole.messageArray, function(value) {
+                			var li = $dom('li');
+                			li.innerHTML = value;
+                			ol.appendChild(li);
+                		});
+                		elemDConsole.innerHTML = '';
+                		elemDConsole.appendChild(ol);
 
-            // restore aCurrentTime to oOut
-            // oOut[ sNow ] = [ ref to No to lrc ]
-            for (var j=0; j < aCurrentTime.length; j++) {
-                var sNow = aCurrentTime[j];
-                if(oOut[sNow]) {
-                    oOut[sNow].push(curLrcNo);
-                }
-                else {
-                    oOut[sNow] = [curLrcNo];
-                }
-            }
+                        // set state as MAX
+                        elemDConsole.node.state = true;
+                    },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.elemDConsole );
+            timers.elemDConsole =
+                window.setTimeout(
+                    function(){
+                        var thisNode = elemDConsole.node;
+                        thisNode.state?
+                            thisNode.min():
+                            thisNode.max();
+                    },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+};
+addDOMElementNodeProperty();
 
-        }
-    }
-    // sort
-	var sortByNumber = function(a, b) { return a>b? 1: -1; };
-	oOut.timeTags.sort(sortByNumber);
+var attachDOMElementEvents = function() {
+    // dConsole window click events
+    var elemDConsole = dConsole.output;
 
-	return oOut;
-}
-// load lrc file
-// notice: file encoding:
-// utf-8
-// ANSI
-// UCS2 BigEndian
-//      LittleEndian
+    $stopPropagation(elemDConsole, 'click');
+    $click(elemDConsole, function(e) {
+        if (elemDConsole.node.state) { return false; }
+        elemDConsole.node.toggle();
+		NS.stackShowup.push(function() {
+			elemDConsole.node.min();
+		});
+	});
 
-function loadLrc(file, callback) {
-    var path = "./music/";
-    var url = path + file;
-    var oOut = {};
-    if (callback === undefined) {callback = parseLrc;}
+    // #menu-option click events
+    var btnOption = $('#option-btn'),
+        menuOption = $('#menu-option');
+    $stopPropagation(btnOption, 'click');
+    $click(btnOption, function(e){
+        NS.stackShowup.releaseALl();
+        menuOption.node.toggle();
+		NS.stackShowup.push(function() { menuOption.node.hide();} ); // auto close in 3s
+    });
+    $click(menuOption, function(e) {
+        menuOption.node.toggle();
+        dConsole.log(e.target.innerHTML);
+    });
 
-    var response = "";
+    var btnSongList = $('#song-list'),
+        menuSonglist = $('#menu-songlist');
+    $stopPropagation(btnSongList, 'click');
+    $click(btnSongList, function(e) {
+        NS.stackShowup.releaseALl();
+        menuSonglist.node.show();
+        NS.stackShowup.push(function(){ menuSonglist.node.hide(); });
+    });
 
-    var xhr = new XMLHttpRequest();
-    	xhr.open("get", url, true);
-    	xhr.send();
-    	xhr.onreadystatechange = function(){
-    		if (xhr.readyState == "4" && xhr.status == "200") {
-    			response = xhr.responseText;
-                loadedLRClist.push( callback(response) );
-    		}
-            return "xhr Fails";
-    	};
-    	return oOut;
-}
-// parse lrc into Array Object
-// Example
-//[ti:Rolling In The Deep]
-//[ar:Adele]
-//[al:21]
-//[by:yvonne]
-//
-function parseLrc(str) {
-    var rg = /[\[\]]/g;
-    var arr = str.split(rg);
-    var aOut = [];
+    var btnShare = $('#btn-share'),
+        menuShare = $('#menu-share');
+    $stopPropagation(btnShare, 'click');
+    $click(btnShare, function(e) {
+        NS.stackShowup.releaseALl();
+        menuShare.node.show();
+        NS.stackShowup.push(function(){ menuShare.node.hide(); });
+    });
 
-    for (var i =0; i < arr.length; i++) {
-        // mutiline of "\n"
-        var sTMP = arr[i];
-        sTMP.replace("\n", "");
-        aOut.push(sTMP);
-    }
-    return classifyLrc(aOut);
-}
+    // .btn-fileOpt
+    var btnFileOption = $('.btn-fileOpt'),
+    menuFileOption = $('#menu-fileOpt');
+    $stopPropagation(btnFileOption, 'click');
+    $click(btnFileOption, function(e) {
+        NS.stackShowup.releaseALl();
+        menuFileOption.node.show();
+        NS.stackShowup.push(function(){ menuFileOption.node.hide(); });
+    });
 
+    var btnBack = $('#btn-back'),
+        pageMain = $('#page-main'),
+        pageSystem = $('#page-system');
+    $click(btnBack, function(e) {
+        pageMain.node.hide();
+        pageSystem.node.show();
+    });
+    // bugs: polyfill  shortcut to return to pageMain
+    $click(pageSystem, function(e) {
+        pageSystem.node.hide();
+        pageMain.node.show();
+    });
 
-var btnPlay = $id('play'),
-    audio = $('audio'),
-    btnPre = $id('pre-song'),
-    btnNext = $id('next-song'),
-    btnBack = $id('back'),
-    totalTime = $id('total-time'),
-    currentTime = $id('current-time'),
-    optionMenu = $id('option-menu'),
-    lyric = $id('lyric'),
-    title = $id('song-title'),
-    artist = $id('song-artist');
+};
+attachDOMElementEvents();
 
 function startPlay() {
     var btnIcons = {
@@ -233,6 +403,8 @@ $on(audio, "timeupdate", function(e) {
 
 	if (ONCE) {
         // title message
+        var title = $id('song-title'),
+            artist = $id('song-artist');
 		title.innerHTML = lrc.ti;
 		artist.innerHTML = lrc.ar;
 		offsetTop = lyric.offsetTop;
@@ -271,7 +443,7 @@ $on(audio, "timeupdate", function(e) {
 	}
 });
 
-var onButtonBack = function() {
+var onTurnLrcAndAlbum = function() {
     var main = $id('main'),
         lyric = $id('lyric-lrc'),
         album = $id('lyric-album'),
@@ -297,6 +469,7 @@ var onButtonBack = function() {
     return listener;
 };
 window.onload = function() {
+
 	loadLrc("OneRepublic - Good Life.lrc", parseLrc);
 
     startPlay();
@@ -305,72 +478,38 @@ window.onload = function() {
 	var imgPreload = new Image();
 	imgPreload.src = 'style/icons/favorited-w.svg';
 
-    var onB = onButtonBack();
-    $click(btnBack, onB);
-    // $id('lyric-lrc').addEventListener('click', onB, false);
-    // $id('lyric-album').addEventListener('click', onB, false);
+    // bugs here: when to turn lrc to album
+    var lyricAlbum = $('#lyric-album'),
+        lyricLrc = $('#lyric-lrc'),
+        onB = onTurnLrcAndAlbum();
+    $click(lyricAlbum, onB);
+    $click(lyricLrc, function(e) {
+        if (e.target.tagName == 'LI') {
+            return false;
+        }
+
+        onB();
+    });
 
     // polyfill
+    var btnPre = $id('pre-song'),
+    btnNext = $id('next-song');
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
-	$click(window, function(e) {
-		while (NS.stackShowup.length) {
-			NS.stackShowup.pop()();
-		}
+
+    // if window receive 'click' event, it will pop up all callback functions in stackShowup
+    $click(window, function(e) {
+		NS.stackShowup.releaseALl();
 	}, false);
     onSizeChange()();
-
-	var elem = $dom('div#dConsole');
-		elem.classList.add('dConsole-line');
-	document.body.appendChild(elem);
-	$click(elem, function(e) {
-		e.stopPropagation();
-		elem.classList.remove('dConsole-line');
-		elem.classList.add('dConsole-window');
-
-		var ol = $dom('ol');
-		dConsole.messageArray.forEach(function(value) {
-			var li = $dom('li');
-			li.innerHTML = value;
-			ol.appendChild(li);
-		});
-		var tmp = elem.innerHTML;
-		elem.innerHTML = '';
-		elem.appendChild(ol);
-
-		NS.stackShowup.push(function() {
-			elem.classList.remove('dConsole-window');
-			elem.classList.add('dConsole-line');
-			elem.innerHTML = tmp;
-		});
-	});
-	dConsole = new DebugConsole(elem);
-
 	onFileLoad();
 };
-
-var btnOption = $('span#option-btn');
-$click(btnOption, function(e){
-        e.stopPropagation();
-        var list = optionMenu.classList;
-		list.toggle('hide-fold');
-
-		if (!list.contains('hide-fold')) {
-			NS.stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
-		}
-    });
-$click(optionMenu, function(e) {
-        // e.stopPropagation();
-        optionMenu.classList.toggle('hide-fold');
-        dConsole.log(e.target.innerHTML);
-    });
 
 var onSongOptionsGroup = function() {
     var wrapper = $('span.song-opt-grp'),
         favorite = $(wrapper, '#btnFavorite'),
         comments = $(wrapper, '.comments'),
-        	commentsCount = $(comments, 'span'),
-        fileOpt = $(wrapper, '.file-option');
+        	commentsCount = $(comments, 'span');
 
 	var favoriteState = false,
 		onFavoriteClick = function(e) {
@@ -387,15 +526,10 @@ var onSongOptionsGroup = function() {
 				e.stopPropagation();
 				dConsole.log('show comments');
 				commentsCount.innerHTML = 99;
-			},
-		onFileOptionClick = function(e) {
-				e.stopPropagation();
-				dConsole.log('show file option menu.');
 			};
 
 	// add listener on their parent and switch on e.target
 	$click(favorite, onFavoriteClick);
 	$click(comments, onCommentsClick);
-	$click(fileOpt, onFileOptionClick);
 };
 onSongOptionsGroup();
