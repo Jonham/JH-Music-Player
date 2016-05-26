@@ -27,12 +27,12 @@
         <div id="page-main" class="page ease-p3">
             <div id="main">
                 <nav class='header row'>
-                    <span id="back" class='left'></span>
+                    <span id="btn-back" class='left'></span>
                     <span id="song-message">
                         <span id="song-title">The Saltwater Room</span> <br>
                         <span id="song-artist">Owl City</span>
                     </span>
-                    <span id="share" class='right'></span>
+                    <span id="btn-share" class='right'></span>
                 </nav>
 
                 <div id="volume" class='row ease-p6'>
@@ -59,7 +59,7 @@
                         </ul>
                         <div id="option" class='layer-2'>
                             <span id="option-btn"></span>
-                            <div id="option-menu" class='ease-p6 hidetoRB'>
+                            <div id="menu-option" class='ease-p3 menu-hidetoRB'>
                                 <span class="menu-item">歌词调整</span>
                                 <span class="menu-item">翻译报错</span>
                                 <span class="menu-item">歌词报错</span>
@@ -68,12 +68,12 @@
                         </div>
                     </div>
                     <!-- page2 -->
-                    <div id='lyric-album'>
+                    <div id='lyric-album' style="display:none;">
                         <span class='disk ease-p6'></span>
                         <span class='song-opt-grp'>
                             <span id='btnFavorite' class="favorite btnToggle"></span>
                             <span class="comments"><span>0</span></span>
-                            <span class="file-option"></span>
+                            <span class="btn-fileOpt"></span>
                         </span>
                     </div>
                 </div>
@@ -112,8 +112,13 @@
         </div>
 
         <div id="menu-share" class="menu test-color-yellow ease-p3 menu-hide">
-            <ul id="share"></ul>
+            <ul id="ulShare"></ul>
             <span class="test-identify">MENU-share</span>
+        </div>
+
+        <div id="menu-fileOpt" class="menu test-color-yellow ease-p3 menu-hide">
+            <ul id="ulFileOpt"></ul>
+            <span class="test-identify">MENU-FileOption</span>
         </div>
 
         <div id="sidebar-left" class="sidebar test-color-green ease-p3 sidebar-hide">
@@ -126,8 +131,8 @@
     <script src="js/lib/underscore-min.js"></script>
 
     <script src="js/cross-browser.js"></script>
-    <script src="js/globalNamespace.js"></script>
     <script src="js/$getter.js"></script>
+    <script src="js/globalNamespace.js"></script>
     <script src="js/app.js"></script>
     <script src="js/time-range.js"></script>
     <script src="js/file-load.js"></script>

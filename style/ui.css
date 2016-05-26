@@ -94,7 +94,7 @@
 @-moz-keyframes    btnOut { from{    -moz-transform: scale(1.2); } to{    -moz-transform: scale(1); } }
 
 /* hide */
-.hidetoRB { /* hide to right bottom side */
+.menu-hidetoRB { /* hide to right bottom side */
     -webkit-transform-origin: right bottom;
         -moz-transform-origin:right bottom;
         -ms-transform-origin: right bottom;
@@ -182,17 +182,17 @@ nav {
     padding-top: 10px;
     vertical-align: middle;
 }
-#back, #share {
+#btn-back, #btn-share {
     margin-top: .5em;
     display: inline-block;
     padding: .7em;
     background-size: contain;
     cursor: pointer;
 }
-#back {
+#btn-back {
     background-image: url('icons/back-w.svg');
 }
-#share {
+#btn-share {
     background-image: url('icons/share-w.svg');
 }
 #song-message,
@@ -377,7 +377,7 @@ span.comments > span { /* comments count */
     background-color: white;
     border-radius: .2em;
 }
-span.file-option {
+span.btn-fileOpt {
     background-image: url('icons/options-w.svg');
 }
 
@@ -406,7 +406,7 @@ span.file-option {
 
     cursor: pointer;
 }
-#option-menu {
+#menu-option {
     display: inline-block;
     border-top: 1px solid white;
     position: absolute;
@@ -571,6 +571,12 @@ ul#lyric {
     top:60%;
     text-align: left;
 }
+#menu-fileOpt {
+    height: 40%;
+
+    top:60%;
+    text-align: left;
+}
 #page-system {
 
 }
@@ -629,17 +635,22 @@ input[type=file]:before {
     color: white;
     content: 'Click to select an Audio file!';
 }
+::-ms-browse, [type='file'] {
+	display: none;
+}
+::-webkit-file-upload-button {
+	display: none;
+}
+
 #dConsole {
     background-color: rgba(0,0,0, 0.9);
     color: white;
     display: inline-block;
     z-index: 50;
     position: fixed;
-}
-.dConsole-line {
-    bottom: 0;
-    right: 0;
-    width: auto;
+	bottom: 0;
+	right: 0;
+	width: auto;
 }
 .dConsole-window {
     top: 3em;
