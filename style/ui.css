@@ -253,7 +253,7 @@ hr.divider {
 
     margin-top: -4px;
 }
-#range-volume, #time-range {
+#range-volume, #range-time {
         display: inline-block;
         position: absolute;
 
@@ -436,15 +436,15 @@ div.bottom {
     vertical-align: middle;
     padding-bottom: 1em;
 }
-#time-range {
+#range-time {
     left: 4em;
     top: .5em;
     padding-top: -0.4em;
 }
-#time-range .range-fill {
+#range-time .range-fill {
     border: 1px solid rgb(255, 0, 0);
 }
-#time-range .loaded {
+#range-time .loaded {
     border: 1px solid rgb(255, 255, 255);
 }
 
