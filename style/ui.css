@@ -195,12 +195,12 @@ nav {
 #btn-share {
     background-image: url('icons/share-w.svg');
 }
-#song-message,
+#tag-songMessage,
 #song-artist,
 #song-title {
     display: inline-block;
 }
-#song-message {
+#tag-songMessage {
     margin-left: 1em;
 }
 #song-artist {
@@ -230,7 +230,7 @@ hr.divider {
 }
 
 
-.empty, .fill, .loaded {
+.empty, .range-fill, .loaded {
     position: absolute;
     display: inline-block;
 }
@@ -239,7 +239,7 @@ hr.divider {
     box-sizing: border-box;
     border: 1px solid rgba(255,255,255,.3);
 }
-.fill {
+.range-fill {
     border: 1px solid rgba(255,255,255,.8);
 }
 .range-btn {
@@ -253,7 +253,7 @@ hr.divider {
 
     margin-top: -4px;
 }
-#volume-range, #time-range {
+#range-volume, #range-time {
         display: inline-block;
         position: absolute;
 
@@ -263,14 +263,14 @@ hr.divider {
         cursor: pointer;
 }
 
-#volume-range {
+#range-volume {
     margin-left: 1em;
     padding-top: .5em;
 }
-#volume-range .fill {
+#range-volume .range-fill {
     width: 100%;
 }
-#volume-range .range-btn {
+#range-volume .range-btn {
     left: 100%;
 }
 
@@ -362,10 +362,10 @@ span.song-opt-grp > span {
     -webkit-animation-name: btnIn;
     -moz-animation-name: btnIn;
 }
-span.comments {
+span.btnComments {
     background-image: url('icons/comments-w.svg');
 }
-span.comments > span { /* comments count */
+span.btnComments > span { /* comments count */
     display: inline;
     position: absolute;
 
@@ -436,27 +436,27 @@ div.bottom {
     vertical-align: middle;
     padding-bottom: 1em;
 }
-#time-range {
+#range-time {
     left: 4em;
     top: .5em;
     padding-top: -0.4em;
 }
-#time-range .fill {
+#range-time .range-fill {
     border: 1px solid rgb(255, 0, 0);
 }
-#time-range .loaded {
+#range-time .loaded {
     border: 1px solid rgb(255, 255, 255);
 }
 
-#current-time, #total-time {
+#tag-currentTime, #tag-totalTime {
     display: inline-block;
     position: absolute;
 }
-#current-time {
+#tag-currentTime {
     float: left;
     left: 10px;
 }
-#total-time {
+#tag-totalTime {
     float: right;
     right: 10px;
 }
@@ -473,19 +473,19 @@ div.bottom {
     cursor: pointer;
 }
 
-#play-mode, #song-list {
+#btn-playMode, #btn-songList {
     padding: 1em;
     background-size: contain;
     margin-top: 20px;
 }
-#pre-song, #next-song {
+#btn-preSong, #btn-nextSong {
     border-radius: 1.4em;
     padding: 1.4em;
     background-repeat: no-repeat;
     background-position: 50%;
     border: white 2px solid;
 }
-#play {
+#btn-play {
     background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
@@ -498,16 +498,16 @@ div.bottom {
 
     margin: 0 1.5em;
 }
-#play-mode {
-    background-image: url('icons/shuffle-w.svg');
+#btn-playMode {
+    background-image: url('icons/mode-shuffle-w.svg');
 }
-#pre-song {
+#btn-preSong {
     background-image: url('icons/pre-w.svg');
 }
-#next-song {
+#btn-nextSong {
     background-image: url('icons/next-w.svg');
 }
-#song-list {
+#btn-songList {
     background-image: url('icons/list-w.svg');
 }
 
@@ -651,9 +651,12 @@ input[type=file]:before {
 	bottom: 0;
 	right: 0;
 	width: auto;
+	max-height: 3em;
 }
 .dConsole-window {
     top: 3em;
     left: 5px;
     width: 98%;
+	overflow: scroll;
+	max-height: none !important;
 }

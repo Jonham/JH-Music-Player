@@ -24,12 +24,18 @@ var onFileLoad = function() {
         var fr = new FileReader();
 
         var type = file.type,
-        size = file.size,
-        name = file.name;
+            size = file.size,
+            name = file.name,
+            fileMsg = {
+                name: name,
+                size:  size,
+                type:  type
+            };
+            dConsole.debug(fileMsg);
         // dConsole.log('is a file of ' + type + ' || size:' + size);
 
         // test type support
-        var loadingMode = false;
+        var loadingMode = -1;
         var typeMapBySubfix = function( subfix ) {
             switch (subfix) {
                 case 'mp3':
@@ -65,11 +71,11 @@ var onFileLoad = function() {
         if (type !== '') {
             var aMIME = type.split('/');
             typeMapByMIME( aMIME[0] );
-            // dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
+            dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
         } else {
         }
         // test twice
-        // dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
+        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
 
         if (!loadingMode) { return false; }
 
@@ -91,7 +97,7 @@ var onFileLoad = function() {
 
         fr.onload = function(e) {
             // dConsole.log('FileReader: file loaded.');
-            callback(fr.result, loadingMode);
+            callback(fr.result, loadingMode, fileMsg);
         };
         fr.onerror = function(e) {
             dConsole.log('ERROR: FileReader=>' + e);
@@ -106,8 +112,8 @@ var onFileLoad = function() {
      * bufferSources => ctx.createBufferSource() Instance ==> because their buffer can only set once
      *
     */
-    var onFileDecode = function( fileBuffer, loadingMode ) {
-        var audioLoader = function( fileBuffer ) {
+    var onFileDecode = function( fileBuffer, loadingMode, fileMsg ) {
+        var audioLoader = function( fileBuffer, fileMsg ) {
             if (!NS.audio) {
                 NS.audio = {};
                 NS.audio.ctx = new AudioContext();
@@ -120,37 +126,47 @@ var onFileLoad = function() {
                 songs = NS.audio.songs,
             bufferSrc = NS.audio.bufferSources;
 
-            songs.push(fileBuffer);
+            songs.push({
+                message:fileMsg,
+                buffer: fileBuffer });
 
             if (songs.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
-            var addAudioBuffer = function(ctx, fileBuffer) {
+            var addAudioBuffer = function(ctx, songItem) {
                 // create a new audio buffer source
-                var src = ctx.createBufferSource();
-                src.connect(ctx.destination);
+                var srcNode = ctx.createBufferSource();
+                srcNode.connect(ctx.destination);
 
-                NS.audio.bufferSources.push(src);
+                NS.audio.bufferSources.push(srcNode);
 
-                ctx.decodeAudioData(fileBuffer, function( audioBuffer ) {
-                    src.buffer = audioBuffer;
+                ctx.decodeAudioData(songItem.buffer, function( audioBuffer ) {
+                    srcNode.buffer = audioBuffer;
                     // dConsole.log('AudioContext: audio decode success');
-                    src.start(0);
-                    dConsole.log('AudioContext: start playing;');
+                    srcNode.start(0);
+                    dConsole.log('start playing ' + songItem.message.name);
+
+                    // update song message to NS.dom.tagSongMessage
+                    var result = songItem.message.name.split('-'),
+                        // name:  ARTIST-TITLE.mp3
+                        artist = result[0].trim();
+                        result.shift();
+                        title = result.join('-');
+                    NS.dom.tagSongMessage.node.update( title, artist );
                 });
 
-                src.onended = function() {
+                srcNode.onended = function() {
                     dConsole.log('last song ended.');
                     var songs = NS.audio.songs;
                     songs.shift();
-                    if (songs.length) {
+                    if (songs.length) { // if there are songs, load first one
                         addAudioBuffer(ctx, songs[0]);
                     }
                 }
             };
 
-            addAudioBuffer(ctx, fileBuffer);
+            addAudioBuffer(ctx, songs[0]);
 
         };
         var lyricLoader = function( fileBuffer ) {
@@ -158,20 +174,20 @@ var onFileLoad = function() {
         };
         var imageLoader = function( fileBuffer ) {
             dConsole.log('imageLoader: set image as new background.');
-            $wrap('#background').backgroundImage(fileBuffer);
+            $wrap('#page-main').backgroundImage(fileBuffer);
         };
 
         // handling logic
         switch (loadingMode) {
             case 1:
-            audioLoader(fileBuffer);
-            break;
+                audioLoader(fileBuffer, fileMsg);
+                break;
             case 2:
-            lyricLoader(fileBuffer);
-            break;
+                lyricLoader(fileBuffer, fileMsg);
+                break;
             case 3:
-            imageLoader(fileBuffer);
-            break;
+                imageLoader(fileBuffer, fileMsg);
+                break;
             default:
         }
     };

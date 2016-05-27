@@ -17,7 +17,8 @@ var addDOMElementNodeProperty = function() {
         menuShare    = $('#menu-share'),
         menuFileOption = $('#menu-fileOpt'),
         menuOption   = $('#menu-option'),
-        elemDConsole = $('#dConsole');
+        elemDConsole = $('#dConsole'),
+        btnPlayMode  = $('#btn-playMode');
 
     var timers = {};
     if (NS.dom === undefined) { NS.dom = {}; }
@@ -234,6 +235,99 @@ var addDOMElementNodeProperty = function() {
                     _.isNumber(second)? second: 0
                 ); },
     });
+    NS.dom.btnPlayMode = attachNodeTo( btnPlayMode, {
+        state: 0,
+        mode: 'SHUFFLE',
+        Modes: ['SHUFFLE', 'LOOP', 'REPEATONE'],
+        // toggle: function() {
+        //     btnPlayMode.node.next();
+        //     },
+        next: function() {
+                    var n = btnPlayMode.node;
+                    var map = ['SHUFFLE', 'LOOP', 'REPEATONE'];
+                    var nextState = ++n.state > 2? 0: n.state;
+
+                    n.mode = map[nextState];
+                    n.state = nextState;
+
+                    n.update(n.mode);
+                },
+        update: function( mode ) {
+            var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
+            btnPlayMode.style.backgroundImage = path(mode); }
+    });
+
+
+    // binded object actions
+    var ranges = $('.range'); // rangeTime and rangeVolume
+    // dConsole.debug(ranges);
+    _.each(ranges, function(range) {
+        var bindViewToControler = function(type) {
+            dConsole.debug(type);
+            switch (type) {
+                case 'range-volume':
+                    return function( percent ) { // value in [0, 100]
+                        var audio = $('audio');
+                        audio.volume = percent;
+                        return audio.volume;
+                    };
+                case 'range-time':
+                    return function( percent ) {
+                        var a = $('audio');
+                        a.currentTime = percent * a.duration;
+                        return a.currentTime;
+                    }
+                default:
+                    return function(v) { dConsole.log(type + " change to value " + v); };
+            }
+        };
+
+        // add node to their parentNode range
+        attachNodeTo(range, {
+            rangeTo: function( percent ) {
+                var btn  = $(range, '.range-btn'),
+                    fill = $(range, '.range-fill');
+                // test percent in [0, 100]
+                var p = percent<0? 0:
+                            percent>1? 1: percent;
+
+                btn.style.left = p * 100 + '%';
+                fill.style.width = p * 100 + '%';
+
+                return range; // return their parentNode
+            },
+            change: bindViewToControler( range.id )
+        });
+    });
+    var tagSongMessage = $('#tag-songMessage');
+    NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
+        update: function(vTitle, vArtist) {
+            var setString = function(target, value) {
+                target.innerHTML = _.isString(value)? value: targetInnerHTML;
+            };
+            var removeSubfix = function(v) {
+                if (!_.isString(v) ) { return v; }
+                var r = v.split('.');
+                if (r[ r.length-1 ].length > 3) { // subfix must less than 3 charactors
+                    return r.join('.');
+                } else {
+                    r.pop();
+                    return r.join('.');
+                }
+            };
+
+            var title = $(tagSongMessage, '#tag-songTitle'),
+                artist = $(tagSongMessage, '#tag-songArtist');
+            if(_.isObject(vTitle)) {
+                setString(title, removeSubfix(vTitle.title) );
+                setString(artist, vTitle.artist);
+            } else {
+                setString(title, removeSubfix(vTitle) );
+                setString(artist, vArtist);
+            }
+        }
+    });
+
 };
 addDOMElementNodeProperty();
 
@@ -264,7 +358,7 @@ var attachDOMElementEvents = function() {
         dConsole.log(e.target.innerHTML);
     });
 
-    var btnSongList = $('#song-list'),
+    var btnSongList = $('#btn-songList'),
         menuSonglist = $('#menu-songlist');
     $stopPropagation(btnSongList, 'click');
     $click(btnSongList, function(e) {
@@ -305,6 +399,10 @@ var attachDOMElementEvents = function() {
         pageMain.node.show();
     });
 
+    var btnPlayMode = $('#btn-playMode');
+    $click(btnPlayMode, function() {
+        btnPlayMode.node.next();
+    });
 };
 attachDOMElementEvents();
 
@@ -326,15 +424,15 @@ function startPlay() {
             audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
             $on(audio, "canplay", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
+                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
                 if (audio.paused) { audio.play(); }
             });
 
             $on(audio, "durationchange", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
+                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
             });
             $on(audio, "loadedmetadata", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
+                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
             });
 
             $on(audio, 'play', function() {
@@ -403,10 +501,10 @@ $on(audio, "timeupdate", function(e) {
 
 	if (ONCE) {
         // title message
-        var title = $id('song-title'),
-            artist = $id('song-artist');
-		title.innerHTML = lrc.ti;
-		artist.innerHTML = lrc.ar;
+        var tagSongTitle = $id('tag-songTitle'),
+            tagSongArtist = $id('tag-songArtist');
+		tagSongTitle.innerHTML = lrc.ti;
+		tagSongArtist.innerHTML = lrc.ar;
 		offsetTop = lyric.offsetTop;
 
 		lyric.style.top = lyricHightlightOriginTop + "px";
@@ -414,7 +512,7 @@ $on(audio, "timeupdate", function(e) {
 		ONCE = false;
 	}
 
-	currentTime.innerHTML = formatTimestamp(audio.currentTime);
+	tagCurrentTime.innerHTML = formatTimestamp(audio.currentTime);
 
     // auto scroll lyrics
 	for (var i=0; i<timeline.length; i++) {
@@ -475,8 +573,41 @@ window.onload = function() {
     startPlay();
 
     $id('page-main').style.backgroundImage = 'url(./OneRepublic.jpg)';
-	var imgPreload = new Image();
-	imgPreload.src = 'style/icons/favorited-w.svg';
+
+    var preloadImage = function( urlArray ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            console.log('loaded ' + index);
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    var aImageURL = [
+        'style/icons/favorited-w.svg',
+        'style/icons/mode-loop-w.svg',
+        'style/icons/mode-repeatone-w.svg'
+    ];
+    preloadImage(aImageURL);
 
     // bugs here: when to turn lrc to album
     var lyricAlbum = $('#lyric-album'),
@@ -492,8 +623,8 @@ window.onload = function() {
     });
 
     // polyfill
-    var btnPre = $id('pre-song'),
-    btnNext = $id('next-song');
+    var btnPre = $id('btn-preSong'),
+    btnNext = $id('btn-nextSong');
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
 
@@ -508,8 +639,8 @@ window.onload = function() {
 var onSongOptionsGroup = function() {
     var wrapper = $('span.song-opt-grp'),
         favorite = $(wrapper, '#btnFavorite'),
-        comments = $(wrapper, '.comments'),
-        	commentsCount = $(comments, 'span');
+        btnComments = $(wrapper, '.btnComments'),
+        	commentsCount = $(btnComments, 'span');
 
 	var favoriteState = false,
 		onFavoriteClick = function(e) {
@@ -530,6 +661,6 @@ var onSongOptionsGroup = function() {
 
 	// add listener on their parent and switch on e.target
 	$click(favorite, onFavoriteClick);
-	$click(comments, onCommentsClick);
+	$click(btnComments, onCommentsClick);
 };
 onSongOptionsGroup();
