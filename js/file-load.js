@@ -86,7 +86,8 @@ var onFileLoad = function() {
             break;
             case 2: // pure-text file Lyric
             dConsole.log('FileReader: loading ' + file.name);
-            fr.readAsText(file);
+            fr.readAsText(file, 'GB2312');
+            // fr.readAsText(file);
             break;
             case 3:
             dConsole.log('FileReader: loading ' + file.name);
