@@ -120,6 +120,7 @@
 		var me = this;
         me.messageArray = [];
         me.debugingArray = [];
+        me.errorArray = [];
 
 		me.output = null;
 		if (isDOMElement(box)) { me.output = box; }
@@ -136,7 +137,17 @@
         me.debug = function(msg) {
             me.debugingArray.push(msg);
             me.log(msg);
-        }
+        };
+        me.error = function(error) {
+            var getKeyWords = function(error) {
+                var reg = /([^\/]*?\.js):(\d+):(\d+)/img;
+                var arr = error.stack.match(reg);
+                return arr.join("_");
+            };
+            me.errorArray.push(error);
+            me.log( error.name + ": " +getKeyWords(error) );
+        };
+
 		me.init = function(newBox) {
 			if (!isDOMElement(newBox)) { return false; }
 			// remove previous box
@@ -148,10 +159,11 @@
 
         // redirect all error message onto me.log
         // mainly for mobile device without console
-        // $on(window, 'error', function(e) {
-        //     e.preventDefault();
-        //     me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        // });
+        $on(window, 'error', function(e) {
+            e.preventDefault();
+            me.error(e);
+            // me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        });
 		return this;
 	};
 })(window);

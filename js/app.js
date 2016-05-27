@@ -263,18 +263,22 @@ var addDOMElementNodeProperty = function() {
     // dConsole.debug(ranges);
     _.each(ranges, function(range) {
         var bindViewToControler = function(type) {
-            dConsole.debug(type);
+            // dConsole.debug(type);
             switch (type) {
                 case 'range-volume':
                     return function( percent ) { // value in [0, 100]
-                        var audio = $('audio');
-                        audio.volume = percent;
+                        try {
+                            var audio = $('audio');
+                            audio.volume = percent;
+                        } catch(e) { dConsole.error(e); jh = e; }
                         return audio.volume;
                     };
                 case 'range-time':
                     return function( percent ) {
-                        var a = $('audio');
-                        a.currentTime = percent * a.duration;
+                        try {
+                            var a = $('audio');
+                            a.currentTime = percent * a.duration;
+                        } catch(e) { dConsole.error(e); jh = e; }
                         return a.currentTime;
                     }
                 default:
@@ -579,7 +583,6 @@ window.onload = function() {
 
         var startTime = +new Date(), success = [], fail = [];
         var process = function(index) {
-            console.log('loaded ' + index);
             if (index === urlArray.length - 1) {
                 dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
             }
