@@ -256,6 +256,78 @@ var addDOMElementNodeProperty = function() {
             var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
             btnPlayMode.style.backgroundImage = path(mode); }
     });
+
+
+    // binded object actions
+    var ranges = $('.range'); // rangeTime and rangeVolume
+    // dConsole.debug(ranges);
+    _.each(ranges, function(range) {
+        var bindViewToControler = function(type) {
+            dConsole.debug(type);
+            switch (type) {
+                case 'range-volume':
+                    return function( percent ) { // value in [0, 100]
+                        var audio = $('audio');
+                        audio.volume = percent;
+                        return audio.volume;
+                    };
+                case 'range-time':
+                    return function( percent ) {
+                        var a = $('audio');
+                        a.currentTime = percent * a.duration;
+                        return a.currentTime;
+                    }
+                default:
+                    return function(v) { dConsole.log(type + " change to value " + v); };
+            }
+        };
+
+        // add node to their parentNode range
+        attachNodeTo(range, {
+            rangeTo: function( percent ) {
+                var btn  = $(range, '.range-btn'),
+                    fill = $(range, '.range-fill');
+                // test percent in [0, 100]
+                var p = percent<0? 0:
+                            percent>1? 1: percent;
+
+                btn.style.left = p * 100 + '%';
+                fill.style.width = p * 100 + '%';
+
+                return range; // return their parentNode
+            },
+            change: bindViewToControler( range.id )
+        });
+    });
+    var tagSongMessage = $('#tag-songMessage');
+    NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
+        update: function(vTitle, vArtist) {
+            var setString = function(target, value) {
+                target.innerHTML = _.isString(value)? value: targetInnerHTML;
+            };
+            var removeSubfix = function(v) {
+                if (!_.isString(v) ) { return v; }
+                var r = v.split('.');
+                if (r[ r.length-1 ].length > 3) { // subfix must less than 3 charactors
+                    return r.join('.');
+                } else {
+                    r.pop();
+                    return r.join('.');
+                }
+            };
+
+            var title = $(tagSongMessage, '#tag-songTitle'),
+                artist = $(tagSongMessage, '#tag-songArtist');
+            if(_.isObject(vTitle)) {
+                setString(title, removeSubfix(vTitle.title) );
+                setString(artist, vTitle.artist);
+            } else {
+                setString(title, removeSubfix(vTitle) );
+                setString(artist, vArtist);
+            }
+        }
+    });
+
 };
 addDOMElementNodeProperty();
 
