@@ -27,9 +27,43 @@ function addDragEventsTo( range ) {
     this._rangeTo = rangeTo;
     this._oStart = o;
 
+    var mobileOrDestop = function() {
+        // return true for mobile
+        return _.isNull(document.ontouchend);
+    };
+    var Events = (function(mobile) {
+        dConsole.debug('Events: ' + mobile);
+        if (mobile) {
+            dConsole.debug('Events: mobile mode>> touch;');
+            return {
+                start: 'touchstart',
+                move:  'touchmove',
+                end:   'touchend'
+            };
+        } else {
+            dConsole.debug('Events: desktop mode>> mouse;');
+            return {
+                start: 'mousedown',
+                move:  'mousemove',
+                end:   'mouseup'
+            };
+        }
+    })( mobileOrDestop() );
+    var getX = (function(mobile) {
+        dConsole.debug('GetX: ' + mobile);
+        if (mobile) {
+            return function(e, end) {
+                return end === 'end'? e.changedTouches[0].clientX: e.touches[0].clientX;
+            };
+        } else {
+            return function(e) {
+                return e.clientX;
+            };
+        }
+    })( mobileOrDestop() );
+
     var moveListener = function(e) {
-        // dConsole.debug('moveListener' + new Date());
-        var offset = e.clientX - o.clientX; // using clientX get horizontal offset
+        var offset = getX(e) - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;   // [0,1]
 
@@ -39,31 +73,32 @@ function addDragEventsTo( range ) {
         change(leftPercent);
     };
     var upListener = function(e) {
-        var offset = e.clientX - o.clientX; // using clientX get horizontal offset
+        var offset = getX(e, 'end') - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;
 
-        var leftPercent = totalPercent < 0? 0:totalPercent > 1? 1: totalPercent;
+        var leftPercent = totalPercent < 0? 0:
+                            totalPercent > 1? 1: totalPercent;
 
         rangeTo(leftPercent);
         change(leftPercent);
 
         o.leftPercent = leftPercent;
 
-        $off(window, 'mousemove', moveListener);
-        $off(window, 'mouseup', upListener);
+        $off(window, Events.move, moveListener);
+        $off(window, Events.end, upListener);
     };
     var downListener = function(e) {
-        o.clientX = e.clientX;
+        o.clientX = getX(e);
         o.width = range.getBoundingClientRect()['width'];
         o.percent = parsePercent( btn.style.left || '100%' ); // [0,1]
 
-        $on(window, 'mousemove', moveListener);
-        $on(window, 'mouseup', upListener);
+        $on(window, Events.move, moveListener);
+        $on(window, Events.end, upListener);
     };
 
     // attach downListener on range
-    $on(range, 'mousedown', downListener);
+    $on(range, Events.start, downListener);
     // dConsole.debug(range.id + 'mousedown');
     return this;
 };
