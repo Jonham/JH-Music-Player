@@ -72,12 +72,30 @@
         }
     };
 
-    var supportAudioContext = function() {
-        return !!window.AudioContext;
-    };
-    var mobileOrDestop = function() {
 
+    // desktop browsers don't support touch events
+    var mobileOrDestop = function() {
+        return null === document.ontouchend;
     };
+
+
+    // AudioContext
+    var supportAudioContext = function() { return !!window.AudioContext; };
+    var audioCtx = function() {
+        if (!supportAudioContext()) {
+            alert("WoW! your browser doesn't support the tech: AudioContext.\n我的天！ 你的浏览器居然不支持音频解析，赶紧升级到最新版本!\n或者，你可以尝试用QQ浏览器, Firefox 或者 Chrome浏览器。\n要更好地体验黑科技，建议您使用电脑版的浏览器。");
+            return false;
+        }
+        var ctx = new AudioContext(),
+            gain = ctx.createGain();
+            gain.connect(ctx.destination);
+        return {
+            ctx: ctx,
+            gain: gain,
+            songs: [],
+            bufferSources: []
+        }
+    }
 
     // adding to w.NS;
     var ns = w.NS;
@@ -92,6 +110,8 @@
     ns.supports = {};
     ns.supports.audioContext = supportAudioContext();
     ns.supports.mobile = mobileOrDestop();
+
+    ns.audio = audioCtx();
 })(window);
 
 // initial global parameters
