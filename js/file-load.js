@@ -224,6 +224,7 @@ var onFileLoad = function() {
         var fileInput = $dom('input');
             fileInput.type = 'file';
             fileInput.multiple = true;
+            fileInput.style.display = 'none';
         document.body.appendChild(fileInput);
         $on(fileInput, 'change', function(e) {
             if (fileInput.files.length >= 1) {
