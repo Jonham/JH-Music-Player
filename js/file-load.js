@@ -118,16 +118,20 @@ var onFileLoad = function() {
             if (!NS.audio) {
                 NS.audio = {};
                 NS.audio.ctx = new AudioContext();
+                NS.audio.gain = NS.audio.ctx.createGain();
+                NS.audio.gain.connect( NS.audio.ctx.destination );
                 NS.audio.songs = [];
                 NS.audio.bufferSources = [];
             }
 
             // let
             var   ctx = NS.audio.ctx,
+                 gain = NS.audio.gain,
                 songs = NS.audio.songs,
             bufferSrc = NS.audio.bufferSources;
 
             songs.push({
+                filename: fileMsg.name,
                 message:fileMsg,
                 buffer: fileBuffer });
 
@@ -138,7 +142,7 @@ var onFileLoad = function() {
             var addAudioBuffer = function(ctx, songItem) {
                 // create a new audio buffer source
                 var srcNode = ctx.createBufferSource();
-                srcNode.connect(ctx.destination);
+                srcNode.connect( gain );
 
                 NS.audio.bufferSources.push(srcNode);
 
@@ -170,8 +174,14 @@ var onFileLoad = function() {
             addAudioBuffer(ctx, songs[0]);
 
         };
-        var lyricLoader = function( fileBuffer ) {
-            dConsole.log(fileBuffer);
+        var lyricLoader = function( fileBuffer, fileMsg ) {
+            // debug
+            // construct a lyric wrapper
+            loadedLRClist.push({
+                filename: fileMsg.name,
+                msg: fileMsg,
+                lrc: parseLrc(fileBuffer)
+            });
         };
         var imageLoader = function( fileBuffer ) {
             dConsole.log('imageLoader: set image as new background.');
