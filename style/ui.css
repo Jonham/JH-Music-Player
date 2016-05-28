@@ -751,3 +751,15 @@ input[type=file]:before {
 	overflow: scroll;
 	max-height: none !important;
 }
+
+
+
+
+/* debuging */
+
+span.header {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	text-align: center;
+}
