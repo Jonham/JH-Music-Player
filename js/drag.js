@@ -103,10 +103,6 @@ function addDragEventsTo( range ) {
     return this;
 };
 
-addDragEventsTo.prototype = {
-    update: function() {}
-};
-
 NS.ranges = {};
 NS.ranges.time = new addDragEventsTo(rangeTime);
 NS.ranges.volume = new addDragEventsTo(rangeVolume);

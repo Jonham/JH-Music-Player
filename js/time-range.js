@@ -88,8 +88,8 @@ onAudioMute(document.querySelector('#volume .speaker'), audio);
 // Resizing Adjustment
 var onSizeChange = function() {
     var divBottom = document.querySelector('div.bottom');
-    var lyric = $id('lyric-container'),
-        albumDisk = $id('lyric-album').querySelector('span');
+    var viewContainer = $id('view-container'),
+        albumDisk = $('#view-album').querySelector('span');
 
     var slowdownTimer; // for reducing listener-invoking times
 
@@ -111,7 +111,7 @@ var onSizeChange = function() {
     }; // resizeRange()
 
     var resizeLyric = function() {
-        var rectLyric = lyric.getBoundingClientRect();
+        var rectLyric = viewContainer.getBoundingClientRect();
         var rectBottom = divBottom.getBoundingClientRect();
 
         // polyfill : lyric.top return auto...
@@ -119,7 +119,7 @@ var onSizeChange = function() {
         var bottom = rectBottom.top;
         var height = bottom - top;
 
-        lyric.style.height = height  + "px";
+        viewContainer.style.height = height  + "px";
         lyricHightlightOriginTop = height / 2 - 40;
         // albumDisk height 240px 15em
         albumDisk.style.top = (height / 2) - 140 + 'px';

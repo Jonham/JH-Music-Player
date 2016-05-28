@@ -137,6 +137,11 @@
 }
 
 
+/* shared class */
+.btn {
+	cursor: pointer;
+}
+
 /* main body */
 body, #viewport {
     padding: 0;
@@ -196,14 +201,18 @@ nav {
     background-image: url('icons/share-w.svg');
 }
 #tag-songMessage,
-#song-artist,
-#song-title {
+#tag-songArtist,
+#tag-songTitle {
     display: inline-block;
+}
+#tag-songArtist,
+#tag-songTitle {
+	padding: .2em;
 }
 #tag-songMessage {
     margin-left: 1em;
 }
-#song-artist {
+#tag-songArtist {
     color: rgba(255,255,255, .5);
 }
 
@@ -275,20 +284,20 @@ hr.divider {
 }
 
 
-#lyric-container {
+#view-container {
     height: 28em;
     overflow: hidden;
     position: relative;
     min-height: 240px;
 }
 
-#lyric-container ul {
+#view-container ul {
     list-style: none;
     text-align: center;
     padding: 0;
     line-height: 2em;
 }
-#lyric-lrc, #lyric-album {
+#view-lyric, #view-album {
     position: relative;
     width: 100%;
     height: 100%;
@@ -301,14 +310,14 @@ hr.divider {
             transition: all linear 0.5s;
 }
 
-#lyric-album {
+#view-album {
     position: absolute;
     top: 0;
     text-align: center;
     vertical-align: middle;
     opacity: 0;
 }
-#lyric-album > span.disk {
+#view-album > span.disk {
     display: inline-block;
     position: relative;
     top: 0;
@@ -382,13 +391,13 @@ span.btn-fileOpt {
 }
 
 
-#option {
+#container-fileOption {
     /*display: none;*/
     position: absolute;
     width: 100%;
     bottom: 0;
 }
-#option-btn {
+#btn-lyricOption {
     background-image: url('icons/options-w.svg');
     background-color: black;
     background-repeat: no-repeat;
@@ -406,7 +415,7 @@ span.btn-fileOpt {
 
     cursor: pointer;
 }
-#menu-option {
+#menu-lyricOption {
     display: inline-block;
     border-top: 1px solid white;
     position: absolute;
@@ -542,21 +551,48 @@ ul#lyric {
             transition: all 1s;
 }
 
-.page {
-    height: 100%;
-    width: 100%;
-    display: block;
-    position: absolute;
-}
+
+
+/* menu */
 .menu {
-    width: 100%;
-    display: block;
-    position: absolute;
+	display: block;
+	position: absolute;
+	background-color: white;
+	width: 100%;
+	/* debug need to remove the scroll bar here */
+	overflow-y: scroll;
+
+	z-index: 50;
 }
-.sidebar {
-    height: 100%;
-    display: block;
-    position: absolute;
+.menu > ul, .sidebar ul {
+	left: 0;
+	color: black;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.menu li{
+	border-bottom: 1px solid #555;
+	text-align: left;
+	padding: .5em 0;
+
+	cursor: pointer;
+}
+.menu li:before,.sidebar li:before {
+	content: "X";
+	display: inline-block;
+	margin: 0 .5em;
+	text-align: center;
+	width: 1.2em;
+	height: 1.2em;
+	background-color: red;
+	border: none;
+}
+.menu span{
+	display: block;
+	margin-left: .5em;
+	text-align: left;
+	padding: .5em 0;
 }
 
 #menu-songlist {
@@ -566,9 +602,9 @@ ul#lyric {
     text-align: left;
 }
 #menu-share {
-    height: 40%;
+    height: 220px;
 
-    top:60%;
+    bottom: 0;
     text-align: left;
 }
 #menu-fileOpt {
@@ -577,8 +613,63 @@ ul#lyric {
     top:60%;
     text-align: left;
 }
+
+/* page */
+.page {
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+}
 #page-system {
 
+}
+
+/* sidebar */
+.sidebar {
+	height: 100%;
+	display: block;
+	position: absolute;
+	background-color: white;
+
+	overflow-y: scroll;
+}
+.sidebar #tag-userMessage{
+	width: 100%;
+	height: 14em;
+	display: block;
+	position: relative;
+	top: 0;
+	left: 0;
+
+	background-color: green;
+}
+.sidebar li {
+	text-align: left;
+	padding: .8em 0;
+
+	cursor: pointer;
+}
+.sidebar .bottom {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	background-color: white;
+
+	width: 100%;
+	text-align: center;
+	height: 2em;
+}
+.sidebar .bottom > span {
+	height: 100%;
+	width: 49%;
+	box-sizing: border-box;
+
+	display: inline-block;
+	padding: .5em;
+
+	vertical-align: middle;
 }
 #sidebar-left {
     width: 75%;
