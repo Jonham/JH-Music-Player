@@ -127,17 +127,116 @@
     var supportAudioContext = function() { return !!window.AudioContext; };
     var audioCtx = function() {
         if (!supportAudioContext()) {
-            alert("WoW! your browser doesn't support the tech: AudioContext.\n我的天！ 你的浏览器居然不支持音频解析，赶紧升级到最新版本!\n或者，你可以尝试用QQ浏览器, Firefox 或者 Chrome浏览器。\n要更好地体验黑科技，建议您使用电脑版的浏览器。");
+            // alert("WoW! your browser doesn't support the tech: AudioContext.\n我的天！ 你的浏览器居然不支持音频解析，赶紧升级到最新版本!\n或者，你可以尝试用QQ浏览器, Firefox 或者 Chrome浏览器。\n要更好地体验黑科技，建议您使用电脑版的浏览器。");
+            alert("WoW! your browser doesn't support the tech: AudioContext.\nFor more joy, please open this player in Destop Browsers.");
             return false;
         }
+
         var ctx = new AudioContext(),
             gain = ctx.createGain();
             gain.connect(ctx.destination);
+
+        var controller = {
+            play: function( inTime ) {},
+            pause: function( inTime ) {},
+            next: function() {},
+            stop: function() {},
+        };
+
+        // Song wrapper for each song
+        var Song = function( file ) {
+            if (this === window) { return new Song( buffer, fileMsg ); }
+                this._state = 'uninit';
+
+                this._file = this._buffer = this._audioBuffer = null;
+                // messages from File
+                this.fileName = this.size = this.type = null;
+                // message after analyse fileName
+                this.title = this.artist = null;
+                // message after audio decode
+                this.duration = null;
+
+            // if get arguments file
+            if (file && file.toString() === '[object File]') {
+                this.init( file );
+            }
+
+            return this;
+        };
+        Song.prototype = {
+            init: function InitwithAudioFileBuffer( file ) {
+                if (file && file.toString() === '[object File]') {
+                    this._file = file;
+                    this._state = 'init';
+
+                    this.fileName = file.name;
+                    this.size = file.size;
+                    this.type = file.type;
+
+                    return this;
+                    // overwrite init function
+                    this.init = function() {
+                        console.error('Each Song can only init once.');
+                        return 'ERROR: Each Song can only init once.';
+                    };
+                } else {
+                    return 'you send a wrong file.';
+                }
+            },
+
+            getBuffer: function GetFileUsingFileReader() {
+                if (typeof(this._buffer) === 'object' && this._buffer.toString() === '[object FileReader]') {
+                    return this._buffer;
+                }
+                if ( this._state === 'uninit') {
+                    return 'your should Song.init( file ) first.';
+                }
+
+                var fr = new FileReader();
+                fr.readAsArrayBuffer( this._file );
+                fr.onload = function(e) {
+                    this._buffer = fr.result;
+                    this._state = 'getBuffer';
+                };
+                fr.onerror = function(e) {
+                    console.error('Song load buffer ERROR:');
+                    console.log(e);
+                };
+
+                return this;
+            },
+            decode: function() {
+                // decode using AudioContext
+            },
+            analyseFilename: function() {},
+            addSongMessage: function() {
+                // this.duration
+            },
+            toString: function() { return '[object Song]'},
+        };
+
+        // extendable songList
+        var SongList = function() {
+            var l = [];
+            l.next = -1; // index for next one
+
+            l.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
+            l.mode = 'LOOP'; // mode for playlist 'LOOP' 'REPEATONE' 'SHUFFLE'
+            l.playing = -1; // index for current playing or paused songList
+
+            return l;
+        };
+        var songList = new SongLIst();
+
         return {
             ctx: ctx,
             gain: gain,
-            songs: [],
-            bufferSources: []
+            Song: Song,
+            SongList: SongList,
+            songList: songList,
+            bufferSources: [],
+            currentPlayingSong: [],
+            controller: controller,
         }
     }
 

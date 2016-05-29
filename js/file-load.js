@@ -39,30 +39,30 @@ var onFileLoad = function() {
         var typeMapBySubfix = function( subfix ) {
             switch (subfix) {
                 case 'mp3':
-                loadingMode = 1;
-                return 'media: audio file MP3';
+                    loadingMode = 1;
+                    return 'media: audio file MP3';
                 case 'lrc':
-                loadingMode = 2;
-                return 'pure-text: Lyric file';
+                    loadingMode = 2;
+                    return 'pure-text: Lyric file';
                 case 'jpg':
                 case 'png':
                 case 'gif':
-                loadingMode = 3;
-                return 'image: Album cover file';
+                    loadingMode = 3;
+                    return 'image: Album cover file';
                 default:
-                return 'Unknown File type';
+                    return 'Unknown File type';
             }
         };
         var typeMapByMIME = function( mime ) {
             switch ( mime ) {
                 case 'audio':
-                loadingMode = 1;
-                return 'media: audio file';
+                    loadingMode = 1;
+                    return 'media: audio file';
                 case 'image':
-                loadingMode = 3;
-                return 'image: Album cover file';
+                    loadingMode = 3;
+                    return 'image: Album cover file';
                 default:
-                return 'Unknown File type';
+                    return 'Unknown File type';
             }
         };
 
@@ -81,18 +81,18 @@ var onFileLoad = function() {
 
         switch (loadingMode) {
             case 1: // media file
-            dConsole.log('FileReader: loading ' + file.name);
-            fr.readAsArrayBuffer(file);
-            break;
+                dConsole.log('FileReader: loading ' + file.name);
+                fr.readAsArrayBuffer(file);
+                break;
             case 2: // pure-text file Lyric
-            dConsole.log('FileReader: loading ' + file.name);
-            fr.readAsText(file, 'GB2312');
-            // fr.readAsText(file);
-            break;
+                dConsole.log('FileReader: loading ' + file.name);
+                fr.readAsText(file, 'GB2312');
+                // fr.readAsText(file);
+                break;
             case 3:
-            dConsole.log('FileReader: loading ' + file.name);
-            fr.readAsDataURL(file);
-            break;
+                dConsole.log('FileReader: loading ' + file.name);
+                fr.readAsDataURL(file);
+                break;
             default:
         }
 
@@ -127,18 +127,19 @@ var onFileLoad = function() {
             // let
             var   ctx = NS.audio.ctx,
                  gain = NS.audio.gain,
-                songs = NS.audio.songs,
+             songList = NS.audio.songList,
             bufferSrc = NS.audio.bufferSources;
 
-            songs.push({
+            songList.push({
                 filename: fileMsg.name,
-                message:fileMsg,
+                message: fileMsg,
                 buffer: fileBuffer });
 
-            if (songs.length > 1) {
+            if (songList.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
+
             var addAudioBuffer = function(ctx, songItem) {
                 // create a new audio buffer source
                 var srcNode = ctx.createBufferSource();
@@ -146,9 +147,19 @@ var onFileLoad = function() {
 
                 NS.audio.bufferSources.push(srcNode);
 
+                var currentPlayingSong = {
+                    bufferSourceNode: srcNode,
+                };
+                NS.audio.currentSong = currentPlayingSong;
+
+                // audio duration/length/sampleRate can only get after decode
                 ctx.decodeAudioData(songItem.buffer, function( audioBuffer ) {
                     srcNode.buffer = audioBuffer;
-                    // dConsole.log('AudioContext: audio decode success');
+
+                        currentPlayingSong.length = audioBuffer.length;
+                      currentPlayingSong.duration = audioBuffer.duration;
+                    currentPlayingSong.sampleRate = audioBuffer.sampleRate;
+
                     srcNode.start(0);
                     dConsole.log('start playing ' + songItem.message.name);
 
@@ -164,7 +175,8 @@ var onFileLoad = function() {
                 srcNode.onended = function() {
                     dConsole.log('last song ended.');
                     var songs = NS.audio.songs;
-                    songs.shift();
+                    songs.shift(); // delete last song
+
                     if (songs.length) { // if there are songs, load first one
                         addAudioBuffer(ctx, songs[0]);
                     }
