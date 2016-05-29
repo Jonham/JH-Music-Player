@@ -5,6 +5,8 @@
     //==> declare at the beginning of this file,
     //==> add to NS at the bottom
     var LocalFileList = function() {
+
+        // FileContainer will store the true data
         var FileContainer = function() {
             this._array = [];
             return this;
@@ -20,17 +22,59 @@
             length: function() { return this._array.length; }
         };
 
+        // Index Tree store all file related message and index to each subtree
         var IndexTree = function() {
             // name artist album
+            this._tree = {};
             return this;
         };
         IndexTree.prototype = {
-            add: function(file) {
+            add: function(file, group, index) {
                 var name = file.name,
-                    arr  = name.split('-'),
-                    artist = arr[0],
-                    title  = arr[1];
+                    size = file.size,
+                    tree = this._tree;
 
+                if (tree[name] && tree[name].size === size) { // already load one: JH-bugs: sizes
+                    dConsole.log("skip " + name + ": already had one.");
+
+                    return false;
+                }// already load one
+                else if( tree[name] ) { // with different size, as a new object, name end with #i
+                    // JH-bugs: here should count all file, that share a same name and compare their size
+                    var num = tree[name].count;
+                    if (typeof(num) === 'number') {
+                        tree[ name + '#' + (++num)] = {
+                            name: name,
+                            num: num, // the number of this in those songs share the name
+                            size: size,
+                            group: group,
+                            index: index
+                        };
+                        return true;
+                    }
+                    else { // this maybe the second one
+                        num = 1;
+                        tree[ name ].count = 2;
+                        tree[ name ].num = num;
+                        tree[ name + '#' + (++num)] = {
+                            name: name,
+                            num: num, // the number of this in those songs share the name
+                            size: size,
+                            group: group,
+                            index: index
+                        };
+                        return true;
+                    }
+                } // different size
+                else { // this is the first one on this name
+                    tree[ name ] = {
+                        name: name,
+                        size: size,
+                        group: group,
+                        index: index
+                    };
+                    return true;
+                }
             },
             set: function() {},
             get: function() {},
