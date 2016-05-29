@@ -17,7 +17,7 @@ var attachDOMElementEvents = function() {
         menuLyricOption = $('#menu-lyricOption');
     $stopPropagation(btnLyricOption, 'click');
     $click(btnLyricOption, function(e){
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuLyricOption.node.toggle();
 		NS.stackShowup.push(function() { menuLyricOption.node.hide();} ); // auto close in 3s
     });
@@ -32,7 +32,7 @@ var attachDOMElementEvents = function() {
         menuSonglist = $('#menu-songlist');
     $stopPropagation(btnSongList, 'click');
     $click(btnSongList, function(e) {
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuSonglist.node.show();
         NS.stackShowup.push(function(){ menuSonglist.node.hide(); });
     });
@@ -43,7 +43,7 @@ var attachDOMElementEvents = function() {
         menuShare = $('#menu-share');
     $stopPropagation(btnShare, 'click');
     $click(btnShare, function(e) {
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuShare.node.show();
         NS.stackShowup.push(function(){ menuShare.node.hide(); });
     });
@@ -53,7 +53,7 @@ var attachDOMElementEvents = function() {
         menuFileOption = $('#menu-fileOpt');
     $stopPropagation(btnFileOption, 'click');
     $click(btnFileOption, function(e) {
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuFileOption.node.show();
         NS.stackShowup.push(function(){ menuFileOption.node.hide(); });
     });
