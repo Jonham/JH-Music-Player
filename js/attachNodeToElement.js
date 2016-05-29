@@ -344,11 +344,16 @@ var addDOMElementNodeProperty = function() {
         viewContainer = $('#view-container'),
         viewLyric = $('#view-lyric'),
         viewAlbum = $('#view-album'),
-        disk  = $(viewAlbum, '.disk'),
+        viewDisk  = $(viewAlbum, '.view-disk'),
 
         LYRIC = 0,
         ALBUM = 1,
         currentView = 0; // view-lyric
+
+        var toggleViewDiskGoRoundNode = {
+            turnOn: function() { viewDisk.classList.add('goRound'); },
+            turnOff: function() { viewDisk.classList.remove('goRound'); }
+        };
 
         NS.dom.viewContainer = attachNodeTo( viewContainer, {
             LYRIC: 0,
@@ -373,6 +378,15 @@ var addDOMElementNodeProperty = function() {
             },
             turn: function() {}
         });
+        // JH-unfinished: function to fill
+        NS.dom.viewLyric = attachNodeTo( viewLyric, {
+            select: function() {},
+            share: function() {}
+        });
+
+        NS.dom.viewAlbum = attachNodeTo( viewAlbum, toggleViewDiskGoRoundNode );
+        NS.dom.viewDisk = attachNodeTo( viewDisk, toggleViewDiskGoRoundNode );
+
     })();
 
 };

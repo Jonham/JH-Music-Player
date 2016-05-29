@@ -317,7 +317,7 @@ hr.divider {
     vertical-align: middle;
     opacity: 0;
 }
-#view-album > span.disk {
+#view-album > span.view-disk {
     display: inline-block;
     position: relative;
     top: 0;
@@ -762,4 +762,15 @@ span.header {
 	width: 100%;
 	box-sizing: border-box;
 	text-align: center;
+}
+
+/* add styles on Ranges scroll */
+.range {
+
+}
+.rangeScrolling > .range-btn {
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+	margin-top: -5px;
 }

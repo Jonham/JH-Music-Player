@@ -145,7 +145,7 @@
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
     ns.stackShowup = [];
-    ns.stackShowup.releaseALl = function() {
+    ns.stackShowup.releaseAll = function() {
         while (ns.stackShowup.length) {
             ns.stackShowup.pop()();
         }

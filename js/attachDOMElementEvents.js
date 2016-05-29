@@ -92,7 +92,7 @@ var attachDOMElementEvents = function() {
         viewContainer.node.toggle();
     });
 
-    
+
 };
 attachDOMElementEvents();
 
@@ -103,7 +103,7 @@ function startPlay() {
         'pause': "url('./style/icons/pause-w.svg')"
     };
     var once = false,
-        disk = $('span.disk');
+        viewDisk = $('span.view-disk');
 
     var playOrPause = function() {
         if (once) {
@@ -128,11 +128,11 @@ function startPlay() {
 
             $on(audio, 'play', function() {
                 btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.classList.add('goRound');
+                viewDisk.classList.add('goRound');
             });
             $on(audio, 'pause', function() {
                 btnPlay.style.backgroundImage = btnIcons.play;
-				disk.classList.remove('goRound');
+				viewDisk.classList.remove('goRound');
             });
             // media loaded seekable range
             var loaded = $('span.loaded');
