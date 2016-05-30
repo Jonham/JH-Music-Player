@@ -313,7 +313,7 @@ var addDOMElementNodeProperty = function() {
     NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
         update: function(vTitle, vArtist) {
             var setString = function(target, value) {
-                target.innerHTML = _.isString(value)? value: targetInnerHTML;
+                target.innerHTML = _.isString(value)? value: target.innerHTML;
             };
             var removeSubfix = function(v) {
                 if (!_.isString(v) ) { return v; }
