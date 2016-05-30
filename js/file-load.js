@@ -131,7 +131,6 @@ var onFileLoad = function() {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
-            var currentPlayingSong = song;
             song.connect();
 
             NS.dom.tagSongMessage.node.update( song.title, song.artist );

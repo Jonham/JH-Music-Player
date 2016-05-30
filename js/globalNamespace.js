@@ -121,121 +121,381 @@
     var mobileOrDestop = function() {
         return null === document.ontouchend;
     };
+    // another way: not completed
+    var mobileOrDestop1 = function() {
+        var ug = navigator.userAgent;
+        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
+        dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
+        // return true if userAgent fulfill desktop-browser conditions
+        //   and browser support AudioContext() [webkitAudioContext() included]
+        return NS.supports.audioContext && result !== -1;
+    };
 
 
     // AudioContext
     var supportAudioContext = function() { return !!window.AudioContext; };
-    var audioCtx = function() {
+    // this contains Song(), SongList()
+    // create
+    var audioCtx = function() { // Global NameSpace AudioContext Initial
         if (!supportAudioContext()) {
             // alert("WoW! your browser doesn't support the tech: AudioContext.\n我的天！ 你的浏览器居然不支持音频解析，赶紧升级到最新版本!\n或者，你可以尝试用QQ浏览器, Firefox 或者 Chrome浏览器。\n要更好地体验黑科技，建议您使用电脑版的浏览器。");
             alert("WoW! your browser doesn't support the tech: AudioContext.\nFor more joy, please open this player in Destop Browsers.");
+            // polyfill NS.audio.ctx...
             return false;
         }
 
-        var ctx = new AudioContext(),
-            gain = ctx.createGain();
-            gain.connect(ctx.destination);
+        var ctx = new AudioContext();
+        var currentPlayingSongs = [];
+        var headGain = ctx.createGain(); // this gain works as the headoffice to control all volume of inputs
+            headGain.connect(ctx.destination);
 
+        // this works as Center controller
         var controller = {
-            play: function( inTime ) {},
-            pause: function( inTime ) {},
+            play: function( inTime ) {
+                console.log('play in ' + inTime);
+                return currentPlayingSongs;
+            },
+            pause: function( inTime ) {
+                console.log('play in ' + inTime);
+                return currentPlayingSongs;
+            },
             next: function() {},
             stop: function() {},
+            mute: function() {
+                headGain.gain.value = 0;
+            }
         };
 
         // Song wrapper for each song
-        var Song = function( file ) {
-            if (this === window) { return new Song( buffer, fileMsg ); }
-                this._state = 'uninit';
 
-                this._file = this._buffer = this._audioBuffer = null;
-                // messages from File
-                this.fileName = this.size = this.type = null;
-                // message after analyse fileName
-                this.title = this.artist = null;
-                // message after audio decode
-                this.duration = null;
+        // "I think maybe I just quit and go back home to make noodles."
+        // I think this gay works like a Promise
+        var Song = function Song( file ) {
+            if (this === window) { return new Song( file ); }
 
-            // if get arguments file
-            if (file && file.toString() === '[object File]') {
-                this.init( file );
-            }
+            this._Steps = {
+                '0_uninit':true,
+                '1_init':false,
+                '2_readFile':false,
+                '3_decode':false,
+                '4_sourceBuffer':false
+            };
+
+            this._NextToDo = ['init', 'readFile', 'decode', 'createBufferSource'];
+            this._targetStep = '0_uninit';
+            this._currentStep = '0_uninit';
+            this._state = 'DONE'; // 'DONE'/'ING'
+
+            // 1_init
+            this._file = null;
+            this.fileName = this.size = this.type = null; // messages from File
+            // extra: message after analyse fileName
+            this.title = this.artist = null;
+            // 2_getBuffer
+            this._buffer = null;
+            // 3_decode
+            this._audioBuffer = null;
+            // 4_sourceBuffer
+            this.output = this.sourceBufferNode = this.gainNode = null;
+            this.duration = null; // message after audio decode
+
+            // if get argument file
+            if (file && file.toString() === '[object File]') { this.init( file ); }
 
             return this;
         };
         Song.prototype = {
             init: function InitwithAudioFileBuffer( file ) {
-                if (file && file.toString() === '[object File]') {
-                    this._file = file;
-                    this._state = 'init';
-
-                    this.fileName = file.name;
-                    this.size = file.size;
-                    this.type = file.type;
-
-                    return this;
-                    // overwrite init function
-                    this.init = function() {
-                        console.error('Each Song can only init once.');
-                        return 'ERROR: Each Song can only init once.';
-                    };
+                var me = this;
+                if (!file || file.toString() !== '[object File]') {
+                    console.warn('you send a wrong file.');
+                    return me;
                 } else {
-                    return 'you send a wrong file.';
-                }
-            },
+                    me._file = file;
+                    console.log('me._file' + me._file);
+                    me._Steps['1_init'] = true;
+                    me._NextToDo.shift();
 
-            getBuffer: function GetFileUsingFileReader() {
-                if (typeof(this._buffer) === 'object' && this._buffer.toString() === '[object FileReader]') {
-                    return this._buffer;
+                    me.fileName = file.name;
+                    me.size = file.size;
+                    me.type = file.type;
+
+                    // overwrite init function
+                    me.init = function() {
+                        console.error('Each Song can only init once.');
+                        return me;
+                    };
                 }
-                if ( this._state === 'uninit') {
-                    return 'your should Song.init( file ) first.';
+                me.next();
+            },
+            readFile: function GetFileUsingFileReader() { // asynchronous function
+                var me = this;
+                if ( me._currentStep > '2_readFile' || me._WAITING_ ) {
+                    console.log('me._currentStep');
+                    return me;
                 }
+                if ( me._targetStep < '2_readFile' ) {
+                    me.until('2_readFile');
+                    return me;
+                }
+                // already done
+                if ( me._buffer && me._buffer.toString() === '[object FileReader]') {
+                    console.log('already got one.');
+                    me.next();
+                    return me;
+                }
+
+                // main work
+                me._state = 'ING';
 
                 var fr = new FileReader();
-                fr.readAsArrayBuffer( this._file );
+                fr.readAsArrayBuffer( me._file );
+                console.log(fr + 'readAsArrayBuffer');
                 fr.onload = function(e) {
-                    this._buffer = fr.result;
-                    this._state = 'getBuffer';
+                    me._buffer = fr.result;
+                    me._Steps['2_readFile'] = true;
+                    me._NextToDo.shift();
+                    console.log('file loaded.');
+
+                    me._state = 'DONE'
+                    me.next();
                 };
                 fr.onerror = function(e) {
                     console.error('Song load buffer ERROR:');
                     console.log(e);
+                    me._WAITING_ = false;
                 };
+                return me;
+            },
+            decode: function DecodeAudioData() { // asynchronous function
+                var me = this;
+                if ( me._currentStep > '3_decode' || me._WAITING_) { return me; }
+                if ( me._targetStep < '3_decode' ) {
+                    me.until('3_decode');
+                    return me;
+                }
 
-                return this;
-            },
-            decode: function() {
+                // main work
+                me._state = 'ING';
                 // decode using AudioContext
+                ctx.decodeAudioData(me._buffer, function( audioBuffer ) {
+                    me._audioBuffer = audioBuffer;
+                    me._Steps['3_decode'] = true;
+                    me._NextToDo.shift();
+
+                    me._state = 'DONE';
+                    me.next();
+                });
+                return me;
             },
-            analyseFilename: function() {},
-            addSongMessage: function() {
-                // this.duration
+            createBufferSource: function CreateBufferSourceNode() { // if you want to play one more time
+                var me = this;
+                if ( me._currentStep > '4_sourceBuffer' || me._WAITING_) { return me; }
+                if ( me._targetStep < '4_sourceBuffer' ) {
+                    me.until('4_sourceBuffer');
+                    return me;
+                }
+
+                // main works
+                var bs = ctx.createBufferSource();
+                bs.buffer = this._audioBuffer;
+                me.sourceBufferNode = bs;
+                if (me.gainNode) { // if there is a gainNode, connect to it
+                    bs.connect(me.gainNode);
+                }
+                else { // otherwise, set sourceBufferNode to me.output
+                    me.output = bs;
+                }
+
+                me._Steps['4_sourceBuffer'] = true;
+                me._NextToDo.shift();
+
+                return me;
+            },
+            getDuration: function GetSongDuration() {
+                var me = this;
+                // after you get to decode
+                if ( me._targetStep < '3_decode' ) {
+                    me._NextToDo.push('getDuration');
+                    me.until('3_decode');
+                    return me;
+                }
+                if ( me._WAITING_ ) {
+                    me._NextToDo.push('getDuration');
+                    return me;
+                }
+
+                me.duration = me._audioBuffer.duration;
+                return me;
+            },
+            createGain: function createGain( createNewGain ) {
+                var me = this;
+                // create a new gain
+                if (createNewGain) {
+                    me.gainNode = ctx.createGain();
+                    me.sourceBufferNode.connect(me.gainNode);
+                    me.output = me.gainNode;
+
+                    return me;
+                }
+                // if can't get one, create one
+                if (!me.gainNode) { me.gainNode = ctx.createGain(); }
+
+                me.sourceBufferNode.connect(me.gainNode);
+                    me.output = me.gainNode;
+
+                return me;
+            },
+            connect: function ConnectSongToAudioContext( anotherAudioContextNode ) {
+                var me = this;
+                if ( me._targetStep < '4_sourceBuffer' ) {
+                    me._NextToDo.push('connect');
+                    me.until('4_sourceBuffer');
+                    return me;
+                }
+
+                if (anotherAudioContext && anotherAudioContext.disconnect) {
+                    me.output.connect( anotherAudioContextNode );
+                } else {
+                    me.output.connect( headGain );
+                }
+
+                return me;
+            },
+            analyseFilename: function() {
+                var me = this;
+                if ( me._targetStep < '1_init' ) {
+                    me._NextToDo.push('analyseFilename');
+                    me.until('1_init');
+                    return me;
+                }
+
+                // main works
+                // get rid of subfix
+                var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+                // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
+                if (name.search('-') === -1) {
+                    console.warn('Song: Not a Regular Filename.');
+                    me.title = name;
+                    return me;
+                }
+                var result = name.split('-');
+                me.artist = result[0].trim(); result.shift();
+                me.title = result.length === 1? result[0].trim: result.join('-').trim();
+
+                return me;
+            },
+
+            next: function next() {
+                var me = this;
+                console.log('coming to next again.');
+
+                var current = me._currentStep,
+                    target = me._targetStep,
+                    todo = me._NextToDo,
+                    state = me._state;
+                // something processing: waiting for its call on next()
+                if (state === 'ING') {
+                    console.log('next: ING');
+                    return me;
+                }
+                // console.log(current);
+                // console.log(target);
+                // steps reach or beyond target step
+                if (current <= target) {
+                    if (todo.length) {
+                        var n = todo.shift();
+                        console.log(n + ' is the next to do.');
+                        me[n]();
+                    }
+                }
+                else { // find next step and go
+                    return me;
+                }
+            },
+            until: function nextUntil( step ) {
+                var me = this;
+
+                var current = me._currentStep,
+                    target = me._targetStep,
+                    me = me,
+                    state = me._state;
+
+                target = step>target? step: target;
+                if (state === 'DONE') {
+                    console.log('set target: DONE');
+                    me.next();
+                }
+            },
+            check: function check() {
+                var steps = this._Steps;
+                for (var step in steps) {
+                    if (!steps[step]) { return step; }
+                }
+                return step; // all done
             },
             toString: function() { return '[object Song]'},
+            constructor: Song
         };
 
         // extendable songList
         var SongList = function() {
-            var l = [];
-            l.next = -1; // index for next one
+            var songlist = [];
 
-            l.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
-            l.mode = 'LOOP'; // mode for playlist 'LOOP' 'REPEATONE' 'SHUFFLE'
-            l.playing = -1; // index for current playing or paused songList
+            songlist.next = -1; // index for next one
+            songlist.playing = -1; // index for current playing or paused songList
 
-            return l;
+            songlist.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
+
+            var _mode = 'LOOP';
+            // mode for playlist 'LOOP' 'REPEATONE' 'SHUFFLE'
+            Object.defineProperty(songlist, 'mode', {
+                get: function(){return _mode;},
+                set: function(mode){
+                    var InModes = false;
+                    songlist.MODES.forEach(function(value){
+                        if (mode === value) {
+                            InModes = true;
+                            _mode = value;
+                        }
+                    });
+                    if (!InModes) console.warn('Wrong value applied.');
+                    return songlist;
+                }
+            });
+
+            songlist.push = function(){
+                var args = Array.prototype.slice.apply(arguments);
+                args.forEach(function(value) {
+                    if ( value.toString() === '[object Song]' && value._state > '0_uninit' ) {
+                        Array.prototype.push.call(songlist, value);
+                        value.analyseFilename();
+
+                        return songlist;
+                    }
+                    console.warn('You\'re trying to push a object not Song instance or uninit Song to SongList');
+                    return songlist;
+                });
+            };
+            songlist.titles = function( n ) {
+                var songTitles = [];
+                songlist.forEach(function(song) {
+                    songTitles.push( song.title ); // every Song will invoke Song.analyseFilename() before push into SongList
+                });
+                return songTitles.splice(0, n > 0? n: undefined);
+            };
+            return songlist;
         };
-        var songList = new SongLIst();
+        var songList = new SongList();
 
         return {
+            Song: Song, // Song creator function
+            SongList: SongList, // SongList creator function
+
             ctx: ctx,
-            gain: gain,
-            Song: Song,
-            SongList: SongList,
+            headGain: headGain,
             songList: songList,
-            bufferSources: [],
-            currentPlayingSong: [],
+            currentPlayingSongs: currentPlayingSongs,
             controller: controller,
         }
     }
@@ -243,7 +503,7 @@
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
-    ns.stackShowup = [];
+    ns.stackShowup = []; // divide into 2 or 3 level
     ns.stackShowup.releaseAll = function() {
         while (ns.stackShowup.length) {
             ns.stackShowup.pop()();
