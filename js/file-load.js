@@ -126,10 +126,13 @@ var onFileLoad = function() {
 
             songList.push( song );
 
+            // if there is other song on the songlist, add this song to the list too
             if (songList.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
+
+            // if this is the first song add, play it right away
             song.connect(function() {
                 song.play(0);
                 NS.dom.viewDisk.node.turnOn();
