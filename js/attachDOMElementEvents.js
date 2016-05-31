@@ -76,13 +76,14 @@ var attachDOMElementEvents = function() {
     // btnBack : change between pageMain and pageSystem
     var btnBack = $('#btn-back'),
         pageMain = $('#page-main'),
-        pageSystem = $('#page-system');
+        pageSystem = $('#page-system'),
+        areaControls = $(pageSystem, '.controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
         pageSystem.node.show();
     });
     // bugs: polyfill  shortcut to return to pageMain
-    $click(pageSystem, function(e) {
+    $click(areaControls, function(e) {
         pageSystem.node.hide();
         pageMain.node.show();
     });
@@ -96,8 +97,9 @@ var attachDOMElementEvents = function() {
     // JH-bugs: when to turn lrc to album
     var viewContainer = $('#view-container'),
         viewAlbum = $('#view-album'),
+        viewDisk = $(viewAlbum, '.view-disk'),
         viewLyric = $('#view-lyric');
-    $click( viewAlbum, function() { viewContainer.node.toggle(); });
+    $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) {
         if (e.target.tagName == 'LI') {
             // when click on Lyric lines stop turning

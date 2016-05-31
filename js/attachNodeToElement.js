@@ -427,6 +427,6 @@ var addDOMElementNodeProperty = function() {
         }
     };
     $click(btnFullScreen, fullscreenListener);
-    $on(viewport, 'dblclick', fullscreenListener);
+    // $on(viewport, 'dblclick', fullscreenListener);
 };
 addDOMElementNodeProperty();
