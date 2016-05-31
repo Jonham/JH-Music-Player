@@ -130,7 +130,7 @@ window.onload = function() {
 
     // if window receive 'click' event, it will pop up all callback functions in stackShowup
     $click(window, function(e) {
-		NS.stackShowup.releaseALl();
+		NS.stackShowup.releaseAll();
 	}, false);
     onSizeChange()();
 	onFileLoad();

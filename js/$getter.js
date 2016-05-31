@@ -4,8 +4,8 @@
     var isDOMElement = function(elem) {
         if (typeof(elem) !== 'object') { return false; }
 
-        var str = elem.toString();
-        if (str.search('HTML') === 8 && elem.tagName) { return true; }
+        // var str = elem.toString();
+        if (elem.innerHTML !== undefined  && elem.tagName) { return true; }
         return false;
     };
     var toArray = function(o) { return Array.prototype.slice.apply(o); };
@@ -68,17 +68,50 @@
 
     // wrapper
     var Wrapper = function(elem) {
-        if (typeof(elem) === 'string') { return new Wrapper( $(elem) ); }
+        if (typeof(elem) === 'string') { return new Wrapper( $dom(elem) ); }
         if (!isDOMElement(elem)) { console.error('JH:Wrapper takes only DOM elements or DOM CSS3 selector string.'); return false;}
         if (this == window) { return new Wrapper(elem); }
-        this._NODE = elem;
+
+        this[0] = elem;
         return this;
     };
     Wrapper.prototype = {
-        node: function() {return this._NODE;},
+        value: function() {return this[0];},
+        getNode: function() {return this[0];},
         backgroundImage: function(url) {
-            var n = this._NODE;
+            var n = this[0];
             n.style.backgroundImage = "url(" + url + ')';
+            return this;
+        },
+        html: function( content ) {
+            if (!content) {
+                return this[0].innerHTML;
+            } else {
+                this[0].innerHTML = content;
+                return this;
+            }
+        },
+        empty: function() { this[0].innerHTML = ''; return this; },
+        add: function() {
+            var me = this;
+            if (arguments.length) {
+                _.each(arguments, function(value) {
+                    me[0].appendChild(value);
+                });
+                return me;
+            }
+        },
+        data: function(key, value) {
+            if (value === undefined) {
+                return this[0].dataset[key];
+            }
+            this[0].dataset[key] = value;
+            return this;
+        },
+        bind: function(key, value) {
+            if (!this[0].db) { this[0].db = {}; }
+            if (!value) { return this[0].db[key]; }
+            this[0].db[key] = value;
             return this;
         }
     };

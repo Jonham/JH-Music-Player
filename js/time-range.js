@@ -89,7 +89,7 @@ onAudioMute(document.querySelector('#volume .speaker'), audio);
 var onSizeChange = function() {
     var divBottom = document.querySelector('div.bottom');
     var viewContainer = $id('view-container'),
-        albumDisk = $('#view-album').querySelector('span');
+        albumDisk = $('#view-album').querySelector('span.view-disk');
 
     var slowdownTimer; // for reducing listener-invoking times
 

@@ -138,6 +138,7 @@ var addDOMElementNodeProperty = function() {
                 ); },
     });
     NS.dom.menuSonglist = attachNodeTo( menuSonglist, {
+        bindedSongList: null,
         hide: function(second) {
             window.clearTimeout( timers.menuSonglist );
             timers.menuSonglist =
@@ -159,6 +160,24 @@ var addDOMElementNodeProperty = function() {
                     function(){ menuSonglist.classList.toggle('menu-hide'); },
                     _.isNumber(second)? second: 0
                 ); },
+        update: function( arrTitles ) {
+            var songlist = $('#songlist'),
+                temp = $wrap('ul');
+            _.each(arrTitles, function(value, index, array){
+                temp.add( $wrap('li').html(value).data('index', index).getNode() );
+            });
+            // add all titles to songlist
+            $wrap( songlist ).empty()
+                    .html( temp.html() );
+        },
+        bind: function( songlist ) {
+            if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
+                console.log('menuSonglist bind.');
+                songlist.output = function( arrTitles ) {
+                    menuSonglist.node.update( arrTitles );
+                };
+            }
+                },
     });
     NS.dom.menuLyricOption = attachNodeTo( menuLyricOption, {
         hide: function(second) {
@@ -271,7 +290,7 @@ var addDOMElementNodeProperty = function() {
                         try {
                             // var audio = $('audio');
                             // audio.volume = percent;
-                            var gain = NS.audio.gain;
+                            var gain = NS.audio.headGain;
                             gain.gain.value = percent;
                         } catch(e) { dConsole.error(e); jh = e; }
                         // return audio.volume;
@@ -313,7 +332,7 @@ var addDOMElementNodeProperty = function() {
     NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
         update: function(vTitle, vArtist) {
             var setString = function(target, value) {
-                target.innerHTML = _.isString(value)? value: targetInnerHTML;
+                target.innerHTML = _.isString(value)? value: target.innerHTML;
             };
             var removeSubfix = function(v) {
                 if (!_.isString(v) ) { return v; }
@@ -339,16 +358,22 @@ var addDOMElementNodeProperty = function() {
     });
 
     // #view-container
+
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),
         viewLyric = $('#view-lyric'),
         viewAlbum = $('#view-album'),
-        disk  = $(viewAlbum, '.disk'),
+        viewDisk  = $(viewAlbum, '.view-disk'),
 
         LYRIC = 0,
         ALBUM = 1,
         currentView = 0; // view-lyric
+
+        var toggleViewDiskGoRoundNode = {
+            turnOn: function() { viewDisk.classList.add('goRound'); },
+            turnOff: function() { viewDisk.classList.remove('goRound'); }
+        };
 
         NS.dom.viewContainer = attachNodeTo( viewContainer, {
             LYRIC: 0,
@@ -373,7 +398,35 @@ var addDOMElementNodeProperty = function() {
             },
             turn: function() {}
         });
+        // JH-unfinished: function to fill
+        NS.dom.viewLyric = attachNodeTo( viewLyric, {
+            select: function() {},
+            share: function() {}
+        });
+
+        NS.dom.viewAlbum = attachNodeTo( viewAlbum, toggleViewDiskGoRoundNode );
+        NS.dom.viewDisk = attachNodeTo( viewDisk, toggleViewDiskGoRoundNode );
+
     })();
 
+
+    var viewport = $('#viewport'),
+        btnFullScreen = $('#btn-fullscreen'),
+        fullscreen = NS.supports.fullscreen,
+        state_FullScreen = false;
+    var fullscreenListener = function(e) {
+        if (state_FullScreen) {
+            fullscreen.cancelFullScreen( viewport );
+            btnFullScreen.innerHTML = "Go FullScreen Now!";
+            state_FullScreen = false;
+        }
+        else {
+            fullscreen.requestFullScreen( viewport );
+            btnFullScreen.innerHTML = "Exit FullScreen.";
+            state_FullScreen = true;
+        }
+    };
+    $click(btnFullScreen, fullscreenListener);
+    $on(viewport, 'dblclick', fullscreenListener);
 };
 addDOMElementNodeProperty();

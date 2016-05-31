@@ -17,7 +17,7 @@ var attachDOMElementEvents = function() {
         menuLyricOption = $('#menu-lyricOption');
     $stopPropagation(btnLyricOption, 'click');
     $click(btnLyricOption, function(e){
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuLyricOption.node.toggle();
 		NS.stackShowup.push(function() { menuLyricOption.node.hide();} ); // auto close in 3s
     });
@@ -29,12 +29,26 @@ var attachDOMElementEvents = function() {
 
     // menuSongList click
     var btnSongList = $('#btn-songList'),
-        menuSonglist = $('#menu-songlist');
+        menuSongList = $('#menu-songlist'),
+        containerSongList = $(menuSongList, '#songlist');
     $stopPropagation(btnSongList, 'click');
     $click(btnSongList, function(e) {
-        NS.stackShowup.releaseALl();
-        menuSonglist.node.show();
-        NS.stackShowup.push(function(){ menuSonglist.node.hide(); });
+        NS.stackShowup.releaseAll();
+        menuSongList.node.show();
+        NS.stackShowup.push(function(){ menuSongList.node.hide(); });
+    });
+    $click(containerSongList, function(e) {
+        if (e.target.tagName === 'LI') {
+            e.stopPropagation();
+            var index = $wrap(e.target).data('index');
+            var lastSongs = NS.audio.currentPlayingSongs,
+                songList = NS.audio.songList;
+            _.each(lastSongs, function( song ) {
+                song.stop();
+            });
+
+            songList.play(index);
+        }
     });
 
 
@@ -43,7 +57,7 @@ var attachDOMElementEvents = function() {
         menuShare = $('#menu-share');
     $stopPropagation(btnShare, 'click');
     $click(btnShare, function(e) {
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuShare.node.show();
         NS.stackShowup.push(function(){ menuShare.node.hide(); });
     });
@@ -53,7 +67,7 @@ var attachDOMElementEvents = function() {
         menuFileOption = $('#menu-fileOpt');
     $stopPropagation(btnFileOption, 'click');
     $click(btnFileOption, function(e) {
-        NS.stackShowup.releaseALl();
+        NS.stackShowup.releaseAll();
         menuFileOption.node.show();
         NS.stackShowup.push(function(){ menuFileOption.node.hide(); });
     });
@@ -92,7 +106,7 @@ var attachDOMElementEvents = function() {
         viewContainer.node.toggle();
     });
 
-    
+
 };
 attachDOMElementEvents();
 
@@ -103,7 +117,7 @@ function startPlay() {
         'pause': "url('./style/icons/pause-w.svg')"
     };
     var once = false,
-        disk = $('span.disk');
+        viewDisk = $('span.view-disk');
 
     var playOrPause = function() {
         if (once) {
@@ -128,11 +142,11 @@ function startPlay() {
 
             $on(audio, 'play', function() {
                 btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.classList.add('goRound');
+                viewDisk.classList.add('goRound');
             });
             $on(audio, 'pause', function() {
                 btnPlay.style.backgroundImage = btnIcons.play;
-				disk.classList.remove('goRound');
+				viewDisk.classList.remove('goRound');
             });
             // media loaded seekable range
             var loaded = $('span.loaded');
