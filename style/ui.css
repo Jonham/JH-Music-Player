@@ -602,7 +602,6 @@ ul#lyric {
 
 	cursor: pointer;
 }
-#menu-share li:before,
 .sidebar li:before {
 	content: "X";
 	background-color: #FF2C2C;
@@ -691,6 +690,9 @@ ul#lyric {
 
     top:50%;
     text-align: left;
+}
+#menu-fileOpt .tag-title {
+	color: rgba(100,100,100,.8);
 }
 #menu-fileOpt .tag-title:before {
 	content: '歌曲：';
@@ -1037,6 +1039,15 @@ span.header {
 	margin-right: .5em;
 	vertical-align: middle;
 }
+/* share menu */
+.icon-shareToYun  { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToTencent { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToYixin { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToURL { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToOtherWays { background-image: url('icons/addtolist-b.svg'); }
+
+/* file option menu */
 .icon-addTo { background-image: url('icons/addtolist-b.svg'); }
 .icon-download { background-image: url('icons/download-b.svg'); }
 .icon-tag-artist { background-image: url('icons/person-b.svg'); }
