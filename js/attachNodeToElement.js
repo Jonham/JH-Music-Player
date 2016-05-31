@@ -271,7 +271,7 @@ var addDOMElementNodeProperty = function() {
                         try {
                             // var audio = $('audio');
                             // audio.volume = percent;
-                            var gain = NS.audio.gain;
+                            var gain = NS.audio.headGain;
                             gain.gain.value = percent;
                         } catch(e) { dConsole.error(e); jh = e; }
                         // return audio.volume;
@@ -339,6 +339,7 @@ var addDOMElementNodeProperty = function() {
     });
 
     // #view-container
+
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),

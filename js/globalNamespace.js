@@ -145,7 +145,7 @@
         }
 
         var ctx = new AudioContext();
-        var currentPlayingSongs = [];
+        var currentPlayingSongs = null;
         var headGain = ctx.createGain(); // this gain works as the headoffice to control all volume of inputs
             headGain.connect(ctx.destination);
 
@@ -212,13 +212,15 @@
                     return me;
                 } else {
                     me._file = file;
-                    console.log('me._file' + me._file);
                     me._Steps['1_init'] = true;
                     me._NextToDo.shift();
 
                     me.fileName = file.name;
                     me.size = file.size;
                     me.type = file.type;
+
+                    // analyseFilename for SongList update information
+                    me.analyseFilename();
 
                     // overwrite init function
                     me.init = function() {
@@ -228,29 +230,52 @@
                 }
                 me.next();
             },
-            readFile: function GetFileUsingFileReader() { // asynchronous function
+            analyseFilename: function() {
                 var me = this;
-                if ( me._currentStep > '2_readFile' || me._WAITING_ ) {
-                    console.log('me._currentStep');
+                // if ( me._targetStep < '1_init' ) {
+                //     me._NextToDo.push('analyseFilename');
+                //     me.until('1_init');
+                //     return me;
+                // }
+
+                // main works
+                // get rid of subfix
+                var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+                // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
+                if (name.search('-') === -1) {
+                    console.warn('Song: Not a Regular Filename.');
+                    me.title = name;
                     return me;
                 }
-                if ( me._targetStep < '2_readFile' ) {
-                    me.until('2_readFile');
-                    return me;
-                }
-                // already done
-                if ( me._buffer && me._buffer.toString() === '[object FileReader]') {
-                    console.log('already got one.');
-                    me.next();
-                    return me;
-                }
+                var result = name.split('-');
+                me.artist = result[0].trim(); result.shift();
+                me.title = result.length === 1? result[0].trim(): result.join('-').trim();
+
+                return me;
+            },
+            readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
+                var me = this;
+                // if ( me._currentStep > '2_readFile' || me._state == 'ING' ) {
+                //     console.log('me._currentStep');
+                //     return me;
+                // }
+                // if ( me._targetStep < '2_readFile' ) {
+                //     me.until('2_readFile');
+                //     return me;
+                // }
+                // // already done
+                // if ( me._buffer && me._buffer.toString() === '[object FileReader]') {
+                //     console.log('already got one.');
+                //     me.next();
+                //     return me;
+                // }
 
                 // main work
                 me._state = 'ING';
 
                 var fr = new FileReader();
                 fr.readAsArrayBuffer( me._file );
-                console.log(fr + 'readAsArrayBuffer');
+                // console.log(fr + 'readAsArrayBuffer');
                 fr.onload = function(e) {
                     me._buffer = fr.result;
                     me._Steps['2_readFile'] = true;
@@ -258,22 +283,23 @@
                     console.log('file loaded.');
 
                     me._state = 'DONE'
-                    me.next();
+                    callback();
+                    // me.next();
                 };
                 fr.onerror = function(e) {
                     console.error('Song load buffer ERROR:');
                     console.log(e);
-                    me._WAITING_ = false;
+                    me._state = 'DONE';
                 };
                 return me;
             },
-            decode: function DecodeAudioData() { // asynchronous function
+            decode: function DecodeAudioData( callback ) { // asynchronous function
                 var me = this;
-                if ( me._currentStep > '3_decode' || me._WAITING_) { return me; }
-                if ( me._targetStep < '3_decode' ) {
-                    me.until('3_decode');
-                    return me;
-                }
+                // if ( me._currentStep > '3_decode' || me._state == 'ING') { return me; }
+                // if ( me._targetStep < '3_decode' ) {
+                //     me.until('3_decode');
+                //     return me;
+                // }
 
                 // main work
                 me._state = 'ING';
@@ -284,17 +310,18 @@
                     me._NextToDo.shift();
 
                     me._state = 'DONE';
-                    me.next();
+                    callback();
+                    // me.next();
                 });
                 return me;
             },
             createBufferSource: function CreateBufferSourceNode() { // if you want to play one more time
                 var me = this;
-                if ( me._currentStep > '4_sourceBuffer' || me._WAITING_) { return me; }
-                if ( me._targetStep < '4_sourceBuffer' ) {
-                    me.until('4_sourceBuffer');
-                    return me;
-                }
+                // if ( me._currentStep > '4_sourceBuffer' || me._state == 'ING') { return me; }
+                // if ( me._targetStep < '4_sourceBuffer' ) {
+                //     me.until('4_sourceBuffer');
+                //     return me;
+                // }
 
                 // main works
                 var bs = ctx.createBufferSource();
@@ -315,15 +342,15 @@
             getDuration: function GetSongDuration() {
                 var me = this;
                 // after you get to decode
-                if ( me._targetStep < '3_decode' ) {
-                    me._NextToDo.push('getDuration');
-                    me.until('3_decode');
-                    return me;
-                }
-                if ( me._WAITING_ ) {
-                    me._NextToDo.push('getDuration');
-                    return me;
-                }
+                // if ( me._targetStep < '3_decode' ) {
+                //     me._NextToDo.push('getDuration');
+                //     me.until('3_decode');
+                //     return me;
+                // }
+                // if ( me._state == 'ING' ) {
+                //     me._NextToDo.push('getDuration');
+                //     return me;
+                // }
 
                 me.duration = me._audioBuffer.duration;
                 return me;
@@ -331,13 +358,13 @@
             createGain: function createGain( createNewGain ) {
                 var me = this;
                 // create a new gain
-                if (createNewGain) {
-                    me.gainNode = ctx.createGain();
-                    me.sourceBufferNode.connect(me.gainNode);
-                    me.output = me.gainNode;
-
-                    return me;
-                }
+                // if (createNewGain) {
+                //     me.gainNode = ctx.createGain();
+                //     me.sourceBufferNode.connect(me.gainNode);
+                //     me.output = me.gainNode;
+                //
+                //     return me;
+                // }
                 // if can't get one, create one
                 if (!me.gainNode) { me.gainNode = ctx.createGain(); }
 
@@ -348,84 +375,99 @@
             },
             connect: function ConnectSongToAudioContext( anotherAudioContextNode ) {
                 var me = this;
-                if ( me._targetStep < '4_sourceBuffer' ) {
-                    me._NextToDo.push('connect');
-                    me.until('4_sourceBuffer');
-                    return me;
-                }
+                // if ( me._targetStep < '4_sourceBuffer' ) {
+                //     me._NextToDo.push('connect');
+                //     me.until('4_sourceBuffer');
+                //     return me;
+                // }
+                me.readFile(function() {
+                    me.decode(function() {
+                        me.createBufferSource();
+                        me.getDuration();
+                        me.createGain();
 
-                if (anotherAudioContext && anotherAudioContext.disconnect) {
-                    me.output.connect( anotherAudioContextNode );
-                } else {
-                    me.output.connect( headGain );
-                }
-
-                return me;
-            },
-            analyseFilename: function() {
-                var me = this;
-                if ( me._targetStep < '1_init' ) {
-                    me._NextToDo.push('analyseFilename');
-                    me.until('1_init');
-                    return me;
-                }
-
-                // main works
-                // get rid of subfix
-                var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
-                // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
-                if (name.search('-') === -1) {
-                    console.warn('Song: Not a Regular Filename.');
-                    me.title = name;
-                    return me;
-                }
-                var result = name.split('-');
-                me.artist = result[0].trim(); result.shift();
-                me.title = result.length === 1? result[0].trim: result.join('-').trim();
+                        if (anotherAudioContextNode && anotherAudioContextNode.disconnect) {
+                            me.output.connect( anotherAudioContextNode );
+                        } else {
+                            if ( typeof(anotherAudioContextNode) === 'function' ) { anotherAudioContextNode(); }
+                            me.output.connect( headGain );
+                        }
+                    });
+                });
 
                 return me;
             },
 
-            next: function next() {
+            play: function( inTime ) {
                 var me = this;
-                console.log('coming to next again.');
-
-                var current = me._currentStep,
-                    target = me._targetStep,
-                    todo = me._NextToDo,
-                    state = me._state;
-                // something processing: waiting for its call on next()
-                if (state === 'ING') {
-                    console.log('next: ING');
-                    return me;
-                }
-                // console.log(current);
-                // console.log(target);
-                // steps reach or beyond target step
-                if (current <= target) {
-                    if (todo.length) {
-                        var n = todo.shift();
-                        console.log(n + ' is the next to do.');
-                        me[n]();
+                try {
+                    if (currentPlayingSongs && currentPlayingSongs !== me) {
+                        currentPlayingSongs.output.disconnect(headGain);
                     }
+                    if (me._Steps['4_sourceBuffer']) {
+                        currentPlayingSongs = me;
+                        me.sourceBufferNode.start( inTime );
+                    } else {
+                        me.connect( function() { me.sourceBufferNode.start(inTime); } );
+                        currentPlayingSongs = me;
+                    }
+                } catch(e) {
+                    console.log(e);
+                    me.output.disconnect( headGain );
+                    me.createBufferSource();
+                    me.sourceBufferNode.start( inTime );
                 }
-                else { // find next step and go
-                    return me;
+                return me;
+            },
+            stop: function( inTime ) {
+                var me = this;
+                if (me._Steps['4_sourceBuffer']) {
+                    me.sourceBufferNode.stop( inTime );
+                    me.output.disconnect(headGain);
                 }
+                return me;
+
+            },
+            next: function next() {
+                // var me = this;
+                // console.log('coming to next again.');
+                //
+                // var current = me._currentStep,
+                //     target = me._targetStep,
+                //     todo = me._NextToDo,
+                //     state = me._state;
+                // // something processing: waiting for its call on next()
+                // if (state === 'ING') {
+                //     console.log('next: ING');
+                //     return me;
+                // }
+                // // console.log(current);
+                // // console.log(target);
+                // // steps reach or beyond target step
+                // if (current <= target) {
+                //     if (todo.length) {
+                //         var n = todo.shift();
+                //         console.log(n + ' is the next to do.');
+                //         me[n]();
+                //     }
+                // }
+                // else { // find next step and go
+                    // return me;
+                // }
             },
             until: function nextUntil( step ) {
-                var me = this;
-
-                var current = me._currentStep,
-                    target = me._targetStep,
-                    me = me,
-                    state = me._state;
-
-                target = step>target? step: target;
-                if (state === 'DONE') {
-                    console.log('set target: DONE');
-                    me.next();
-                }
+                // var me = this;
+                //
+                // var current = me._currentStep,
+                //     target = me._targetStep,
+                //     me = me,
+                //     state = me._state;
+                //
+                // target = step>target? step: target;
+                // if (state === 'DONE') {
+                //     console.log('set target: DONE');
+                //     me.next();
+                // }
             },
             check: function check() {
                 var steps = this._Steps;
@@ -471,18 +513,29 @@
                         Array.prototype.push.call(songlist, value);
                         value.analyseFilename();
 
+                        // callback functions when update
+                        if (typeof(songlist.output) === 'function') {
+                            songlist.output( songlist.titles() );
+                        }
+
                         return songlist;
                     }
                     console.warn('You\'re trying to push a object not Song instance or uninit Song to SongList');
                     return songlist;
                 });
             };
-            songlist.titles = function( n ) {
+            songlist.titles = function( itemCount ) {
                 var songTitles = [];
                 songlist.forEach(function(song) {
                     songTitles.push( song.title ); // every Song will invoke Song.analyseFilename() before push into SongList
                 });
-                return songTitles.splice(0, n > 0? n: undefined);
+                return songTitles;//.splice(0, itemCount > 0? itemCount: undefined);
+            };
+            songlist.output = function() {};
+            songlist.play = function( index ) {
+                if (typeof(+index) == 'number' && +index < songlist.length) {
+                    songlist[index].play(0);
+                }
             };
             return songlist;
         };

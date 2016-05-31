@@ -131,7 +131,9 @@ var onFileLoad = function() {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
-            song.connect();
+            song.connect(function() {
+                song.play(0);
+            });
 
             NS.dom.tagSongMessage.node.update( song.title, song.artist );
 
@@ -164,7 +166,7 @@ var onFileLoad = function() {
         // image file loader
         var imageLoader = function( fileBuffer ) {
             dConsole.log('imageLoader: set image as new background.');
-            $wrap('#page-main').backgroundImage(fileBuffer);
+            $wrap( $('#page-main') ).backgroundImage(fileBuffer);
         };
 
         // handling logic
