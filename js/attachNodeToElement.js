@@ -206,53 +206,35 @@ var addDOMElementNodeProperty = function() {
         state: false, // true for maxed, false for mined
         MAX: true,
         MIN: false,
-        min: function(second) {
-            window.clearTimeout( timers.elemDConsole );
-            timers.elemDConsole =
-                window.setTimeout(
-                    function(){
-                        var a = dConsole.messageArray;
-                        elemDConsole.classList.remove('dConsole-window');
-                        elemDConsole.innerHTML = a[ a.length -1 ];
+        min: function() {
+            var a = dConsole.messageArray;
+            elemDConsole.classList.remove('dConsole-window');
+            elemDConsole.innerHTML = a[ a.length -1 ];
 
-                        // set status as MIN
-                        elemDConsole.node.state = false;
-                    },
-                    _.isNumber(second)? second: 0
-                ); },
-        max: function(second) {
-            window.clearTimeout( timers.elemDConsole );
-            timers.elemDConsole =
-                window.setTimeout(
-                    function(){
-                        elemDConsole.classList.add('dConsole-window');
-                        // add log messages as ol
-                        var ol = $dom('ol');
-                		_.each( dConsole.messageArray, function(value) {
-                			var li = $dom('li');
-                			li.innerHTML = value;
-                			ol.appendChild(li);
-                		});
-                		elemDConsole.innerHTML = '';
-                		elemDConsole.appendChild(ol);
+            // set status as MIN
+            elemDConsole.node.state = false;
+        },
+        max: function() {
+            elemDConsole.classList.add('dConsole-window');
+            // add log messages as ol
+            var ol = $dom('ol');
+    		_.each( dConsole.messageArray, function(value) {
+    			var li = $dom('li');
+    			li.innerHTML = value;
+    			ol.appendChild(li);
+    		});
+    		elemDConsole.innerHTML = '';
+    		elemDConsole.appendChild(ol);
 
-                        // set state as MAX
-                        elemDConsole.node.state = true;
-                    },
-                    _.isNumber(second)? second: 0
-                ); },
-        toggle: function(second) {
-            window.clearTimeout( timers.elemDConsole );
-            timers.elemDConsole =
-                window.setTimeout(
-                    function(){
-                        var thisNode = elemDConsole.node;
-                        thisNode.state?
-                            thisNode.min():
-                            thisNode.max();
-                    },
-                    _.isNumber(second)? second: 0
-                ); },
+            // set state as MAX
+            elemDConsole.node.state = true;
+        },
+        toggle: function() {
+            var thisNode = elemDConsole.node;
+            thisNode.state?
+                thisNode.min():
+                thisNode.max();
+        },
     });
     NS.dom.btnPlayMode = attachNodeTo( btnPlayMode, {
         state: 0,
@@ -277,9 +259,9 @@ var addDOMElementNodeProperty = function() {
     });
 
 
-    // binded object actions
+    // binded up related object actions
+    //BINDUP-01: Ranges: rangeTime and rangeVolume
     var ranges = $('.range'); // rangeTime and rangeVolume
-    // Ranges: rangeTime and rangeVolume
     _.each(ranges, function(range) {
         // this will generate function to change value of <audio>
         var bindViewToControler = function(type) {
@@ -327,8 +309,9 @@ var addDOMElementNodeProperty = function() {
         });
     });
 
+
+    //BINDUP-02: tagSongMessage.node.update(String title, String artist)
     var tagSongMessage = $('#tag-songMessage');
-    // tagSongMessage.node.update(String title, String artist)
     NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
         update: function(vTitle, vArtist) {
             var setString = function(target, value) {
@@ -357,8 +340,7 @@ var addDOMElementNodeProperty = function() {
         }
     });
 
-    // #view-container
-
+    //BINDUP-03: #view-container #view-album #view-disk
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),
@@ -409,7 +391,7 @@ var addDOMElementNodeProperty = function() {
 
     })();
 
-
+    //BINDUP-04: FullScreen
     var viewport = $('#viewport'),
         btnFullScreen = $('#btn-fullscreen'),
         fullscreen = NS.supports.fullscreen,
@@ -428,5 +410,15 @@ var addDOMElementNodeProperty = function() {
     };
     $click(btnFullScreen, fullscreenListener);
     // $on(viewport, 'dblclick', fullscreenListener);
+
+    //BINDUP-05: button #btn-showConsole
+    var btnShowConsole = $('#btn-showConsole'),
+        ConsoleMAX = false;
+    $click(btnShowConsole, function(e) {
+        dConsole.output.node.max();
+    });
+    $click(dConsole.output, function(e) {
+        dConsole.output.node.min();
+    });
 };
 addDOMElementNodeProperty();

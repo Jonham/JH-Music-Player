@@ -2,7 +2,7 @@ var attachDOMElementEvents = function() {
 
     // dConsole window click events
     var elemDConsole = dConsole.output;
-    $stopPropagation(elemDConsole, 'click');
+    // $stopPropagation(elemDConsole, 'click');
     $click(elemDConsole, function(e) {
         if (elemDConsole.node.state) { return false; }
         elemDConsole.node.toggle();

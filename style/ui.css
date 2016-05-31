@@ -34,6 +34,9 @@
 .layer-6 {
     z-index: 60;
 }
+.top {
+	z-index: 99;
+}
 
 /* float */
 .left {
@@ -972,11 +975,16 @@ button#btn-fullscreen {
 	font-size: 20px;
 	text-align: left;
 }
+button#btn-showConsole {
+	height: 2em;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 20px;
+}
 
 #dConsole {
     background-color: rgba(0,0,0, 0.3);
     color: white;
-    display: inline-block;
     z-index: 50;
     position: fixed;
 	bottom: 0;
@@ -986,13 +994,13 @@ button#btn-fullscreen {
 	display: none;
 }
 .dConsole-window {
-	background-color: rgba(0,0,0, 0.8) !important;
-    top: 3em;
-    left: 5px;
-    width: 98%;
+	background-color: rgba(0,0,0, 0.9) !important;
+    top: 1em;
+    left: 0;
+    width: 100%;
 	overflow: scroll;
 	max-height: none !important;
-	display: block;
+	display: block !important;
 }
 
 
