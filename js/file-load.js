@@ -137,19 +137,6 @@ var onFileLoad = function() {
 
             NS.dom.tagSongMessage.node.update( song.title, song.artist );
 
-                // srcNode.onended = function() {
-                //     dConsole.log('last song ended.');
-                //     var songList = NS.audio.songList;
-                //     songList.shift(); // delete last song
-                //
-                //     if (songList.length) { // if there are songList, load first one
-                //         addAudioBuffer(ctx, songList[0]);
-                //     }
-                // }
-            // };
-
-            // addAudioBuffer(ctx, songList[0]);
-
         };
 
         // lyric file loader
