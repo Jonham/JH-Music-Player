@@ -29,8 +29,8 @@
                 <nav class='header row'>
                     <span id="btn-back" class='left'></span>
                     <span id="tag-songMessage">
-                        <span id="tag-songTitle">The Saltwater Room</span>
-                        <span id="tag-songArtist">Owl City</span>
+                        <span id="tag-songTitle" class="tag-title">The Saltwater Room</span>
+                        <span id="tag-songArtist" class="tag-artist">Owl City</span>
                     </span>
                     <span id="btn-share" class='right'></span>
                 </nav>
@@ -70,11 +70,11 @@
                     </div>
                     <!-- page2 -->
                     <div id='view-album' style="display:none;">
-                        <span class='view-disk ease-p6'></span>
+                        <span class='view-disk ease-p6 btn'></span>
                         <span class='song-opt-grp'>
-                            <span id='btnFavorite' class="favorite btnToggle"></span>
-                            <span class="btnComments"><span>0</span></span>
-                            <span class="btn-fileOpt"></span>
+                            <span id='btnFavorite' class="favorite btnToggle btn"></span>
+                            <span class="btnComments btn"><span>0</span></span>
+                            <span class="btn-fileOpt btn"></span>
                         </span>
                     </div>
                 </div>
@@ -107,13 +107,30 @@
         </div>
 
         <div id="page-system" class="page ease-p3">
-            <span class="file_loader">
-                <input id="fileLoader" class=".layer-6" type="file" multiple="true" />
+            <span class="file-loader">
+                <span>Click here to add files.</span>
+                <input id="fileLoader" class="btn" class=".layer-6" type="file" multiple="true" />
             </span>
             <span>
-                <button id="btn-fullscreen">Go FullScreen Now!</button>
+                <button id="btn-fullscreen" class="btn">Go FullScreen Now!</button>
             </span>
 
+            <span class="controls">
+                <span class="view-album"></span>
+                <span class="tag-songMessage">
+                    <span class="tag-songTitle tag-title">The Saltwater Room</span>
+                    <span class="tag-songArtist tag-artist">Owl City</span>
+                </span>
+                <span class="view-controls right">
+                    <span class="btn btn-songList"></span>
+                    <span class="btn btn-play"></span>
+                    <span class="btn btn-nextSong"></span>
+                </span>
+
+                <span class="range">
+                    <span class="range-fill"></span>
+                </span>
+            </span>
         </div>
 
         <div id="menu-songlist" class="menu ease-p3 menu-hide">
@@ -157,18 +174,41 @@
         </div>
 
         <div id="menu-fileOpt" class="menu ease-p3 menu-hide">
-            <span class="tag-songMessage">
-                歌曲：The Saltwater Room
-            </span>
+            <span class="tag-title">The Saltwater Room</span>
             <ul id="ulFileOpt">
-                <li>收藏到歌单</li>
-                <li>下载</li>
-                <li class='tag-songArtist'>歌手：Owl City</li>
-                <li class='tag-songAlbum'>专辑: The Saltwater Room</li>
-                <li>音质：自动选择</li>
-                <li>相似推荐</li>
-                <li>定时停止播放</li>
-                <li>打开驾驶模式</li>
+                <li><span class="icon icon-addTo"></span>
+                                <span class="addTo">收藏到歌单</span></li>
+                <li><span class="icon icon-download"></span>
+                                <span class="download">下载</span></li>
+                <li><span class="icon icon-tag-artist"></span>
+                                <span class='tag-artist'>歌手：
+                                        <span class="inline value">Owl City</span></span></li>
+                <li><span class="icon icon-tag-album"></span>
+                                <span class='tag-album'>专辑：
+                                        <span class="inline value">The Saltwater Room</span></span></li>
+                <li><span class="icon icon-btn-audioQuality"></span>
+                                <span id="btn-audioQuality">音质：
+                                        <span class="inline value">自动选择</span></span></li>
+                <li><span class="icon icon-btn-proposeAlike"></span>
+                                <span id="btn-proposeAlike">相似推荐</span></li>
+                <li><span class="icon icon-btn-stopAtTime"></span>
+                                <span id="btn-stopAtTime">定时停止播放</span></li>
+                <li><span class="icon icon-btn-drivingMode"></span>
+                                <span id="btn-drivingMode">打开驾驶模式</span></li>
+            </ul>
+        </div>
+
+        <div id="page-comments" class="page ease-p3 page-hide">
+            <ul id="list-comments">
+                <li>
+                    <span class="view-commentUserIcon"></span>
+                    <span class="container-comment">
+                        <span class="tag-commentUser">Jonham</span>
+                        <span class="tag-commentDate">2016年5月31日</span>
+                        <span class="tag-commentContent">Live in the Saltwater Room with you.</span>
+                        <span class="tag-commentAgreeCount">999</span>
+                    </span>
+                </li>
             </ul>
         </div>
 

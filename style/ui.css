@@ -515,7 +515,7 @@ div.bottom {
     background-position: 50%;
     border: white 2px solid;
 }
-#btn-play {
+#btn-play, .btn-play {
     background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
@@ -600,7 +600,6 @@ ul#lyric {
 	cursor: pointer;
 }
 #menu-share li:before,
-#menu-fileOpt li:before,
 .sidebar li:before {
 	content: "X";
 	background-color: #FF2C2C;
@@ -676,6 +675,8 @@ ul#lyric {
 	display: block;
 }
 
+
+
 #menu-share {
     height: 220px;
 
@@ -683,10 +684,13 @@ ul#lyric {
     text-align: left;
 }
 #menu-fileOpt {
-    height: 40%;
+    height: 50%;
 
-    top:60%;
+    top:50%;
     text-align: left;
+}
+#menu-fileOpt .tag-title:before {
+	content: '歌曲：';
 }
 
 /* page */
@@ -696,8 +700,139 @@ ul#lyric {
     display: block;
     position: absolute;
 }
-#page-system {
+#page-comments {
+	background-color: #dddddd;
+}
+#list-comments {
+	list-style: none;
+	margin: 0 .5em;
+	padding: 0;
+}
+#list-comments>li {
+	display: block;
+	width: 100%;
+	position: relative;
+	margin-top: .5em;
+}
+#list-comments .view-commentUserIcon {
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+	background-color: red;
+	margin: 0 .5em;
+	display: inline-block;
+	left: 0;
+}
+#list-comments .container-comment {
+	display: inline-block;
+	position: absolute;
+	width: 80%;
+	box-sizing: border-box;
+}
+.container-comment > span {
+	display: block;
+}
+.container-comment > .tag-commentUser {
+	color: rgba(0,0,0,.8);
+	font-size: .5em;
+}
+.container-comment > .tag-commentDate {
+	color: rgba(0,0,0,.6);
+	font-size: .5em;
+}
+.container-comment > .tag-commentContent {
 
+}
+.container-comment > .tag-commentAgreeCount {
+	color: rgba(0,0,0,.6);
+	font-size: .5em;
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.container-comment > .tag-commentAgreeCount:after {
+	content:
+}
+#page-system {
+	background-color: #dddddd;
+}
+#page-system .controls {
+	position: absolute;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	height: 3em;
+	bottom: 0;
+	background-color: white;
+
+	cursor: pointer;
+}
+.controls .view-album {
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-image: url('../OneRepublic.jpg');
+	background-position: 50%;
+	padding: 1.3em;
+	margin: .2em;
+}
+.controls .tag-songMessage {
+	display: inline-block;
+	position: absolute;
+	margin: .6em .4em;
+}
+.tag-songMessage span {
+	display: block;
+	position: relative;
+}
+.tag-songTitle {
+	top: 0;
+}
+.tag-songArtist {
+	bottom: 0;
+	color: rgba(0,0,0,.8);
+	font-size: .6em;
+}
+.controls .view-controls {
+	margin-top: 1em;
+	display: inline-block;
+	position: absolute;
+	right: 0;
+}
+.controls .btn-songList,
+.controls .btn-nextSong {
+	margin: 0;
+	padding: 1em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border: 0;
+}
+.btn-songList { background-image: url('icons/list-r.svg'); }
+.btn-play {
+	background-image: url('icons/play-r.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	border: 2px solid red;
+	margin: 0 .5em;
+	padding: .5em 1em;
+}
+.btn-nextSong { background-image: url('icons/next-r.svg'); }
+.controls .range {
+	display: inline-block;
+	position: absolute;
+	height: .2em;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	text-align: left;
+}
+.controls .range-fill {
+	width: 60%;
+	display: inline-block;
+	left: 0;
+	border: red solid 2px;
 }
 
 /* sidebar */
@@ -787,10 +922,13 @@ input[type=file] {
     /*position: absolute;*/
 
     /*top: 15%;*/
-    height: 10em;
+    height: 100%;
     width: 100%;
     background-color: gray;
-    z-index: 50;
+	box-sizing: border-box;
+	opacity: 0;
+	position: absolute;
+	top: 0;
 }
 input[type=file]:before {
     display: block;
@@ -802,8 +940,23 @@ input[type=file]:before {
     color: white;
     content: 'Click here to add files.';
 }
-#fileLoader {
-
+.file-loader {
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: 0;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.file-loader span {
+    display: block;
+    width: 100%;
+	box-sizing: border-box;
+    padding: .5em 1em;
+    font-size: 1.4em;
+    background-color: black;
+    color: white;
+	z-index: -1;
 }
 ::-ms-browse, [type='file'] {
 	display: none;
@@ -830,6 +983,7 @@ button#btn-fullscreen {
 	right: 0;
 	width: auto;
 	max-height: 3em;
+	display: none;
 }
 .dConsole-window {
 	background-color: rgba(0,0,0, 0.8) !important;
@@ -838,6 +992,7 @@ button#btn-fullscreen {
     width: 98%;
 	overflow: scroll;
 	max-height: none !important;
+	display: block;
 }
 
 
@@ -862,3 +1017,23 @@ span.header {
 	border-radius: 6px;
 	margin-top: -5px;
 }
+
+.icon {
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 50%;
+
+	display: inline-block;
+	padding: 1em;
+	margin-left: .5em;
+	margin-right: .5em;
+	vertical-align: middle;
+}
+.icon-addTo { background-image: url('icons/addtolist-b.svg'); }
+.icon-download { background-image: url('icons/download-b.svg'); }
+.icon-tag-artist { background-image: url('icons/person-b.svg'); }
+.icon-tag-album { background-image: url('icons/album-b.svg'); }
+.icon-btn-audioQuality { background-image: url('icons/pc-b.svg'); }
+.icon-btn-proposeAlike { background-image: url('icons/audio-b.svg'); }
+.icon-btn-stopAtTime { background-image: url('icons/schedule-b.svg'); }
+.icon-btn-drivingMode { background-image: url('icons/driving-b.svg'); }
