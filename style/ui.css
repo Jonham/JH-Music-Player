@@ -25,6 +25,15 @@
 .layer-3 {
     z-index: 30;
 }
+.layer-4 {
+    z-index: 40;
+}
+.layer-5 {
+    z-index: 50;
+}
+.layer-6 {
+    z-index: 60;
+}
 
 /* float */
 .left {
@@ -196,9 +205,15 @@ nav {
 }
 #btn-back {
     background-image: url('icons/back-w.svg');
+	position: absolute;
+	top: .5em;
+	left: .5em;
 }
 #btn-share {
     background-image: url('icons/share-w.svg');
+	position: absolute;
+	top: .5em;
+	right: .5em;
 }
 #tag-songMessage,
 #tag-songArtist,
@@ -208,9 +223,15 @@ nav {
 #tag-songArtist,
 #tag-songTitle {
 	padding: .2em;
+	max-height: 1em;
+	display: block;
+	overflow: hidden;
 }
 #tag-songMessage {
-    margin-left: 1em;
+	width: 100%;
+	padding: 0 3em;
+	box-sizing: border-box;
+	display: block;
 }
 #tag-songArtist {
     color: rgba(255,255,255, .5);
@@ -572,23 +593,27 @@ ul#lyric {
 	margin: 0;
 }
 .menu li{
-	border-bottom: 1px solid #555;
+	border-bottom: 1px solid rgba(100,100,100,.2);
 	text-align: left;
 	padding: .5em 0;
 
 	cursor: pointer;
 }
-.menu li:before,.sidebar li:before {
+#menu-share li:before,
+#menu-fileOpt li:before,
+.sidebar li:before {
 	content: "X";
+	background-color: #FF2C2C;
+	color: white;
 	display: inline-block;
 	margin: 0 .5em;
 	text-align: center;
+	border: none;
 	width: 1.2em;
 	height: 1.2em;
-	background-color: red;
-	border: none;
+	border-radius: .6em;
 }
-.menu span{
+.menu > span{
 	display: block;
 	margin-left: .5em;
 	text-align: left;
@@ -596,11 +621,61 @@ ul#lyric {
 }
 
 #menu-songlist {
-    height: 60%;
-
-    top: 40%;
+    height: 50%;
+    top: 50%;
     text-align: left;
+	overflow: hidden;
 }
+#menu-songlist li {
+	margin-left: .6em;
+}
+#menu-songlist span {
+	margin: 0;
+}
+#menu-songlist span.header {
+	background-color: white;
+	z-index: 31;
+	box-sizing: border-box;
+	position: absolute;
+	display: block;
+	height: 3em;
+	padding: 1em 0;
+	top: 0em;
+	border-bottom: 1px solid rgba(100,100,100, .2);
+	width: 100%;
+}
+#menu-songlist .header .btn {
+	font-size: .8em;
+	color: rgba(0,0,0,.7);
+	position: absolute;
+}
+#menu-songlist .header .left {
+	left: .6em;
+}
+#menu-songlist .header .right {
+	right: .6em;
+}
+#menu-songlist span.container {
+	height: 25em;
+	overflow-y: scroll;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+#menu-songlist ul {
+	left: 0;
+	color: black;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+#menu-songlist ul:before {
+	content: 'E';
+	height: 3em;
+	display: block;
+}
+
 #menu-share {
     height: 220px;
 
@@ -709,10 +784,10 @@ ul#lyric {
 input[type=file] {
     /* browser don't support drag */
     display: block;
-    position: fixed;
+    /*position: absolute;*/
 
-    top: 15%;
-    height: 50%;
+    /*top: 15%;*/
+    height: 10em;
     width: 100%;
     background-color: gray;
     z-index: 50;
@@ -720,11 +795,15 @@ input[type=file] {
 input[type=file]:before {
     display: block;
     width: 100%;
+	box-sizing: border-box;
     padding: .5em 1em;
     font-size: 1.4em;
     background-color: black;
     color: white;
-    content: 'Click to select an Audio file!';
+    content: 'Click here to add files.';
+}
+#fileLoader {
+
 }
 ::-ms-browse, [type='file'] {
 	display: none;
@@ -733,8 +812,16 @@ input[type=file]:before {
 	display: none;
 }
 
+button#btn-fullscreen {
+	height: 8em;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 20px;
+	text-align: left;
+}
+
 #dConsole {
-    background-color: rgba(0,0,0, 0.9);
+    background-color: rgba(0,0,0, 0.3);
     color: white;
     display: inline-block;
     z-index: 50;
@@ -745,6 +832,7 @@ input[type=file]:before {
 	max-height: 3em;
 }
 .dConsole-window {
+	background-color: rgba(0,0,0, 0.8) !important;
     top: 3em;
     left: 5px;
     width: 98%;

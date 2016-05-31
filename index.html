@@ -24,12 +24,12 @@
 </head>
 <body>
     <div id="viewport">
-        <div id="page-main" class="page ease-p3">
+        <div id="page-main" class="page ease-p3 mainpage-hide">
             <div id="main">
                 <nav class='header row'>
                     <span id="btn-back" class='left'></span>
                     <span id="tag-songMessage">
-                        <span id="tag-songTitle">The Saltwater Room</span> <br>
+                        <span id="tag-songTitle">The Saltwater Room</span>
                         <span id="tag-songArtist">Owl City</span>
                     </span>
                     <span id="btn-share" class='right'></span>
@@ -58,7 +58,7 @@
                             <li class='line'>staring up at the planes that aren't there anymore</li>
                             <li class='line'>盯着不再有星星的天空</li>
                         </ul>
-                        <div id="container-fileOption" class='menu layer-2'>
+                        <div id="container-fileOption" class='layer-2'>
                             <span id="btn-lyricOption"></span>
                             <div id="menu-lyricOption" class='ease-p3 menu-hidetoRB'>
                                 <span class="menu-item">歌词调整</span>
@@ -106,25 +106,43 @@
             </div>
         </div>
 
-        <div id="page-system" class="page ease-p3 page-hide">
-            <span>Add messages about 'local' filesystem.</span>
+        <div id="page-system" class="page ease-p3">
+            <span class="file_loader">
+                <input id="fileLoader" class=".layer-6" type="file" multiple="true" />
+            </span>
+            <span>
+                <button id="btn-fullscreen">Go FullScreen Now!</button>
+            </span>
+
         </div>
 
         <div id="menu-songlist" class="menu ease-p3 menu-hide">
             <span class="header">
                 <span class="btn left">收藏全部</span>
-                <span class="center">播放列表</span>
+                <span class="center">播放列表(<span class="count inline">6</span>)</span>
                 <span class="btn right">清空</span>
             </span>
-            <ul id="songlist">
-                <li>Counting Stars</li>
-                <li>All The Right Moves</li>
-                <li>Good Life</li>
-                <li>I Lived</li>
-                <li>Secrets</li>
-                <li>Stop and Stare</li>
-                <li>Something I Need</li>
-            </ul>
+            <span class='container'>
+                <ul id="songlist">
+                    <li>Counting Stars</li>
+                    <li>All The Right Moves</li>
+                    <li>Good Life</li>
+                    <li>I Lived</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>I Lived</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                </ul>
+            </span>
         </div>
 
         <div id="menu-share" class="menu ease-p3 menu-hide">
@@ -192,6 +210,6 @@
     <script src="js/time-range.js"></script>
     <script src="js/file-load.js"></script>
     <script src="js/drag.js"></script>
+    <script src="js/debug-shorthand.js"></script>
 </body>
 </html>
-tag-songArtist

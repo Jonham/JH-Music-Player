@@ -29,12 +29,26 @@ var attachDOMElementEvents = function() {
 
     // menuSongList click
     var btnSongList = $('#btn-songList'),
-        menuSonglist = $('#menu-songlist');
+        menuSongList = $('#menu-songlist'),
+        containerSongList = $(menuSongList, '#songlist');
     $stopPropagation(btnSongList, 'click');
     $click(btnSongList, function(e) {
         NS.stackShowup.releaseAll();
-        menuSonglist.node.show();
-        NS.stackShowup.push(function(){ menuSonglist.node.hide(); });
+        menuSongList.node.show();
+        NS.stackShowup.push(function(){ menuSongList.node.hide(); });
+    });
+    $click(containerSongList, function(e) {
+        if (e.target.tagName === 'LI') {
+            e.stopPropagation();
+            var index = $wrap(e.target).data('index');
+            var lastSongs = NS.audio.currentPlayingSongs,
+                songList = NS.audio.songList;
+            _.each(lastSongs, function( song ) {
+                song.stop();
+            });
+
+            songList.play(index);
+        }
     });
 
 
