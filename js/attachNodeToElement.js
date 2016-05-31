@@ -138,6 +138,7 @@ var addDOMElementNodeProperty = function() {
                 ); },
     });
     NS.dom.menuSonglist = attachNodeTo( menuSonglist, {
+        bindedSongList: null,
         hide: function(second) {
             window.clearTimeout( timers.menuSonglist );
             timers.menuSonglist =
@@ -159,6 +160,24 @@ var addDOMElementNodeProperty = function() {
                     function(){ menuSonglist.classList.toggle('menu-hide'); },
                     _.isNumber(second)? second: 0
                 ); },
+        update: function( arrTitles ) {
+            var songlist = $('#songlist'),
+                temp = $wrap('ul');
+            _.each(arrTitles, function(value, index, array){
+                temp.add( $wrap('li').html(value).data('index', index).getNode() );
+            });
+            // add all titles to songlist
+            $wrap( songlist ).empty()
+                    .html( temp.html() );
+        },
+        bind: function( songlist ) {
+            if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
+                console.log('menuSonglist bind.');
+                songlist.output = function( arrTitles ) {
+                    menuSonglist.node.update( arrTitles );
+                };
+            }
+                },
     });
     NS.dom.menuLyricOption = attachNodeTo( menuLyricOption, {
         hide: function(second) {
@@ -390,5 +409,24 @@ var addDOMElementNodeProperty = function() {
 
     })();
 
+
+    var viewport = $('#viewport'),
+        btnFullScreen = $('#btn-fullscreen'),
+        fullscreen = NS.supports.fullscreen,
+        state_FullScreen = false;
+    var fullscreenListener = function(e) {
+        if (state_FullScreen) {
+            fullscreen.cancelFullScreen( viewport );
+            btnFullScreen.innerHTML = "Go FullScreen Now!";
+            state_FullScreen = false;
+        }
+        else {
+            fullscreen.requestFullScreen( viewport );
+            btnFullScreen.innerHTML = "Exit FullScreen.";
+            state_FullScreen = true;
+        }
+    };
+    $click(btnFullScreen, fullscreenListener);
+    $on(viewport, 'dblclick', fullscreenListener);
 };
 addDOMElementNodeProperty();

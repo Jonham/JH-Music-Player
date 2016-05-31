@@ -76,6 +76,7 @@ function addDragEventsTo( range ) {
         var offset = getX(e, 'end') - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;
+        range.classList.remove('rangeScrolling');
 
         var leftPercent = totalPercent < 0? 0:
                             totalPercent > 1? 1: totalPercent;
@@ -92,6 +93,7 @@ function addDragEventsTo( range ) {
         o.clientX = getX(e);
         o.width = range.getBoundingClientRect()['width'];
         o.percent = parsePercent( btn.style.left || '100%' ); // [0,1]
+        range.classList.add('rangeScrolling');
 
         $on(window, Events.move, moveListener);
         $on(window, Events.end, upListener);

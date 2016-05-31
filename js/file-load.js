@@ -192,24 +192,14 @@ var onFileLoad = function() {
         $on(document, 'dragleave', dragEvent);
         $on(document, 'drop', onFileDrop);
     }
-    else {
-        // dConsole.log('use input[type=file] to load file.');
-        var fileInput = $dom('input');
-            fileInput.type = 'file';
-            fileInput.multiple = true;
-            fileInput.style.display = 'none';
-        document.body.appendChild(fileInput);
-        $on(fileInput, 'change', function(e) {
-            if (fileInput.files.length >= 1) {
-                onFileSelect(fileInput);
-            }
-        });
-        $stopPropagation(fileInput, 'click');
 
-        NS.stackShowup.push(function() {
-            fileInput.style.display = 'none';
-        });
-    }
+    var fileInput = $('#fileLoader');
+    $on(fileInput, 'change', function(e) {
+        if (fileInput.files.length >= 1) {
+            onFileSelect(fileInput);
+        }
+    });
+    $stopPropagation(fileInput, 'click');
 };
 
 function classifyLrc(arr) {
