@@ -124,7 +124,7 @@ window.onload = function() {
 
     // polyfill
     var btnPre = $id('btn-preSong'),
-    btnNext = $id('btn-nextSong');
+    btnNext = $(mainControls, '.btn-nextSong');
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
 

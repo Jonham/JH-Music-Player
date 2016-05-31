@@ -511,14 +511,14 @@ div.bottom {
     background-size: contain;
     margin-top: 20px;
 }
-#btn-preSong, #btn-nextSong {
+#btn-preSong,#controls .btn-nextSong {
     border-radius: 1.4em;
     padding: 1.4em;
     background-repeat: no-repeat;
     background-position: 50%;
     border: white 2px solid;
 }
-#btn-play, .btn-play {
+.btn-play {
     background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
@@ -537,7 +537,7 @@ div.bottom {
 #btn-preSong {
     background-image: url('icons/pre-w.svg');
 }
-#btn-nextSong {
+.btn-nextSong {
     background-image: url('icons/next-w.svg');
 }
 #btn-songList {
@@ -762,7 +762,7 @@ ul#lyric {
 #page-system {
 	background-color: #dddddd;
 }
-#page-system .controls {
+#page-system .ban-controls {
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -773,7 +773,7 @@ ul#lyric {
 
 	cursor: pointer;
 }
-.controls .view-album {
+.ban-controls .view-album {
 	display: inline-block;
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -782,7 +782,7 @@ ul#lyric {
 	padding: 1.3em;
 	margin: .2em;
 }
-.controls .tag-songMessage {
+.ban-controls .tag-songMessage {
 	display: inline-block;
 	position: absolute;
 	margin: .6em .4em;
@@ -799,14 +799,14 @@ ul#lyric {
 	color: rgba(0,0,0,.8);
 	font-size: .6em;
 }
-.controls .view-controls {
+.ban-controls .view-controls {
 	margin-top: 1em;
 	display: inline-block;
 	position: absolute;
 	right: 0;
 }
-.controls .btn-songList,
-.controls .btn-nextSong {
+.ban-controls .btn-songList,
+.ban-controls .btn-nextSong {
 	margin: 0;
 	padding: 1em;
 	background-size: contain;
@@ -815,7 +815,7 @@ ul#lyric {
 	border: 0;
 }
 .btn-songList { background-image: url('icons/list-r.svg'); }
-.btn-play {
+.ban-controls .btn-play {
 	background-image: url('icons/play-r.svg');
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -823,8 +823,8 @@ ul#lyric {
 	margin: 0 .5em;
 	padding: .5em 1em;
 }
-.btn-nextSong { background-image: url('icons/next-r.svg'); }
-.controls .range {
+.ban-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
+.ban-controls .range {
 	display: inline-block;
 	position: absolute;
 	height: .2em;
@@ -833,7 +833,7 @@ ul#lyric {
 	left: 0;
 	text-align: left;
 }
-.controls .range-fill {
+.ban-controls .range-fill {
 	width: 60%;
 	display: inline-block;
 	left: 0;

@@ -79,7 +79,7 @@ var attachDOMElementEvents = function() {
         pageSystem = $('#page-system'),
         btnComments = $('.btn-comments'),
         pageComments = $('#page-comments'),
-        areaControls = $(pageSystem, '.controls');
+        areaControls = $(pageSystem, '.ban-controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
         pageSystem.node.show();
