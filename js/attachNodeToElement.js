@@ -12,6 +12,7 @@ var addDOMElementNodeProperty = function() {
 
     var pageMain     = $('#page-main'),
         pageSystem   = $('#page-system'),
+        pageComments   = $('#page-comments'),
         sidebarLeft  = $('#sidebar-left'),
         menuSonglist = $('#menu-songlist'),
         menuShare    = $('#menu-share'),
@@ -27,21 +28,21 @@ var addDOMElementNodeProperty = function() {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
-                    function(){ pageMain.classList.add('mainpage-hide'); },
+                    function(){ pageMain.classList.add('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
         show: function(second) {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
-                    function(){ pageMain.classList.remove('mainpage-hide'); },
+                    function(){ pageMain.classList.remove('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
         toggle: function(second) {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
-                    function(){ pageMain.classList.toggle('mainpage-hide'); },
+                    function(){ pageMain.classList.toggle('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
     });
@@ -50,21 +51,44 @@ var addDOMElementNodeProperty = function() {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
-                    function(){ pageSystem.classList.add('page-hide'); },
+                    function(){ pageSystem.classList.add('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
         show: function(second) {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
-                    function(){ pageSystem.classList.remove('page-hide'); },
+                    function(){ pageSystem.classList.remove('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
         toggle: function(second) {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
-                    function(){ pageSystem.classList.toggle('page-hide'); },
+                    function(){ pageSystem.classList.toggle('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
+    NS.dom.pageComments = attachNodeTo( pageComments, {
+        hide: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.add('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.remove('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.toggle('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
     });

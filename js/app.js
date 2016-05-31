@@ -139,7 +139,7 @@ window.onload = function() {
 var onSongOptionsGroup = function() {
     var wrapper = $('span.song-opt-grp'),
         favorite = $(wrapper, '#btnFavorite'),
-        btnComments = $(wrapper, '.btnComments'),
+        btnComments = $(wrapper, '.btn-comments'),
         	commentsCount = $(btnComments, 'span');
 
 	var favoriteState = false,

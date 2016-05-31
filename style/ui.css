@@ -129,13 +129,13 @@
         -ms-transform: translateY(100%);
             transform: translateY(100%);
 }
-.page-hide {
+.page-hide-left {
     -webkit-transform: translateX(-100%);
         -moz-transform:translateX(-100%);
         -ms-transform: translateX(-100%);
             transform: translateX(-100%);
 }
-.mainpage-hide {
+.page-hide-right {
     -webkit-transform: translateX(100%);
         -moz-transform:translateX(100%);
         -ms-transform: translateX(100%);
@@ -395,10 +395,10 @@ span.song-opt-grp > span {
     -webkit-animation-name: btnIn;
     -moz-animation-name: btnIn;
 }
-span.btnComments {
+span.btn-comments {
     background-image: url('icons/comments-w.svg');
 }
-span.btnComments > span { /* comments count */
+span.btn-comments > span { /* comments count */
     display: inline;
     position: absolute;
 
