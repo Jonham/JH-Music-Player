@@ -124,7 +124,7 @@ window.onload = function() {
 
     // polyfill
     var btnPre = $id('btn-preSong'),
-    btnNext = $id('btn-nextSong');
+    btnNext = $(mainControls, '.btn-nextSong');
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
 
@@ -139,7 +139,7 @@ window.onload = function() {
 var onSongOptionsGroup = function() {
     var wrapper = $('span.song-opt-grp'),
         favorite = $(wrapper, '#btnFavorite'),
-        btnComments = $(wrapper, '.btnComments'),
+        btnComments = $(wrapper, '.btn-comments'),
         	commentsCount = $(btnComments, 'span');
 
 	var favoriteState = false,

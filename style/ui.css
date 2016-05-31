@@ -34,6 +34,9 @@
 .layer-6 {
     z-index: 60;
 }
+.top {
+	z-index: 99;
+}
 
 /* float */
 .left {
@@ -102,6 +105,19 @@
 @-webkit-keyframes btnOut { from{ -webkit-transform: scale(1.2); } to{ -webkit-transform: scale(1); } }
 @-moz-keyframes    btnOut { from{    -moz-transform: scale(1.2); } to{    -moz-transform: scale(1); } }
 
+
+/* mask */
+span.mask {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,.4);
+}
+
+
 /* hide */
 .menu-hidetoRB { /* hide to right bottom side */
     -webkit-transform-origin: right bottom;
@@ -126,13 +142,13 @@
         -ms-transform: translateY(100%);
             transform: translateY(100%);
 }
-.page-hide {
+.page-hide-left {
     -webkit-transform: translateX(-100%);
         -moz-transform:translateX(-100%);
         -ms-transform: translateX(-100%);
             transform: translateX(-100%);
 }
-.mainpage-hide {
+.page-hide-right {
     -webkit-transform: translateX(100%);
         -moz-transform:translateX(100%);
         -ms-transform: translateX(100%);
@@ -392,10 +408,10 @@ span.song-opt-grp > span {
     -webkit-animation-name: btnIn;
     -moz-animation-name: btnIn;
 }
-span.btnComments {
+span.btn-comments {
     background-image: url('icons/comments-w.svg');
 }
-span.btnComments > span { /* comments count */
+span.btn-comments > span { /* comments count */
     display: inline;
     position: absolute;
 
@@ -508,14 +524,14 @@ div.bottom {
     background-size: contain;
     margin-top: 20px;
 }
-#btn-preSong, #btn-nextSong {
+#btn-preSong,#controls .btn-nextSong {
     border-radius: 1.4em;
     padding: 1.4em;
     background-repeat: no-repeat;
     background-position: 50%;
     border: white 2px solid;
 }
-#btn-play {
+.btn-play {
     background-image: url('icons/play-w.svg');
     background-repeat: no-repeat;
     background-position: 50%;
@@ -534,7 +550,7 @@ div.bottom {
 #btn-preSong {
     background-image: url('icons/pre-w.svg');
 }
-#btn-nextSong {
+.btn-nextSong {
     background-image: url('icons/next-w.svg');
 }
 #btn-songList {
@@ -599,8 +615,6 @@ ul#lyric {
 
 	cursor: pointer;
 }
-#menu-share li:before,
-#menu-fileOpt li:before,
 .sidebar li:before {
 	content: "X";
 	background-color: #FF2C2C;
@@ -676,6 +690,8 @@ ul#lyric {
 	display: block;
 }
 
+
+
 #menu-share {
     height: 220px;
 
@@ -683,10 +699,16 @@ ul#lyric {
     text-align: left;
 }
 #menu-fileOpt {
-    height: 40%;
+    height: 50%;
 
-    top:60%;
+    top:50%;
     text-align: left;
+}
+#menu-fileOpt .tag-title {
+	color: rgba(100,100,100,.8);
+}
+#menu-fileOpt .tag-title:before {
+	content: '歌曲：';
 }
 
 /* page */
@@ -696,8 +718,139 @@ ul#lyric {
     display: block;
     position: absolute;
 }
-#page-system {
+#page-comments {
+	background-color: #dddddd;
+}
+#list-comments {
+	list-style: none;
+	margin: 0 .5em;
+	padding: 0;
+}
+#list-comments>li {
+	display: block;
+	width: 100%;
+	position: relative;
+	margin-top: .5em;
+}
+#list-comments .view-commentUserIcon {
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+	background-color: red;
+	margin: 0 .5em;
+	display: inline-block;
+	left: 0;
+}
+#list-comments .container-comment {
+	display: inline-block;
+	position: absolute;
+	width: 80%;
+	box-sizing: border-box;
+}
+.container-comment > span {
+	display: block;
+}
+.container-comment > .tag-commentUser {
+	color: rgba(0,0,0,.8);
+	font-size: .5em;
+}
+.container-comment > .tag-commentDate {
+	color: rgba(0,0,0,.6);
+	font-size: .5em;
+}
+.container-comment > .tag-commentContent {
 
+}
+.container-comment > .tag-commentAgreeCount {
+	color: rgba(0,0,0,.6);
+	font-size: .5em;
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.container-comment > .tag-commentAgreeCount:after {
+	content:
+}
+#page-system {
+	background-color: #dddddd;
+}
+#page-system .ban-controls {
+	position: absolute;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	height: 3em;
+	bottom: 0;
+	background-color: white;
+
+	cursor: pointer;
+}
+.ban-controls .view-album {
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-image: url('../OneRepublic.jpg');
+	background-position: 50%;
+	padding: 1.3em;
+	margin: .2em;
+}
+.ban-controls .tag-songMessage {
+	display: inline-block;
+	position: absolute;
+	margin: .6em .4em;
+}
+.tag-songMessage span {
+	display: block;
+	position: relative;
+}
+.tag-songTitle {
+	top: 0;
+}
+.tag-songArtist {
+	bottom: 0;
+	color: rgba(0,0,0,.8);
+	font-size: .6em;
+}
+.ban-controls .view-controls {
+	margin-top: 1em;
+	display: inline-block;
+	position: absolute;
+	right: 0;
+}
+.ban-controls .btn-songList,
+.ban-controls .btn-nextSong {
+	margin: 0;
+	padding: 1em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border: 0;
+}
+.btn-songList { background-image: url('icons/list-r.svg'); }
+.ban-controls .btn-play {
+	background-image: url('icons/play-r.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	border: 2px solid red;
+	margin: 0 .5em;
+	padding: .5em 1em;
+}
+.ban-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
+.ban-controls .range {
+	display: inline-block;
+	position: absolute;
+	height: .2em;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	text-align: left;
+}
+.ban-controls .range-fill {
+	width: 60%;
+	display: inline-block;
+	left: 0;
+	border: red solid 2px;
 }
 
 /* sidebar */
@@ -787,10 +940,13 @@ input[type=file] {
     /*position: absolute;*/
 
     /*top: 15%;*/
-    height: 10em;
+    height: 100%;
     width: 100%;
     background-color: gray;
-    z-index: 50;
+	box-sizing: border-box;
+	opacity: 0;
+	position: absolute;
+	top: 0;
 }
 input[type=file]:before {
     display: block;
@@ -802,8 +958,23 @@ input[type=file]:before {
     color: white;
     content: 'Click here to add files.';
 }
-#fileLoader {
-
+.file-loader {
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: 0;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.file-loader span {
+    display: block;
+    width: 100%;
+	box-sizing: border-box;
+    padding: .5em 1em;
+    font-size: 1.4em;
+    background-color: black;
+    color: white;
+	z-index: -1;
 }
 ::-ms-browse, [type='file'] {
 	display: none;
@@ -819,25 +990,32 @@ button#btn-fullscreen {
 	font-size: 20px;
 	text-align: left;
 }
+button#btn-showConsole {
+	height: 2em;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 20px;
+}
 
 #dConsole {
     background-color: rgba(0,0,0, 0.3);
     color: white;
-    display: inline-block;
     z-index: 50;
     position: fixed;
 	bottom: 0;
 	right: 0;
 	width: auto;
 	max-height: 3em;
+	display: none;
 }
 .dConsole-window {
-	background-color: rgba(0,0,0, 0.8) !important;
-    top: 3em;
-    left: 5px;
-    width: 98%;
+	background-color: rgba(0,0,0, 0.9) !important;
+    top: 1em;
+    left: 0;
+    width: 100%;
 	overflow: scroll;
 	max-height: none !important;
+	display: block !important;
 }
 
 
@@ -862,3 +1040,32 @@ span.header {
 	border-radius: 6px;
 	margin-top: -5px;
 }
+
+.icon {
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 50%;
+
+	display: inline-block;
+	padding: 1em;
+	margin-left: .5em;
+	margin-right: .5em;
+	vertical-align: middle;
+}
+/* share menu */
+.icon-shareToYun  { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToTencent { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToYixin { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToURL { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToOtherWays { background-image: url('icons/addtolist-b.svg'); }
+
+/* file option menu */
+.icon-addTo { background-image: url('icons/addtolist-b.svg'); }
+.icon-download { background-image: url('icons/download-b.svg'); }
+.icon-tag-artist { background-image: url('icons/person-b.svg'); }
+.icon-tag-album { background-image: url('icons/album-b.svg'); }
+.icon-btn-audioQuality { background-image: url('icons/pc-b.svg'); }
+.icon-btn-proposeAlike { background-image: url('icons/audio-b.svg'); }
+.icon-btn-stopAtTime { background-image: url('icons/schedule-b.svg'); }
+.icon-btn-drivingMode { background-image: url('icons/driving-b.svg'); }

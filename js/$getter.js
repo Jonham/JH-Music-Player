@@ -203,7 +203,8 @@
 
 
 
-var btnPlay = $('#btn-play'),
+var mainControls = $('#controls'),
+    btnPlay = $(mainControls, '.btn-play'),
     audio = $('audio'),
     tagTotalTime = $('#tag-totalTime'),
     tagCurrentTime = $('#tag-currentTime'),

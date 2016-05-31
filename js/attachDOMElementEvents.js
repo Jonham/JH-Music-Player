@@ -1,8 +1,8 @@
 var attachDOMElementEvents = function() {
 
-    // dConsole window click events
+    //onEVENTS-01: dConsole window click events
     var elemDConsole = dConsole.output;
-    $stopPropagation(elemDConsole, 'click');
+    // $stopPropagation(elemDConsole, 'click');
     $click(elemDConsole, function(e) {
         if (elemDConsole.node.state) { return false; }
         elemDConsole.node.toggle();
@@ -12,7 +12,7 @@ var attachDOMElementEvents = function() {
 	});
 
 
-    // #menu-lyricOption click events
+    //onEVENTS-02: #menu-lyricOption click events
     var btnLyricOption = $('#btn-lyricOption'),
         menuLyricOption = $('#menu-lyricOption');
     $stopPropagation(btnLyricOption, 'click');
@@ -27,7 +27,7 @@ var attachDOMElementEvents = function() {
     });
 
 
-    // menuSongList click
+    //onEVENTS-03: menuSongList click
     var btnSongList = $('#btn-songList'),
         menuSongList = $('#menu-songlist'),
         containerSongList = $(menuSongList, '#songlist');
@@ -52,7 +52,7 @@ var attachDOMElementEvents = function() {
     });
 
 
-    // menuShare click
+    //onEVENTS-04: menuShare click
     var btnShare = $('#btn-share'),
         menuShare = $('#menu-share');
     $stopPropagation(btnShare, 'click');
@@ -62,7 +62,7 @@ var attachDOMElementEvents = function() {
         NS.stackShowup.push(function(){ menuShare.node.hide(); });
     });
 
-    // btnFileOption
+    //onEVENTS-05: btnFileOption
     var btnFileOption = $('.btn-fileOpt'),
         menuFileOption = $('#menu-fileOpt');
     $stopPropagation(btnFileOption, 'click');
@@ -73,31 +73,44 @@ var attachDOMElementEvents = function() {
     });
 
 
-    // btnBack : change between pageMain and pageSystem
+    //onEVENTS-06: btnBack : change between pageMain and pageSystem
     var btnBack = $('#btn-back'),
         pageMain = $('#page-main'),
-        pageSystem = $('#page-system');
+        pageSystem = $('#page-system'),
+        btnComments = $('.btn-comments'),
+        pageComments = $('#page-comments'),
+        areaControls = $(pageSystem, '.ban-controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
         pageSystem.node.show();
     });
     // bugs: polyfill  shortcut to return to pageMain
-    $click(pageSystem, function(e) {
+    $click(areaControls, function(e) {
         pageSystem.node.hide();
         pageMain.node.show();
     });
 
-    // btnPlayMode click
+    //onEVENTS-07: bind up onBtnCommments
+    // Notes: following and using onEVENTS-06
+    $click(btnComments, function(e) {
+        pageMain.node.hide();
+        pageComments.node.show();
+    });
+    // JH-bugs: return btn on pageComments
+
+
+    //onEVENTS-08: btnPlayMode click
     var btnPlayMode = $('#btn-playMode');
     $click(btnPlayMode, function() { btnPlayMode.node.next(); });
 
 
 
-    // JH-bugs: when to turn lrc to album
+    //onEVENTS-09: JH-bugs: when to turn lrc to album
     var viewContainer = $('#view-container'),
         viewAlbum = $('#view-album'),
+        viewDisk = $(viewAlbum, '.view-disk'),
         viewLyric = $('#view-lyric');
-    $click( viewAlbum, function() { viewContainer.node.toggle(); });
+    $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) {
         if (e.target.tagName == 'LI') {
             // when click on Lyric lines stop turning

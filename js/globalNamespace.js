@@ -163,7 +163,10 @@
             stop: function() {},
             mute: function() {
                 headGain.gain.value = 0;
-            }
+            },
+            songEnd: function(song) {
+                songlist.playNext();
+            },
         };
 
         // Song wrapper for each song
@@ -325,8 +328,12 @@
 
                 // main works
                 var bs = ctx.createBufferSource();
+                bs.onended = function(e) {
+                    controller.songEnd( me ); // callback with song
+                };
                 bs.buffer = this._audioBuffer;
                 me.sourceBufferNode = bs;
+
                 if (me.gainNode) { // if there is a gainNode, connect to it
                     bs.connect(me.gainNode);
                 }
@@ -335,7 +342,6 @@
                 }
 
                 me._Steps['4_sourceBuffer'] = true;
-                me._NextToDo.shift();
 
                 return me;
             },
@@ -400,20 +406,23 @@
 
             play: function( inTime ) {
                 var me = this;
+                var inTime = _.isNumber(inTime)? inTime: 0;
+
                 try {
                     if (currentPlayingSongs && currentPlayingSongs !== me) {
-                        currentPlayingSongs.output.disconnect(headGain);
+                        currentPlayingSongs.output.disconnect();
                     }
                     if (me._Steps['4_sourceBuffer']) {
                         currentPlayingSongs = me;
+                        // play if sourceBufferNode was never been played
                         me.sourceBufferNode.start( inTime );
                     } else {
                         me.connect( function() { me.sourceBufferNode.start(inTime); } );
                         currentPlayingSongs = me;
                     }
-                } catch(e) {
+                } catch(e) { // sourceBufferNode is already play
                     console.log(e);
-                    me.output.disconnect( headGain );
+                    me.output.disconnect();
                     me.createBufferSource();
                     me.sourceBufferNode.start( inTime );
                 }
@@ -423,7 +432,7 @@
                 var me = this;
                 if (me._Steps['4_sourceBuffer']) {
                     me.sourceBufferNode.stop( inTime );
-                    me.output.disconnect(headGain);
+                    me.output.disconnect();
                 }
                 return me;
 
@@ -484,8 +493,8 @@
         var SongList = function() {
             var songlist = [];
 
-            songlist.next = -1; // index for next one
-            songlist.playing = -1; // index for current playing or paused songList
+            songlist.next = 1; // index for next one
+            songlist.playing = 0; // index for current playing or paused songList
 
             songlist.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
 
@@ -535,7 +544,12 @@
             songlist.play = function( index ) {
                 if (typeof(+index) == 'number' && +index < songlist.length) {
                     songlist[index].play(0);
+                    songlist.playing = index;
+                    songlist.next = (index + 1) >= songlist.length? 0: (index+1);
                 }
+            };
+            songlist.playNext = function() {
+                songlist.play(songlist.next);
             };
             return songlist;
         };

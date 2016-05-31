@@ -31,7 +31,7 @@ var onFileLoad = function() {
                 size:  size,
                 type:  type
             };
-            dConsole.debug(fileMsg);
+            // dConsole.debug(fileMsg);
         // dConsole.log('is a file of ' + type + ' || size:' + size);
 
         // test type support
@@ -71,11 +71,11 @@ var onFileLoad = function() {
         if (type !== '') {
             var aMIME = type.split('/');
             typeMapByMIME( aMIME[0] );
-            dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
+            // dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
         } else {
         }
         // test twice
-        dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
+        // dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
 
         if (!loadingMode) { return false; }
 
@@ -98,7 +98,6 @@ var onFileLoad = function() {
         }
 
         fr.onload = function(e) {
-            // dConsole.log('FileReader: file loaded.');
             callback(fr.result, loadingMode, fileMsg);
         };
         fr.onerror = function(e) {
@@ -127,28 +126,19 @@ var onFileLoad = function() {
 
             songList.push( song );
 
+            // if there is other song on the songlist, add this song to the list too
             if (songList.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
+
+            // if this is the first song add, play it right away
             song.connect(function() {
                 song.play(0);
+                NS.dom.viewDisk.node.turnOn();
             });
 
             NS.dom.tagSongMessage.node.update( song.title, song.artist );
-
-                // srcNode.onended = function() {
-                //     dConsole.log('last song ended.');
-                //     var songList = NS.audio.songList;
-                //     songList.shift(); // delete last song
-                //
-                //     if (songList.length) { // if there are songList, load first one
-                //         addAudioBuffer(ctx, songList[0]);
-                //     }
-                // }
-            // };
-
-            // addAudioBuffer(ctx, songList[0]);
 
         };
 
@@ -165,7 +155,7 @@ var onFileLoad = function() {
 
         // image file loader
         var imageLoader = function( fileBuffer ) {
-            dConsole.log('imageLoader: set image as new background.');
+            // dConsole.log('imageLoader: set image as new background.');
             $wrap( $('#page-main') ).backgroundImage(fileBuffer);
         };
 
