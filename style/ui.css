@@ -212,14 +212,13 @@ nav {
     padding-top: 10px;
     vertical-align: middle;
 }
-#btn-back, #btn-share {
+#page-main .btn-back, #btn-share {
     margin-top: .5em;
     display: inline-block;
     padding: .7em;
     background-size: contain;
-    cursor: pointer;
 }
-#btn-back {
+.btn-back {
     background-image: url('icons/back-w.svg');
 	position: absolute;
 	top: .5em;
@@ -615,18 +614,6 @@ ul#lyric {
 
 	cursor: pointer;
 }
-.sidebar li:before {
-	content: "X";
-	background-color: #FF2C2C;
-	color: white;
-	display: inline-block;
-	margin: 0 .5em;
-	text-align: center;
-	border: none;
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: .6em;
-}
 .menu > span{
 	display: block;
 	margin-left: .5em;
@@ -635,8 +622,8 @@ ul#lyric {
 }
 
 #menu-songlist {
-    height: 50%;
-    top: 50%;
+    height: 60%;
+    top: 40%;
     text-align: left;
 	overflow: hidden;
 }
@@ -721,30 +708,76 @@ ul#lyric {
 #page-comments {
 	background-color: #dddddd;
 }
+#page-comments .header {
+	background-color: red;
+	color: white;
+	padding: .8em;
+	text-align: left;
+}
+
+#page-comments .btn-back {
+	display: inline-block;
+	padding: .8em;
+	background-size: contain;
+}
+#page-comments .tag-commentCount {
+	margin-left: 2em;
+}
+#page-comments .tag-commentCount:before {
+	content: '评论(';
+}
+#page-comments .tag-commentCount:after {
+	content: ')';
+}
+#page-comments .ban-controls {
+	padding: .5em;
+	height: 4em;
+	width: 100%;
+	display: block;
+	position: relative;
+}
+#page-comments .tag-message {
+	background-color: #aaa;
+	display: block;
+	padding: .3em .5em;
+	font-size: .5em;
+	color: rgba(0,0,0,.8);
+}
+#page-comments .btn-moreMessage {
+	position: absolute;
+	right: 0;
+	top: 1em;
+}
+
 #list-comments {
-	list-style: none;
 	margin: 0 .5em;
 	padding: 0;
 }
-#list-comments>li {
+#list-comments>span {
 	display: block;
 	width: 100%;
 	position: relative;
-	margin-top: .5em;
+	margin: .5em 0;
 }
 #list-comments .view-commentUserIcon {
 	width: 2em;
 	height: 2em;
 	border-radius: 1em;
-	background-color: red;
+	background-image: url('icons/person-b.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 50%;
 	margin: 0 .5em;
 	display: inline-block;
+	position: absolute;
 	left: 0;
 }
 #list-comments .container-comment {
 	display: inline-block;
-	position: absolute;
-	width: 80%;
+	position: relative;
+	width: 100%;
+	left: 0;
+	padding-left: 3em;
 	box-sizing: border-box;
 }
 .container-comment > span {
@@ -759,23 +792,64 @@ ul#lyric {
 	font-size: .5em;
 }
 .container-comment > .tag-commentContent {
-
+	padding-bottom: 1em;
+	border-bottom: 1px solid rgba(100,100,100,.2);
 }
 .container-comment > .tag-commentAgreeCount {
 	color: rgba(0,0,0,.6);
 	font-size: .5em;
-	display: inline-block;
+	display: inline-block !important;
 	position: absolute;
+	width: auto;
 	right: 0;
 	top: 0;
 }
-.container-comment > .tag-commentAgreeCount:after {
-	content:
-}
+
+
+/* #page-system */
 #page-system {
 	background-color: #dddddd;
 }
-#page-system .ban-controls {
+
+#page-system .header {
+	background-color: red;
+	color: white;
+	padding: .8em;
+	display: block;
+	text-align: left;
+	text-align: center;
+}
+#page-system .header > .icon-menu-w {
+	position: absolute;
+	left: 0;
+}
+#page-system .header > .icon-search {
+	position: absolute;
+	right: 0;
+}
+#page-system > .subpage-container {
+	position: relative;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+.sub-page {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+}
+#subpage-netease {
+
+}
+#subpage-music {
+
+}
+#subpage-people {
+
+}
+
+.ban-controls {
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -786,19 +860,21 @@ ul#lyric {
 
 	cursor: pointer;
 }
-.ban-controls .view-album {
+/*.ban-controls */
+.view-album {
 	display: inline-block;
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-image: url('../OneRepublic.jpg');
 	background-position: 50%;
-	padding: 1.3em;
-	margin: .2em;
+	padding: 1.5em;
+	margin: 0;
 }
-.ban-controls .tag-songMessage {
+/*.ban-controls */
+.tag-songMessage {
 	display: inline-block;
 	position: absolute;
-	margin: .6em .4em;
+	margin: .5em .4em;
 }
 .tag-songMessage span {
 	display: block;
@@ -840,7 +916,7 @@ ul#lyric {
 .ban-controls .range {
 	display: inline-block;
 	position: absolute;
-	height: .2em;
+	height: 2px;
 	width: 100%;
 	bottom: 0;
 	left: 0;
@@ -852,6 +928,8 @@ ul#lyric {
 	left: 0;
 	border: red solid 2px;
 }
+
+
 
 /* sidebar */
 .sidebar {
@@ -872,10 +950,48 @@ ul#lyric {
 
 	background-color: green;
 }
+.sidebar #tag-userMessage .view-userMessage {
+	position: absolute;
+	bottom: 1em;
+	left: 0.5em;
+	display: inline-block;
+}
+.view-userMessage .icon-userIcon {
+	display: block;
+	padding: 2em;
+	border-radius: 2em;
+	margin-bottom: 1em;
+
+	background-image: url('./icons/person-b.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}
+.view-userMessage .tag-userName {
+	color: white;
+}
+.view-userMessage .tag-userRank {
+	color: white;
+	border: 1px solid white;
+	border-radius: 1em;
+	padding: .2em .4em;
+	font-size: .6em;
+}
+.sidebar #tag-userMessage .btn-marks {
+	display: inline-block;
+	position: absolute;
+	bottom: 1em;
+	right: 0.5em;
+	border: 1px solid white;
+	color: white;
+	padding: .2em .4em;
+}
+
 .sidebar li {
 	text-align: left;
 	padding: .8em 0;
 
+	background-color: #dddddd;
 	cursor: pointer;
 }
 .sidebar .bottom {
@@ -885,7 +1001,7 @@ ul#lyric {
 	left: 0;
 	background-color: white;
 
-	width: 100%;
+	width: 75%;
 	text-align: center;
 	height: 2em;
 }
@@ -899,6 +1015,7 @@ ul#lyric {
 
 	vertical-align: middle;
 }
+
 #sidebar-left {
     width: 75%;
     left: 0;
@@ -961,7 +1078,7 @@ input[type=file]:before {
 .file-loader {
 	width: 100%;
 	display: block;
-	position: absolute;
+	position: relative;
 	top: 0;
 	box-sizing: border-box;
 	overflow: hidden;
@@ -975,6 +1092,7 @@ input[type=file]:before {
     background-color: black;
     color: white;
 	z-index: -1;
+	text-align: center;
 }
 ::-ms-browse, [type='file'] {
 	display: none;
@@ -983,12 +1101,17 @@ input[type=file]:before {
 	display: none;
 }
 
+
 button#btn-fullscreen {
-	height: 8em;
-	width: 100%;
+    display: block;
+    width: 100%;
 	box-sizing: border-box;
-	font-size: 20px;
-	text-align: left;
+    padding: .5em 1em;
+    font-size: 1.4em;
+    background-color: black;
+    color: white;
+	z-index: -1;
+	text-align: center;
 }
 button#btn-showConsole {
 	height: 2em;
@@ -1052,8 +1175,19 @@ span.header {
 	margin-right: .5em;
 	vertical-align: middle;
 }
+
+.icon-right-arrow { background-image: url('icons/arrow-right-w.svg'); }
+.icon-thumb-up { background-image: url('icons/thumb-up-w.svg')}
+/* system page */
+.icon-menu-w { background-image: url('icons/menu-w.svg')}
+.icon-netease { background-image: url('icons/home-w.svg')}
+.icon-music { background-image: url('icons/music-w.svg')}
+.icon-people { background-image: url('icons/people-w.svg')}
+.icon-search { background-image: url('icons/search-w.svg')}
+
+
 /* share menu */
-.icon-shareToYun  { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToYun { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToTencent { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToYixin { background-image: url('icons/addtolist-b.svg'); }
@@ -1069,3 +1203,14 @@ span.header {
 .icon-btn-proposeAlike { background-image: url('icons/audio-b.svg'); }
 .icon-btn-stopAtTime { background-image: url('icons/schedule-b.svg'); }
 .icon-btn-drivingMode { background-image: url('icons/driving-b.svg'); }
+
+/* sidebar left */
+.icon-mail { background-image: url('icons/mail-b.svg'); }
+.icon-cart { background-image: url('icons/cart-b.svg'); }
+.icon-package { background-image: url('icons/package-b.svg'); }
+.icon-free { background-image: url('icons/inbox-b.svg'); }
+.icon-mic { background-image: url('icons/mic-b.svg'); }
+.icon-cloth { background-image: url('icons/setup-b.svg'); }
+.icon-bulb { background-image: url('icons/bulb-b.svg'); }
+.icon-clock { background-image: url('icons/clock-b.svg'); }
+.icon-cloud { background-image: url('icons/cloud-b.svg'); }

@@ -32,16 +32,16 @@ function addDragEventsTo( range ) {
         return _.isNull(document.ontouchend);
     };
     var Events = (function(mobile) {
-        dConsole.debug('Events: ' + mobile);
+        // dConsole.debug('Events: ' + mobile);
         if (mobile) {
-            dConsole.debug('Events: mobile mode>> touch;');
+            // dConsole.debug('Events: mobile mode>> touch;');
             return {
                 start: 'touchstart',
                 move:  'touchmove',
                 end:   'touchend'
             };
         } else {
-            dConsole.debug('Events: desktop mode>> mouse;');
+            // dConsole.debug('Events: desktop mode>> mouse;');
             return {
                 start: 'mousedown',
                 move:  'mousemove',
@@ -50,7 +50,7 @@ function addDragEventsTo( range ) {
         }
     })( mobileOrDestop() );
     var getX = (function(mobile) {
-        dConsole.debug('GetX: ' + mobile);
+        // dConsole.debug('GetX: ' + mobile);
         if (mobile) {
             return function(e, end) {
                 return end === 'end'? e.changedTouches[0].clientX: e.touches[0].clientX;
@@ -63,6 +63,9 @@ function addDragEventsTo( range ) {
     })( mobileOrDestop() );
 
     var moveListener = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
         var offset = getX(e) - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;   // [0,1]
@@ -73,6 +76,9 @@ function addDragEventsTo( range ) {
         change(leftPercent);
     };
     var upListener = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
         var offset = getX(e, 'end') - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;
@@ -90,6 +96,9 @@ function addDragEventsTo( range ) {
         $off(window, Events.end, upListener);
     };
     var downListener = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
         o.clientX = getX(e);
         o.width = range.getBoundingClientRect()['width'];
         o.percent = parsePercent( btn.style.left || '100%' ); // [0,1]
