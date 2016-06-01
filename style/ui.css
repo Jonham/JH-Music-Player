@@ -614,18 +614,6 @@ ul#lyric {
 
 	cursor: pointer;
 }
-.sidebar li:before {
-	content: "X";
-	background-color: #FF2C2C;
-	color: white;
-	display: inline-block;
-	margin: 0 .5em;
-	text-align: center;
-	border: none;
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: .6em;
-}
 .menu > span{
 	display: block;
 	margin-left: .5em;
@@ -928,7 +916,7 @@ ul#lyric {
 .ban-controls .range {
 	display: inline-block;
 	position: absolute;
-	height: .2em;
+	height: 2px;
 	width: 100%;
 	bottom: 0;
 	left: 0;
@@ -940,6 +928,8 @@ ul#lyric {
 	left: 0;
 	border: red solid 2px;
 }
+
+
 
 /* sidebar */
 .sidebar {
@@ -960,10 +950,48 @@ ul#lyric {
 
 	background-color: green;
 }
+.sidebar #tag-userMessage .view-userMessage {
+	position: absolute;
+	bottom: 1em;
+	left: 0.5em;
+	display: inline-block;
+}
+.view-userMessage .icon-userIcon {
+	display: block;
+	padding: 2em;
+	border-radius: 2em;
+	margin-bottom: 1em;
+
+	background-image: url('./icons/person-b.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}
+.view-userMessage .tag-userName {
+	color: white;
+}
+.view-userMessage .tag-userRank {
+	color: white;
+	border: 1px solid white;
+	border-radius: 1em;
+	padding: .2em .4em;
+	font-size: .6em;
+}
+.sidebar #tag-userMessage .btn-marks {
+	display: inline-block;
+	position: absolute;
+	bottom: 1em;
+	right: 0.5em;
+	border: 1px solid white;
+	color: white;
+	padding: .2em .4em;
+}
+
 .sidebar li {
 	text-align: left;
 	padding: .8em 0;
 
+	background-color: #dddddd;
 	cursor: pointer;
 }
 .sidebar .bottom {
@@ -973,7 +1001,7 @@ ul#lyric {
 	left: 0;
 	background-color: white;
 
-	width: 100%;
+	width: 75%;
 	text-align: center;
 	height: 2em;
 }
@@ -987,6 +1015,7 @@ ul#lyric {
 
 	vertical-align: middle;
 }
+
 #sidebar-left {
     width: 75%;
     left: 0;
@@ -1174,3 +1203,14 @@ span.header {
 .icon-btn-proposeAlike { background-image: url('icons/audio-b.svg'); }
 .icon-btn-stopAtTime { background-image: url('icons/schedule-b.svg'); }
 .icon-btn-drivingMode { background-image: url('icons/driving-b.svg'); }
+
+/* sidebar left */
+.icon-mail { background-image: url('icons/mail-b.svg'); }
+.icon-cart { background-image: url('icons/cart-b.svg'); }
+.icon-package { background-image: url('icons/package-b.svg'); }
+.icon-free { background-image: url('icons/inbox-b.svg'); }
+.icon-mic { background-image: url('icons/mic-b.svg'); }
+.icon-cloth { background-image: url('icons/setup-b.svg'); }
+.icon-bulb { background-image: url('icons/bulb-b.svg'); }
+.icon-clock { background-image: url('icons/clock-b.svg'); }
+.icon-cloud { background-image: url('icons/cloud-b.svg'); }
