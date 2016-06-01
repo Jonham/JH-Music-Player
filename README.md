@@ -25,9 +25,9 @@ And you're welcome to fork and issue whatever come up in your mind.
 <hr>
 ## Features or Functions need tests
 01. **Supports for Browsers**: both Wechat and UC won't crack, but with same error message
-    - [ ] Wechat(enbeded QQ Browser): auto crack down    
+    - [x] Wechat(enbeded QQ Browser): auto crack down    
         BUGS: attachNodeToElement.js:300 drag.js:73
-    - [ ] UC browser : unique input[type=file], crack down when select any kind of files
+    - [x] UC browser : unique input[type=file], crack down when select any kind of files
         BUGS: attachNodeToElement.js:300 drag.js:73    
     **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
     I've catch errors both in rangeTime and rangeVolume.
@@ -44,7 +44,7 @@ And you're welcome to fork and issue whatever come up in your mind.
 04. - [x] highlight Ranges objects
 05. - [x] dConsole display
 06. - [x] FullScreen API for devices
-07. - [ ] Icons for each Page and Menu items
+07. - [x] Icons for each Page and Menu items
 08. - [ ] mask layer for avoiding mistake touches and clicks
 09. - [ ] bind up related blocks
 10. - [ ] images and icons preload
