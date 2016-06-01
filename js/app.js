@@ -1,221 +1,5 @@
-// XMLHttpRequest object polyfill
-if (window.XMLHttpRequest === undefined) {
-	window.XMLHttpRequest = function() {
-		try {
-			// ActiveX Newest Version
-			return new ActiveXObject("Msxml2.XMLHTTP.6.0");
-		}
-		catch (e1) {
-			try {
-				return new ActiveXObject("Msxml2.XMLHTTP.3.0");
-			}
-			catch (e2) {
-				throw new Error("XMLHttpRequest is not supported");
-			}
-		}
-	};
-}
-function classifyLrc(arr) {
-	// two modes
-	// 1. one TimeStamp one lyrics        normal
-	// 2. several timeTags one lyrics   compressd
-
-	// metamsg RegExp
-	// ti : title
-	// ar : artist
-	// al : album
-	// by : lyric maker
-	var rgMetaMsg = /(ti|ar|al|by|offset):(.+)/;
-
-	// timetag regexp
-	// 1. mm:ss.ms
-	var rgTimetag = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/;
-
-	// function(timetag): to transform
-	// "01:01.01" ==> 60 + 1 + .01
-	var parseTimetag = function(timetag) {
-
-		var aTMP = rgTimetag.exec(timetag);
-		var floatTime = parseInt(aTMP[1]) * 60 + parseInt(aTMP[2]) + parseInt(aTMP[3]) / 100;
-		return floatTime;
-	};
-
-	// returnArrayObject
-	// prototype oOut[12.34] = []
-	var oOut = {};
-	// store all lyrics and timetag
-	oOut.lrc = [];
-	oOut.timeTags = [];
-
-	// go through the given array
-    for (var i=0; i < arr.length; i++) {
-        if (rgMetaMsg.test(arr[i])) {
-            // get meta messages
-            var aTMP = rgMetaMsg.exec(arr[i]);
-            oOut[aTMP[1]] = aTMP[2];
-        }
-        else if(rgTimetag.test(arr[i])) {
-            // handling timestamp and lyrics
-
-            // in compress mode:
-            // to collect series of timestamp
-            var aCurrentTime = [];
-
-            // collect all timeTags
-            while (rgTimetag.test(arr[i])) {
-                var fTime = parseTimetag(arr[i]);
-                aCurrentTime.push(fTime);
-                oOut.timeTags.push(fTime);
-                i++;
-            }
-
-            // collect all the lyrics
-            var strNextLRC = arr[i];
-            oOut.lrc.push(strNextLRC);
-            var curLrcNo = oOut.lrc.length - 1;
-
-            // restore aCurrentTime to oOut
-            // oOut[ sNow ] = [ ref to No to lrc ]
-            for (var j=0; j < aCurrentTime.length; j++) {
-                var sNow = aCurrentTime[j];
-                if(oOut[sNow]) {
-                    oOut[sNow].push(curLrcNo);
-                }
-                else {
-                    oOut[sNow] = [curLrcNo];
-                }
-            }
-
-        }
-    }
-    // sort
-	var sortByNumber = function(a, b) { return a>b? 1: -1; };
-	oOut.timeTags.sort(sortByNumber);
-
-	return oOut;
-}
-// load lrc file
-// notice: file encoding:
-// utf-8
-// ANSI
-// UCS2 BigEndian
-//      LittleEndian
-
-var loadedLRClist = [];
-function loadLrc(file, callback) {
-    var path = "./music/";
-    var url = path + file;
-    var oOut = {};
-    if (callback === undefined) {callback = parseLrc;}
-
-    var response = "";
-
-    var xhr = new XMLHttpRequest();
-    	xhr.open("get", url, true);
-    	xhr.send();
-    	xhr.onreadystatechange = function(){
-    		if (xhr.readyState == "4" && xhr.status == "200") {
-    			response = xhr.responseText;
-                loadedLRClist.push( callback(response) );
-    		}
-            return "xhr Fails";
-    	};
-    	return oOut;
-}
-// parse lrc into Array Object
-// Example
-//[ti:Rolling In The Deep]
-//[ar:Adele]
-//[al:21]
-//[by:yvonne]
-//
-function parseLrc(str) {
-    var rg = /[\[\]]/g;
-    var arr = str.split(rg);
-    var aOut = [];
-
-    for (var i =0; i < arr.length; i++) {
-        // mutiline of "\n"
-        var sTMP = arr[i];
-        sTMP.replace("\n", "");
-        aOut.push(sTMP);
-    }
-    return classifyLrc(aOut);
-}
-
-
-var btnPlay = $id('play'),
-    audio = $('audio'),
-    btnPre = $id('pre-song'),
-    btnNext = $id('next-song'),
-    btnBack = $id('back'),
-    totalTime = $id('total-time'),
-    currentTime = $id('current-time'),
-    optionMenu = $id('option-menu'),
-    lyric = $id('lyric'),
-    title = $id('song-title'),
-    artist = $id('song-artist');
-
-var dConsole; // for mobile browser debug
-var stackShowup = [];
-
-function startPlay() {
-    var btnIcons = {
-        'play':  "url('./style/icons/play-w.svg')",
-        'pause': "url('./style/icons/pause-w.svg')"
-    };
-    var once = false,
-        disk = $('span.disk');
-
-    var playOrPause = function() {
-        if (once) {
-            audio.paused ? audio.play() : audio.pause();
-        }
-        else { // first time
-            once = true;
-
-            audio.src = './music/OneRepublic - Good Life.mp3';
-            // auto play
-            $on(audio, "canplay", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
-                if (audio.paused) { audio.play(); }
-            });
-
-            $on(audio, "durationchange", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
-            });
-            $on(audio, "loadedmetadata", function() {
-                totalTime.innerHTML = formatTimestamp(audio.duration);
-            });
-
-            $on(audio, 'play', function() {
-                btnPlay.style.backgroundImage = btnIcons.pause;
-                disk.classList.add('goRound');
-            });
-            $on(audio, 'pause', function() {
-                btnPlay.style.backgroundImage = btnIcons.play;
-				disk.classList.remove('goRound');
-            });
-            // media loaded seekable range
-            var loaded = $('span.loaded');
-            $on(audio, 'progress', function(e){
-              loaded.style.width = this.seekable.length * 100 + '%';
-            });
-
-            // turnoff all hightlighted lines when user seekable
-            $on(audio, 'seeking', function(e) {
-                var domLIs = $(lyric, '.focus');
-                var aFocus = Array.prototype.slice.apply(domLIs);
-                aFocus.forEach(function(ele) {ele.className = 'line';});
-            });
-        }
-    }; // playOrPause()
-
-    $on(btnPlay, "click", playOrPause);
-}
-
-function addScrollLrc() {
-    var lrc = loadedLRClist[0],
+function addScrollLrc(lrc) {
+    var lrc = lrc || loadedLRClist[0],
         timeline = lrc.timeTags,
         tempUL = document.createElement('ul');
 
@@ -254,8 +38,10 @@ $on(audio, "timeupdate", function(e) {
 
 	if (ONCE) {
         // title message
-		title.innerHTML = lrc.ti;
-		artist.innerHTML = lrc.ar;
+        var tagSongTitle = $id('tag-songTitle'),
+            tagSongArtist = $id('tag-songArtist');
+		tagSongTitle.innerHTML = lrc.ti;
+		tagSongArtist.innerHTML = lrc.ar;
 		offsetTop = lyric.offsetTop;
 
 		lyric.style.top = lyricHightlightOriginTop + "px";
@@ -263,7 +49,7 @@ $on(audio, "timeupdate", function(e) {
 		ONCE = false;
 	}
 
-	currentTime.innerHTML = formatTimestamp(audio.currentTime);
+	tagCurrentTime.innerHTML = formatTimestamp(audio.currentTime);
 
     // auto scroll lyrics
 	for (var i=0; i<timeline.length; i++) {
@@ -292,129 +78,69 @@ $on(audio, "timeupdate", function(e) {
 	}
 });
 
-var onButtonBack = function() {
-    var main = $id('main'),
-        lyric = $id('lyric-lrc'),
-        album = $id('lyric-album'),
-        disk  = $(album, '.disk'),
-        page = 0; // lyric-lrc
 
-    var listener = function(e) {
-        if (page == 0) {
-            lyric.style.opacity = 0;
-            album.style.display = '';
-            album.style.opacity = 1;
-            main.style.backgroundColor = 'rgba(0,0,0,.5)';
-            page = 1;
-        } else {
-            lyric.style.opacity = 1;
-            album.style.opacity = 0;
-            album.style.display = 'none';
-            main.style.backgroundColor = 'rgba(0,0,0,.8)';
-            page = 0;
-        }
-    };
-
-    return listener;
-};
 window.onload = function() {
-	loadLrc("OneRepublic - Good Life.lrc", parseLrc);
+
+	// loadLrc("OneRepublic - Good Life.lrc", parseLrc);
 
     startPlay();
 
-    $id('background').style.backgroundImage = 'url(./OneRepublic.jpg)';
-	var imgPreload = new Image();
-	imgPreload.src = 'style/icons/favorited-w.svg';
+    $id('page-main').style.backgroundImage = 'url(./OneRepublic.jpg)';
 
-    var onB = onButtonBack();
-    $click(btnBack, onB);
-    // $id('lyric-lrc').addEventListener('click', onB, false);
-    // $id('lyric-album').addEventListener('click', onB, false);
+    var preloadImage = function( urlArray ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    var aImageURL = [
+        'style/icons/favorited-w.svg',
+        'style/icons/mode-loop-w.svg',
+        'style/icons/mode-repeatone-w.svg'
+    ];
+    preloadImage(aImageURL);
+
 
     // polyfill
+    var btnPre = $id('btn-preSong'),
+    btnNext = $(mainControls, '.btn-nextSong');
     $click(btnNext, function(){audio.currentTime = 0; audio.play();});
     $click(btnPre, function(){audio.currentTime = 0; audio.play();});
-	$click(window, function(e) {
-		while (stackShowup.length) {
-			stackShowup.pop()();
-		}
+
+    // if window receive 'click' event, it will pop up all callback functions in stackShowup
+    $click(window, function(e) {
+		NS.stackShowup.releaseAll();
 	}, false);
     onSizeChange()();
-
-	// elem for dConsole
-	// var elem = $dom('ul#dConsole',{
-	// 	backgroundColor: 'rgba(0,0,0,.6)',
-	// 	color: 'white',
-	// 	listStyle: 'none',
-	// 	position: 'fixed',
-	// 	display: 'inline-block',
-	// 	zIndex: '100'
-	// });
-	var elem = $dom('div#dConsole', {
-		backgroundColor: 'rgba(0,0,0,.6)',
-		color: 'white',
-		display: 'inline-block',
-		zIndex: '100',
-		position: 'fixed',
-		bottom: '0',
-		right: '0'
-	});
-	document.body.appendChild(elem);
-	$click(elem, function(e) {
-		e.stopPropagation();
-
-		elem.style.bottom = '';
-		elem.style.right = '';
-		elem.style.top = '1em';
-		elem.style.left = '5px';
-		elem.style.height = '100%';
-		elem.style.overflowY='auto';
-
-		var ol = $dom('ol');
-		dConsole.messageArray.forEach(function(value) {
-			var li = $dom('li');
-			li.innerHTML = value;
-			ol.appendChild(li);
-		});
-		var tmp = elem.innerHTML;
-		elem.innerHTML = '';
-		elem.appendChild(ol);
-
-		stackShowup.push(function() {
-			elem.style.top = '';
-			elem.style.left = '';
-			elem.style.bottom = 0;
-			elem.style.right = 0;
-			elem.style.height = '';
-			elem.style.overflowY = '';
-			elem.innerHTML = tmp;
-		});
-	});
-	dConsole = new DebugConsole(elem);
+	onFileLoad();
 };
-
-var btnOption = $('span#option-btn');
-$click(btnOption, function(e){
-        e.stopPropagation();
-        var list = optionMenu.classList;
-		list.toggle('hide-fold');
-
-		if (!list.contains('hide-fold')) {
-			stackShowup.push(function() { optionMenu.classList.add('hide-fold');} );
-		}
-    });
-$click(optionMenu, function(e) {
-        // e.stopPropagation();
-        optionMenu.classList.toggle('hide-fold');
-        dConsole.log(e.target.innerHTML);
-    });
 
 var onSongOptionsGroup = function() {
     var wrapper = $('span.song-opt-grp'),
         favorite = $(wrapper, '#btnFavorite'),
-        comments = $(wrapper, '.comments'),
-        	commentsCount = $(comments, 'span'),
-        fileOpt = $(wrapper, '.file-option');
+        btnComments = $(wrapper, '.btn-comments'),
+        	commentsCount = $(btnComments, 'span');
 
 	var favoriteState = false,
 		onFavoriteClick = function(e) {
@@ -431,15 +157,10 @@ var onSongOptionsGroup = function() {
 				e.stopPropagation();
 				dConsole.log('show comments');
 				commentsCount.innerHTML = 99;
-			},
-		onFileOptionClick = function(e) {
-				e.stopPropagation();
-				dConsole.log('show file option menu.');
 			};
 
 	// add listener on their parent and switch on e.target
 	$click(favorite, onFavoriteClick);
-	$click(comments, onCommentsClick);
-	$click(fileOpt, onFileOptionClick);
+	$click(btnComments, onCommentsClick);
 };
 onSongOptionsGroup();

@@ -4,8 +4,8 @@
     var isDOMElement = function(elem) {
         if (typeof(elem) !== 'object') { return false; }
 
-        var str = elem.toString();
-        if (str.search('HTML') === 8 && elem.tagName) { return true; }
+        // var str = elem.toString();
+        if (elem.innerHTML !== undefined  && elem.tagName) { return true; }
         return false;
     };
     var toArray = function(o) { return Array.prototype.slice.apply(o); };
@@ -23,6 +23,9 @@
 
     // event listener add and remove
     w.$on = function (elem, method, callback) { return elem.addEventListener(method, callback, false); };
+    w.$stopPropagation = function(elem, method) {var fn = function(e) {e.stopPropagation();};  w.$on(elem, method, fn);};
+    w.$preventDefault = function(elem, method) {var fn = function(e) {e.preventDefault();};  w.$on(elem, method, fn);};
+
     w.$click = function (elem, callback) { return $on(elem, 'click', callback); };
     w.$off = function (elem, method, callback) { return elem.removeEventListener(method, callback); };
 
@@ -63,6 +66,62 @@
         }
     };
 
+    // wrapper
+    var Wrapper = function(elem) {
+        if (typeof(elem) === 'string') { return new Wrapper( $dom(elem) ); }
+        if (!isDOMElement(elem)) { console.error('JH:Wrapper takes only DOM elements or DOM CSS3 selector string.'); return false;}
+        if (this == window) { return new Wrapper(elem); }
+
+        this[0] = elem;
+        return this;
+    };
+    Wrapper.prototype = {
+        value: function() {return this[0];},
+        getNode: function() {return this[0];},
+        backgroundImage: function(url) {
+            var n = this[0];
+            n.style.backgroundImage = "url(" + url + ')';
+            return this;
+        },
+        html: function( content ) {
+            if (!content) {
+                return this[0].innerHTML;
+            } else {
+                this[0].innerHTML = content;
+                return this;
+            }
+        },
+        empty: function() { this[0].innerHTML = ''; return this; },
+        add: function() {
+            var me = this;
+            if (arguments.length) {
+                _.each(arguments, function(value) {
+                    me[0].appendChild(value);
+                });
+                return me;
+            }
+        },
+        data: function(key, value) {
+            if (value === undefined) {
+                return this[0].dataset[key];
+            }
+            this[0].dataset[key] = value;
+            return this;
+        },
+        bind: function(key, value) {
+            if (!this[0].db) { this[0].db = {}; }
+            if (!value) { return this[0].db[key]; }
+            this[0].db[key] = value;
+            return this;
+        }
+    };
+    w.$wrap = Wrapper;
+
+    // setMultiple functions on $.
+    w.$.isDOMElement = isDOMElement;
+    w.$.toArray = toArray;
+    w.$.splitSelectingString = splitSelectingString;
+
     // create: DOM elements create
     w.$dom = function(str, style){
         var a = splitSelectingString(str);
@@ -93,20 +152,35 @@
 
 		var me = this;
         me.messageArray = [];
+        me.debugingArray = [];
+        me.errorArray = [];
+
 		me.output = null;
 		if (isDOMElement(box)) { me.output = box; }
 
+        // log msg on me.messageArray
 		me.log = function(msg) {
 			if (me.output) {
                 me.output.innerHTML = msg;
-                me.output.style.display = 'inline-block';
-                setTimeout(function(){
-                    me.output.style.display = 'none';
-                    console.log(me);
-                }, 3000);
             }
             me.messageArray.push(msg);
 		};
+
+        // debug will also store message on debugingArray for quick view when debuging
+        me.debug = function(msg) {
+            me.debugingArray.push(msg);
+            me.log(msg);
+        };
+        me.error = function(error) {
+            var getKeyWords = function(error) {
+                var reg = /([^\/]*?\.js):(\d+):(\d+)/img;
+                var arr = error.stack.match(reg);
+                return arr.join("_");
+            };
+            me.errorArray.push(error);
+            me.log( error.name + ": " +getKeyWords(error) );
+        };
+
 		me.init = function(newBox) {
 			if (!isDOMElement(newBox)) { return false; }
 			// remove previous box
@@ -116,10 +190,22 @@
 			o = newBox;
 		};
 
-        $on(window, 'error', function(e) {
-            e.preventDefault();
-            me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        });
+        // redirect all error message onto me.log
+        // mainly for mobile device without console
+        // $on(window, 'error', function(e) {
+        //     e.preventDefault();
+        //     me.error(e);
+        //     // me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        // });
 		return this;
 	};
 })(window);
+
+
+
+var mainControls = $('#controls'),
+    btnPlay = $(mainControls, '.btn-play'),
+    audio = $('audio'),
+    tagTotalTime = $('#tag-totalTime'),
+    tagCurrentTime = $('#tag-currentTime'),
+    lyric = $id('lyric');

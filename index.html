@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Netease Music UI</title>
+    <title>JH Music Player</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
 	<!--UC Fullscreen-->
@@ -19,88 +19,249 @@
 	<meta name="apple-mobile-web-app-title" content="Lyrics Player">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-    <link rel="stylesheet" href="style/ui.css">
+    <!-- using ?xxxx to make browser update css file 1 -->
+    <link rel="stylesheet" href="style/ui.css?0003">
 </head>
 <body>
-    <div id="background"></div>
-    <div id="main">
-        <nav class='header row'>
-            <span id="back" class='left'></span>
-            <span id="song-message">
-                <span id="song-title">The Saltwater Room</span> <br>
-                <span id="song-artist">Owl City</span>
-            </span>
-            <span id="share" class='right'></span>
-        </nav>
+    <div id="viewport">
+        <!-- this span.mask help identify click events -->
+        <span class="mask"></span>
 
-        <div id="volume" class='row one-second'>
-            <span class="speaker layer-2"></span>
-            <div id="volume-range" class='one-second layer-2'>
-                <span class="fill"></span>
-                <span class="range-btn"></span>
-                <span class="empty"></span>
-            </div>
-            <span class="value"></span>
-        </div>
-        <div id="lyric-container" class='row one-second'>
-            <!-- page1 -->
-            <div id='lyric-lrc' class="page">
-                <ul id="lyric" class='one-second layer-1'>
-                    <li class='line'>I opend my eyes last night and saw you in the low light</li>
-                    <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
-                    <li class='line'> </li>
-                    <li class='line'>Walking down by the bay, on the shore.</li>
-                    <li class='line'>沿着海湾走下去， 在岸边</li>
-                    <li class='line'> </li>
-                    <li class='line'>staring up at the planes that aren't there anymore</li>
-                    <li class='line'>盯着不再有星星的天空</li>
-                </ul>
-                <div id="option" class='layer-2'>
-                    <span id="option-btn"></span>
-                    <div id="option-menu" class='hide-fold'>
-                        <span class="menu-item">歌词调整</span>
-                        <span class="menu-item">翻译报错</span>
-                        <span class="menu-item">歌词报错</span>
-                        <span class="menu-item">歌曲报错</span>
+        <div id="page-main" class="page ease-p3 page-hide-right">
+            <div id="main">
+                <nav class='header row'>
+                    <span id="btn-back" class='left'></span>
+                    <span id="tag-songMessage">
+                        <span id="tag-songTitle" class="tag-title">The Saltwater Room</span>
+                        <span id="tag-songArtist" class="tag-artist">Owl City</span>
+                    </span>
+                    <span id="btn-share" class='right'></span>
+                </nav>
+
+                <div id="volume" class='row ease-p6'>
+                    <span class="speaker layer-2"></span>
+                    <div id="range-volume" class='range ease-p6 layer-2'>
+                        <span class="range-fill"></span>
+                        <span class="range-btn" style="left:100%"></span>
+                        <span class="empty"></span>
+                    </div>
+                    <span class="value"></span>
+                </div>
+
+                <div id="view-container" class='row ease-p6'>
+                    <!-- page1 -->
+                    <div id='view-lyric'>
+                        <ul id="lyric" class='ease-p6 layer-1'>
+                            <li class='line'>I opend my eyes last night and saw you in the low light</li>
+                            <li class='line'>昨夜我睁开眼，看见你在昏暗的灯光下</li>
+                            <li class='line'> </li>
+                            <li class='line'>Walking down by the bay, on the shore.</li>
+                            <li class='line'>沿着海湾走下去， 在岸边</li>
+                            <li class='line'> </li>
+                            <li class='line'>staring up at the planes that aren't there anymore</li>
+                            <li class='line'>盯着不再有星星的天空</li>
+                        </ul>
+                        <div id="container-fileOption" class='layer-2'>
+                            <span id="btn-lyricOption"></span>
+                            <div id="menu-lyricOption" class='ease-p3 menu-hidetoRB'>
+                                <span class="menu-item">歌词调整</span>
+                                <span class="menu-item">翻译报错</span>
+                                <span class="menu-item">歌词报错</span>
+                                <span class="menu-item">歌曲报错</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- page2 -->
+                    <div id='view-album' style="display:none;">
+                        <span class='view-disk ease-p6 btn'></span>
+                        <span class='song-opt-grp'>
+                            <span id='btnFavorite' class="favorite btnToggle btn"></span>
+                            <span class="btn-comments btn"><span>0</span></span>
+                            <span class="btn-fileOpt btn"></span>
+                        </span>
                     </div>
                 </div>
-            </div>
-            <!-- page2 -->
-            <div id='lyric-album' class="page">
-                <span class='disk one-second'></span>
-                <span class='song-opt-grp'>
-                    <span id='btnFavorite' class="favorite btnToggle"></span>
-                    <span class="comments"><span>0</span></span>
-                    <span class="file-option"></span>
-                </span>
+
+
+                <!-- RangeTime and Controls Buttons -->
+                <div class="bottom">
+                    <div id='time' class='container row layer-3'>
+                        <span id="tag-currentTime">00:00</span>
+                        <div id="range-time" class='range ease-p6'>
+                            <span class="loaded ease-p6"></span>
+                            <span class="range-fill"></span>
+                            <span class="range-btn" style="left:0%"></span>
+                            <span class="empty"></span>
+                        </div>
+                        <span id="tag-totalTime">04:55</span>
+                    </div>
+
+                    <div id='controls' class="container row ease-p6">
+                        <audio src=""></audio>
+                        <span id="btn-playMode" class='left'></span>
+                        <span id="btn-preSong"></span>
+                        <span class="btn btn-play"></span>
+                        <span class="btn btn-nextSong"></span>
+                        <span id="btn-songList" class='right'></span>
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class="bottom">
-            <div id='time' class='container row layer-3'>
-                <span id="current-time">00:00</span>
-                <div id="time-range" class='one-second'>
-                    <span class="loaded one-second"></span>
-                    <span class="fill"></span>
-                    <span class="range-btn"></span>
-                    <span class="empty"></span>
-                </div>
-                <span id="total-time">04:55</span>
-            </div>
 
-            <div id='controls' class="container row one-second">
-                <audio src=""></audio>
-                <span id="play-mode" class='left'></span>
-                <span id="pre-song"></span>
-                <span id="play"></span>
-                <span id="next-song"></span>
-                <span id="song-list" class='right'></span>
-            </div>
+        <div id="page-system" class="page ease-p3">
+            <span class="file-loader">
+                <span>Click here to add files.</span>
+                <input id="fileLoader" class="btn" class=".layer-6" type="file" multiple="true" />
+            </span>
+            <span>
+                <button id="btn-fullscreen" class="btn">Go FullScreen Now!</button>
+            </span>
+            <span>
+                <button id="btn-showConsole">Show Console</button>
+            </span>
 
+            <span class="ban-controls">
+                <span class="view-album"></span>
+                <span class="tag-songMessage">
+                    <span class="tag-songTitle tag-title">The Saltwater Room</span>
+                    <span class="tag-songArtist tag-artist">Owl City</span>
+                </span>
+                <span class="view-controls right">
+                    <span class="btn btn-songList"></span>
+                    <span class="btn btn-play"></span>
+                    <span class="btn btn-nextSong"></span>
+                </span>
+
+                <span class="range">
+                    <span class="range-fill"></span>
+                </span>
+            </span>
+        </div>
+
+        <div id="menu-songlist" class="menu ease-p3 menu-hide">
+            <span class="header">
+                <span class="btn left">收藏全部</span>
+                <span class="center">播放列表(<span class="count inline">6</span>)</span>
+                <span class="btn right">清空</span>
+            </span>
+            <span class='container'>
+                <ul id="songlist">
+                    <li>Counting Stars</li>
+                    <li>All The Right Moves</li>
+                    <li>Good Life</li>
+                    <li>I Lived</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>I Lived</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                    <li>Secrets</li>
+                    <li>Stop and Stare</li>
+                    <li>Something I Need</li>
+                </ul>
+            </span>
+        </div>
+
+        <div id="menu-share" class="menu ease-p3 menu-hide">
+            <ul id="ulShare">
+                <li><span class="icon icon-shareToYun"></span>
+                            <span class="btn-shareToYun btn">分享到云音乐</span></li>
+                <li><span class="icon icon-shareToMsg"></span>
+                            <span class="btn btn-shareToMsg">私信分享</span></li>
+                <li><span class="icon icon-shareToTencent"></span>
+                            <span class="btn btn-shareToTencent">微信、QQ分享</span></li>
+                <li><span class="icon icon-shareToYixin"></span>
+                            <span class="btn btn-shareToYixin">易信分享</span></li>
+                <li><span class="icon icon-shareToURL"></span>
+                            <span class="btn btn-shareToURL">复制链接</span></li>
+                <li><span class="icon icon-shareToOtherWays"></span>
+                            <span class="btn btn-shareToOtherWays">其他</span></li>
+            </ul>
+        </div>
+
+        <div id="menu-fileOpt" class="menu ease-p3 menu-hide">
+            <span class="tag-title">The Saltwater Room</span>
+            <ul id="ulFileOpt">
+                <li><span class="icon icon-addTo"></span>
+                                <span class="addTo">收藏到歌单</span></li>
+                <li><span class="btn icon icon-download"></span>
+                                <span class="btn download">下载</span></li>
+                <li><span class="icon icon-tag-artist"></span>
+                                <span class='tag-artist'>歌手：
+                                        <span class="btn inline value">Owl City</span></span></li>
+                <li><span class="icon icon-tag-album"></span>
+                                <span class='tag-album'>专辑：
+                                        <span class="btn inline value">The Saltwater Room</span></span></li>
+                <li><span class="icon icon-btn-audioQuality"></span>
+                                <span id="btn-audioQuality">音质：
+                                        <span class="btn inline value">自动选择</span></span></li>
+                <li><span class="icon icon-btn-proposeAlike"></span>
+                                <span id="btn-proposeAlike" class="btn">相似推荐</span></li>
+                <li><span class="icon icon-btn-stopAtTime"></span>
+                                <span id="btn-stopAtTime" class="btn">定时停止播放</span></li>
+                <li><span class="icon icon-btn-drivingMode"></span>
+                                <span id="btn-drivingMode" class="btn">打开驾驶模式</span></li>
+            </ul>
+        </div>
+
+        <div id="page-comments" class="page ease-p3 page-hide-right">
+            <ul id="list-comments">
+                <li>
+                    <span class="view-commentUserIcon"></span>
+                    <span class="container-comment">
+                        <span class="tag-commentUser">Jonham</span>
+                        <span class="tag-commentDate">2016年5月31日</span>
+                        <span class="tag-commentContent">Live in the Saltwater Room with you.</span>
+                        <span class="tag-commentAgreeCount">999</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div id="sidebar-left" class="sidebar ease-p3 sidebar-hide">
+            <span id="tag-userMessage">
+                User-Message
+            </span>
+            <ul>
+                <li>我的消息</li>
+                <li>积分商城 <span class="tag">130积分</span></li>
+                <li>付费音乐包</li>
+                <li>在线听歌免流量</li>
+                <li>听歌识曲</li>
+                <li>主题换肤 <span class="tag">官方红</span></li>
+                <li>夜间模式 <span class="btn-switch"></span></li>
+                <li>定时停止播放</li>
+                <li>音乐闹钟</li>
+                <li>驾驶模式</li>
+                <li>我的音乐云盘</li>
+                <li>_</li>
+            </ul>
+            <span class="bottom">
+                <span class="btn">设置</span>
+                <span class="btn">退出应用</span>
+            </span>
         </div>
     </div>
 
+
+    <script src="js/lib/underscore-min.js"></script>
+
+    <script src="js/cross-browser.js"></script>
     <script src="js/$getter.js"></script>
+    <script src="js/globalNamespace.js"></script>
+
+    <script src="js/attachNodeToElement.js"></script>
+    <script src="js/attachDOMElementEvents.js"></script>
     <script src="js/app.js"></script>
     <script src="js/time-range.js"></script>
+    <script src="js/file-load.js"></script>
+    <script src="js/drag.js"></script>
+    <script src="js/debug-shorthand.js"></script>
 </body>
 </html>
