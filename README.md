@@ -19,12 +19,18 @@ And you're welcome to fork and issue whatever come up in your mind.
 6. scripts making to Video or audio: add time tags and fix accuration.
 7. some other UI besides NetEase one.
 8. **History API** for using return button on browsers to route between each page and menu
+9. lyric search Engine or Song message search Engine, further album cover search engine
+
 
 <hr>
 ## Features or Functions need tests
-01. **Supports for Browsers**
-    - [ ] Wechat(enbeded QQ Browser): auto crack down
+01. **Supports for Browsers**: both Wechat and UC won't crack, but with same error message
+    - [ ] Wechat(enbeded QQ Browser): auto crack down    
+        BUGS: attachNodeToElement.js:300 drag.js:73
     - [ ] UC browser : unique input[type=file], crack down when select any kind of files
+        BUGS: attachNodeToElement.js:300 drag.js:73    
+    **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
+    I've catch errors both in rangeTime and rangeVolume.
 02. **Song** and **SongList**
     - [ ] songlist .next, .play, .pause, .stop ...
 
@@ -33,7 +39,6 @@ And you're welcome to fork and issue whatever come up in your mind.
 01. touch events:
     - [ ] cancel browsers default gestures detection.    
     ( e.preventDefault, e.stopPropagation )
-    - [ ]
 02. - [x] `<input type='file>` display
 03. - [ ] lyric loader and _timeupdate_ event for AudioContext decoded audio
 04. - [x] highlight Ranges objects
@@ -49,3 +54,6 @@ And you're welcome to fork and issue whatever come up in your mind.
 14. - [ ] mute and volume controls on SongList
 15. - [ ] wait and react until animations stop
 16. - [ ] zip up _svg_ files of icon
+17. - [ ] rangeTime throw error when drag event happened before the audio is playing
+18. - [ ] #page-comments needs basic framework setup
+19. - [ ] drag rangeTime and set value to undefined audio throw errors
