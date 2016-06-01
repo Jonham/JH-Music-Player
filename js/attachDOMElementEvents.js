@@ -65,6 +65,7 @@ var attachDOMElementEvents = function() {
         NS.stackShowup.push(function(){ menuShare.node.hide(); });
     });
 
+
     //onEVENTS-05: btnFileOption
     var btnFileOption = $('.btn-fileOpt'),
         menuFileOption = $('#menu-fileOpt');
@@ -73,6 +74,16 @@ var attachDOMElementEvents = function() {
         NS.stackShowup.releaseAll();
         menuFileOption.node.show();
         NS.stackShowup.push(function(){ menuFileOption.node.hide(); });
+    });
+
+    //onEVENTS-05-1: btnSidebarLeft
+    var btnSidebarLeft = $('.icon-menu-w'),
+        sidebarLeft  = $('#sidebar-left');
+    $stopPropagation(btnSidebarLeft, 'click');
+    $click(btnSidebarLeft, function(e) {
+        NS.stackShowup.releaseAll();
+        sidebarLeft.node.show();
+        NS.stackShowup.push(function(){ sidebarLeft.node.hide(); });
     });
 
 

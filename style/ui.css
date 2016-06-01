@@ -726,6 +726,7 @@ ul#lyric {
 	padding: .8em;
 	text-align: left;
 }
+
 #page-comments .btn-back {
 	display: inline-block;
 	padding: .8em;
@@ -759,7 +760,6 @@ ul#lyric {
 	right: 0;
 	top: 1em;
 }
-
 
 #list-comments {
 	margin: 0 .5em;
@@ -816,10 +816,51 @@ ul#lyric {
 	right: 0;
 	top: 0;
 }
+
+
+/* #page-system */
 #page-system {
 	background-color: #dddddd;
 }
-/*#page-system */
+
+#page-system .header {
+	background-color: red;
+	color: white;
+	padding: .8em;
+	display: block;
+	text-align: left;
+	text-align: center;
+}
+#page-system .header > .icon-menu-w {
+	position: absolute;
+	left: 0;
+}
+#page-system .header > .icon-search {
+	position: absolute;
+	right: 0;
+}
+#page-system > .subpage-container {
+	position: relative;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+.sub-page {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+}
+#subpage-netease {
+
+}
+#subpage-music {
+
+}
+#subpage-people {
+
+}
+
 .ban-controls {
 	position: absolute;
 	display: block;
@@ -1008,7 +1049,7 @@ input[type=file]:before {
 .file-loader {
 	width: 100%;
 	display: block;
-	position: absolute;
+	position: relative;
 	top: 0;
 	box-sizing: border-box;
 	overflow: hidden;
@@ -1022,6 +1063,7 @@ input[type=file]:before {
     background-color: black;
     color: white;
 	z-index: -1;
+	text-align: center;
 }
 ::-ms-browse, [type='file'] {
 	display: none;
@@ -1030,12 +1072,17 @@ input[type=file]:before {
 	display: none;
 }
 
+
 button#btn-fullscreen {
-	height: 8em;
-	width: 100%;
+    display: block;
+    width: 100%;
 	box-sizing: border-box;
-	font-size: 20px;
-	text-align: left;
+    padding: .5em 1em;
+    font-size: 1.4em;
+    background-color: black;
+    color: white;
+	z-index: -1;
+	text-align: center;
 }
 button#btn-showConsole {
 	height: 2em;
@@ -1102,6 +1149,14 @@ span.header {
 
 .icon-right-arrow { background-image: url('icons/arrow-right-w.svg'); }
 .icon-thumb-up { background-image: url('icons/thumb-up-w.svg')}
+/* system page */
+.icon-menu-w { background-image: url('icons/menu-w.svg')}
+.icon-netease { background-image: url('icons/home-w.svg')}
+.icon-music { background-image: url('icons/music-w.svg')}
+.icon-people { background-image: url('icons/people-w.svg')}
+.icon-search { background-image: url('icons/search-w.svg')}
+
+
 /* share menu */
 .icon-shareToYun { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
