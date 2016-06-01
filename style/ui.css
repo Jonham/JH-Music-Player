@@ -212,14 +212,13 @@ nav {
     padding-top: 10px;
     vertical-align: middle;
 }
-#btn-back, #btn-share {
+#page-main .btn-back, #btn-share {
     margin-top: .5em;
     display: inline-block;
     padding: .7em;
     background-size: contain;
-    cursor: pointer;
 }
-#btn-back {
+.btn-back {
     background-image: url('icons/back-w.svg');
 	position: absolute;
 	top: .5em;
@@ -721,30 +720,76 @@ ul#lyric {
 #page-comments {
 	background-color: #dddddd;
 }
+#page-comments .header {
+	background-color: red;
+	color: white;
+	padding: .8em;
+	text-align: left;
+}
+#page-comments .btn-back {
+	display: inline-block;
+	padding: .8em;
+	background-size: contain;
+}
+#page-comments .tag-commentCount {
+	margin-left: 2em;
+}
+#page-comments .tag-commentCount:before {
+	content: '评论(';
+}
+#page-comments .tag-commentCount:after {
+	content: ')';
+}
+#page-comments .ban-controls {
+	padding: .5em;
+	height: 4em;
+	width: 100%;
+	display: block;
+	position: relative;
+}
+#page-comments .tag-message {
+	background-color: #aaa;
+	display: block;
+	padding: .3em .5em;
+	font-size: .5em;
+	color: rgba(0,0,0,.8);
+}
+#page-comments .btn-moreMessage {
+	position: absolute;
+	right: 0;
+	top: 1em;
+}
+
+
 #list-comments {
-	list-style: none;
 	margin: 0 .5em;
 	padding: 0;
 }
-#list-comments>li {
+#list-comments>span {
 	display: block;
 	width: 100%;
 	position: relative;
-	margin-top: .5em;
+	margin: .5em 0;
 }
 #list-comments .view-commentUserIcon {
 	width: 2em;
 	height: 2em;
 	border-radius: 1em;
-	background-color: red;
+	background-image: url('icons/person-b.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 50%;
 	margin: 0 .5em;
 	display: inline-block;
+	position: absolute;
 	left: 0;
 }
 #list-comments .container-comment {
 	display: inline-block;
-	position: absolute;
-	width: 80%;
+	position: relative;
+	width: 100%;
+	left: 0;
+	padding-left: 3em;
 	box-sizing: border-box;
 }
 .container-comment > span {
@@ -759,23 +804,23 @@ ul#lyric {
 	font-size: .5em;
 }
 .container-comment > .tag-commentContent {
-
+	padding-bottom: 1em;
+	border-bottom: 1px solid rgba(100,100,100,.2);
 }
 .container-comment > .tag-commentAgreeCount {
 	color: rgba(0,0,0,.6);
 	font-size: .5em;
-	display: inline-block;
+	display: inline-block !important;
 	position: absolute;
+	width: auto;
 	right: 0;
 	top: 0;
-}
-.container-comment > .tag-commentAgreeCount:after {
-	content:
 }
 #page-system {
 	background-color: #dddddd;
 }
-#page-system .ban-controls {
+/*#page-system */
+.ban-controls {
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -786,19 +831,21 @@ ul#lyric {
 
 	cursor: pointer;
 }
-.ban-controls .view-album {
+/*.ban-controls */
+.view-album {
 	display: inline-block;
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-image: url('../OneRepublic.jpg');
 	background-position: 50%;
-	padding: 1.3em;
-	margin: .2em;
+	padding: 1.5em;
+	margin: 0;
 }
-.ban-controls .tag-songMessage {
+/*.ban-controls */
+.tag-songMessage {
 	display: inline-block;
 	position: absolute;
-	margin: .6em .4em;
+	margin: .5em .4em;
 }
 .tag-songMessage span {
 	display: block;
@@ -1052,8 +1099,11 @@ span.header {
 	margin-right: .5em;
 	vertical-align: middle;
 }
+
+.icon-right-arrow { background-image: url('icons/arrow-right-w.svg'); }
+.icon-thumb-up { background-image: url('icons/thumb-up-w.svg')}
 /* share menu */
-.icon-shareToYun  { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToYun { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToTencent { background-image: url('icons/addtolist-b.svg'); }
 .icon-shareToYixin { background-image: url('icons/addtolist-b.svg'); }

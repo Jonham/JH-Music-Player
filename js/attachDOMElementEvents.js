@@ -75,6 +75,7 @@ var attachDOMElementEvents = function() {
         pageSystem = $('#page-system'),
         btnComments = $('.btn-comments'),
         pageComments = $('#page-comments'),
+        btnCommentsBack = $(pageComments, '.btn-back'),
         areaControls = $(pageSystem, '.ban-controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
@@ -89,8 +90,16 @@ var attachDOMElementEvents = function() {
     //onEVENTS-07: bind up onBtnCommments
     // Notes: following and using onEVENTS-06
     $click(btnComments, function(e) {
-        pageMain.node.hide();
-        pageComments.node.show();
+        // pageMain.node.hide();
+        // pageComments.node.show();
+        pageMain.classList.add('page-hide-left');
+        pageComments.classList.remove('page-hide-right');
+    });
+    $click(btnCommentsBack, function(e) {
+        // pageComments.node.hide();
+        // pageMain.node.show();
+        pageComments.classList.add('page-hide-right');
+        pageMain.classList.remove('page-hide-left');
     });
     // JH-bugs: return btn on pageComments
 
