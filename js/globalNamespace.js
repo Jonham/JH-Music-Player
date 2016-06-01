@@ -145,19 +145,25 @@
         }
 
         var ctx = new AudioContext();
-        var currentPlayingSongs = null;
+        var currentPlayingSong = null;
         var headGain = ctx.createGain(); // this gain works as the headoffice to control all volume of inputs
             headGain.connect(ctx.destination);
 
         // this works as Center controller
         var controller = {
             play: function( inTime ) {
+                var currentPlayingSong = NS.audio.currentPlayingSong;
                 console.log('play in ' + inTime);
-                return currentPlayingSongs;
+                if (currentPlayingSong.paused) {
+                    currentPlayingSong.play();
+                }
+                return currentPlayingSong;
             },
             pause: function( inTime ) {
+                var currentPlayingSong = NS.audio.currentPlayingSong;
                 console.log('play in ' + inTime);
-                return currentPlayingSongs;
+                NS.audio.currentPlayingSong.pause();
+                return currentPlayingSong;
             },
             next: function() {},
             stop: function() {},
@@ -165,7 +171,7 @@
                 headGain.gain.value = 0;
             },
             songEnd: function(song) {
-                songlist.playNext();
+                NS.audio.songList.playNext();
             },
         };
 
@@ -201,6 +207,9 @@
             // 4_sourceBuffer
             this.output = this.sourceBufferNode = this.gainNode = null;
             this.duration = null; // message after audio decode
+            // for state after play
+            this.paused = false;
+            this.stopped = false;
 
             // if get argument file
             if (file && file.toString() === '[object File]') { this.init( file ); }
@@ -256,6 +265,7 @@
 
                 return me;
             },
+            //Notes: readFile is an asynchronous function
             readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
                 var me = this;
                 // if ( me._currentStep > '2_readFile' || me._state == 'ING' ) {
@@ -296,6 +306,7 @@
                 };
                 return me;
             },
+            //Notes: decode is an asynchronous function
             decode: function DecodeAudioData( callback ) { // asynchronous function
                 var me = this;
                 // if ( me._currentStep > '3_decode' || me._state == 'ING') { return me; }
@@ -318,7 +329,7 @@
                 });
                 return me;
             },
-            createBufferSource: function CreateBufferSourceNode() { // if you want to play one more time
+            createBufferSource: function CreateBufferSourceNode( callback ) { // if you want to play one more time
                 var me = this;
                 // if ( me._currentStep > '4_sourceBuffer' || me._state == 'ING') { return me; }
                 // if ( me._targetStep < '4_sourceBuffer' ) {
@@ -330,9 +341,15 @@
                 var bs = ctx.createBufferSource();
                 bs.onended = function(e) {
                     controller.songEnd( me ); // callback with song
+                    console.log('songEnd: ' + me.title);
                 };
+
                 bs.buffer = this._audioBuffer;
+                if(me.sourceBufferNode) {
+                    me.sourceBufferNode.disconnect();
+                }
                 me.sourceBufferNode = bs;
+                console.log('new sourceBufferNode created.');
 
                 if (me.gainNode) { // if there is a gainNode, connect to it
                     bs.connect(me.gainNode);
@@ -343,6 +360,9 @@
 
                 me._Steps['4_sourceBuffer'] = true;
 
+                if (_.isFunction(callback)) {
+                    callback( me.sourceBufferNode );
+                }
                 return me;
             },
             getDuration: function GetSongDuration() {
@@ -359,7 +379,7 @@
                 // }
 
                 me.duration = me._audioBuffer.duration;
-                return me;
+                return me.duration;
             },
             createGain: function createGain( createNewGain ) {
                 var me = this;
@@ -371,8 +391,11 @@
                 //
                 //     return me;
                 // }
+
                 // if can't get one, create one
-                if (!me.gainNode) { me.gainNode = ctx.createGain(); }
+                if (!me.gainNode) {
+                    me.gainNode = ctx.createGain();
+                }
 
                 me.sourceBufferNode.connect(me.gainNode);
                     me.output = me.gainNode;
@@ -407,35 +430,81 @@
             play: function( inTime ) {
                 var me = this;
                 var inTime = _.isNumber(inTime)? inTime: 0;
+                var lastone = NS.audio.currentPlayingSong;
+
+                // view works
+                NS.dom.viewDisk.node.turnOn();
+                NS.dom.tagSongMessage.node.update( me.title, me.artist );
 
                 try {
-                    if (currentPlayingSongs && currentPlayingSongs !== me) {
-                        currentPlayingSongs.output.disconnect();
+                    // play one song only
+                    if (lastone && lastone !== me) {
+                        lastone.stop();
                     }
+                    // recover from stop or pause
+                    if (me.paused) { // if play after pause, just connect to headGain
+                        me.output.connect(NS.audio.headGain);
+                        me.paused = false;
+                        me.stopped = false;
+                        return me;
+                    }
+
+                    if (me.stopped) { // create newe buffersource if me had been stop
+                        me.createBufferSource(function() {
+                            me.stopped = false;
+                            me.paused = false;
+                            me.play();
+                        });
+                        return me;
+                    }
+
+                    NS.audio.currentPlayingSong = me;
                     if (me._Steps['4_sourceBuffer']) {
-                        currentPlayingSongs = me;
                         // play if sourceBufferNode was never been played
+                        me.createGain();
+                        me.output.connect(NS.audio.headGain);
                         me.sourceBufferNode.start( inTime );
                     } else {
-                        me.connect( function() { me.sourceBufferNode.start(inTime); } );
-                        currentPlayingSongs = me;
+                        // use connect to handle all asynchronous functions
+                        me.connect( function() {
+                            me.sourceBufferNode.start(inTime);
+                        });
                     }
+
                 } catch(e) { // sourceBufferNode is already play
                     console.log(e);
                     me.output.disconnect();
-                    me.createBufferSource();
-                    me.sourceBufferNode.start( inTime );
+
+                    me.createBufferSource(function(bufferSource) {
+                        console.log('createBufferSource callback');
+                        me.createGain();
+                        me.play();
+                        // me.output.connect(NS.audio.headGain);
+                    });
                 }
                 return me;
             },
             stop: function( inTime ) {
                 var me = this;
+                if (me.stopped) { return me; }
                 if (me._Steps['4_sourceBuffer']) {
-                    me.sourceBufferNode.stop( inTime );
+
+                    NS.dom.viewDisk.node.turnOff();
+
+                    me.stopped = true;
                     me.output.disconnect();
+                    me.sourceBufferNode.stop( inTime );
                 }
                 return me;
+            },
+            pause: function( inTime ) {
+                var me = this;
+                if (me.paused || me.stopped) { return me; }
+                NS.dom.viewDisk.node.turnOff();
 
+                me.output.disconnect(NS.audio.headGain);
+                me.paused = true;
+                return me;
             },
             next: function next() {
                 // var me = this;
@@ -542,13 +611,14 @@
             };
             songlist.output = function() {};
             songlist.play = function( index ) {
-                if (typeof(+index) == 'number' && +index < songlist.length) {
+                if (_.isNumber(+index) && +index < songlist.length) {
                     songlist[index].play(0);
                     songlist.playing = index;
                     songlist.next = (index + 1) >= songlist.length? 0: (index+1);
                 }
             };
             songlist.playNext = function() {
+                // JH-todo: songlist should has a modes and playNext should add supports to that
                 songlist.play(songlist.next);
             };
             return songlist;
@@ -562,7 +632,7 @@
             ctx: ctx,
             headGain: headGain,
             songList: songList,
-            currentPlayingSongs: currentPlayingSongs,
+            currentPlayingSong: currentPlayingSong,
             controller: controller,
         }
     }
