@@ -41,11 +41,7 @@ var attachDOMElementEvents = function() {
         if (e.target.tagName === 'LI') {
             e.stopPropagation();
             var index = $wrap(e.target).data('index');
-            var lastSongs = NS.audio.currentPlayingSongs,
-                songList = NS.audio.songList;
-            _.each(lastSongs, function( song ) {
-                song.stop();
-            });
+            var songList = NS.audio.songList;
 
             songList.play(index);
         }
