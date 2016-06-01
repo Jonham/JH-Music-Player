@@ -29,10 +29,17 @@ var attachDOMElementEvents = function() {
 
     //onEVENTS-03: menuSongList click
     var btnSongList = $('#btn-songList'),
+        btnSongListSub = $('.btn-songList'),
         menuSongList = $('#menu-songlist'),
         containerSongList = $(menuSongList, '#songlist');
     $stopPropagation(btnSongList, 'click');
     $click(btnSongList, function(e) {
+        NS.stackShowup.releaseAll();
+        menuSongList.node.show();
+        NS.stackShowup.push(function(){ menuSongList.node.hide(); });
+    });
+    $click(btnSongListSub, function(e) {
+        e.stopPropagation();
         NS.stackShowup.releaseAll();
         menuSongList.node.show();
         NS.stackShowup.push(function(){ menuSongList.node.hide(); });

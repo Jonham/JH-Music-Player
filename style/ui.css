@@ -634,8 +634,8 @@ ul#lyric {
 }
 
 #menu-songlist {
-    height: 50%;
-    top: 50%;
+    height: 60%;
+    top: 40%;
     text-align: left;
 	overflow: hidden;
 }
