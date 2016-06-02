@@ -736,7 +736,7 @@ ul#lyric {
 #page-comments .tag-commentCount:after {
 	content: ')';
 }
-#page-comments .ban-controls {
+#page-comments .bar-sub-controls {
 	padding: .5em;
 	height: 4em;
 	width: 100%;
@@ -856,7 +856,7 @@ ul#lyric {
 
 }
 
-.ban-controls {
+.bar-sub-controls {
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -867,7 +867,7 @@ ul#lyric {
 
 	cursor: pointer;
 }
-/*.ban-controls */
+/*.bar-sub-controls */
 .view-albumCover {
 	display: inline-block;
 	background-repeat: no-repeat;
@@ -877,7 +877,7 @@ ul#lyric {
 	padding: 1.5em;
 	margin: 0;
 }
-/*.ban-controls */
+/*.bar-sub-controls */
 .tag-songMessage {
 	display: inline-block;
 	position: absolute;
@@ -895,14 +895,14 @@ ul#lyric {
 	color: rgba(0,0,0,.8);
 	font-size: .6em;
 }
-.ban-controls .view-controls {
+.bar-sub-controls .view-controls {
 	margin-top: 1em;
 	display: inline-block;
 	position: absolute;
 	right: 0;
 }
-.ban-controls .btn-songList,
-.ban-controls .btn-nextSong {
+.bar-sub-controls .btn-songList,
+.bar-sub-controls .btn-nextSong {
 	margin: 0;
 	padding: 1em;
 	background-size: contain;
@@ -911,7 +911,7 @@ ul#lyric {
 	border: 0;
 }
 .btn-songList { background-image: url('icons/list-r.svg'); }
-.ban-controls .btn-play {
+.bar-sub-controls .btn-play {
 	background-image: url('icons/play-r.svg');
 	background-size: cover;
 	background-position: 50%;
@@ -921,8 +921,8 @@ ul#lyric {
 	margin: 0 .5em;
 	padding: .5em 1em;
 }
-.ban-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
-.ban-controls .range {
+.bar-sub-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
+.bar-sub-controls .range {
 	display: inline-block;
 	position: absolute;
 	height: 2px;
@@ -931,7 +931,7 @@ ul#lyric {
 	left: 0;
 	text-align: left;
 }
-.ban-controls .range-fill {
+.bar-sub-controls .range-fill {
 	width: 60%;
 	display: inline-block;
 	left: 0;
@@ -1202,12 +1202,12 @@ span.header {
 
 
 /* share menu */
-.icon-shareToYun { background-image: url('icons/addtolist-b.svg'); }
-.icon-shareToMsg { background-image: url('icons/addtolist-b.svg'); }
-.icon-shareToTencent { background-image: url('icons/addtolist-b.svg'); }
-.icon-shareToYixin { background-image: url('icons/addtolist-b.svg'); }
-.icon-shareToURL { background-image: url('icons/addtolist-b.svg'); }
-.icon-shareToOtherWays { background-image: url('icons/addtolist-b.svg'); }
+.icon-shareToYun { background-image: url('icons/cloud-b.svg'); }
+.icon-shareToMsg { background-image: url('icons/mail-b.svg'); }
+.icon-shareToTencent { background-image: url('icons/wechat-g.png'); }
+.icon-shareToYixin { background-image: url('icons/yixin_logo.png'); }
+.icon-shareToURL { background-image: url('icons/link-b.svg'); }
+.icon-shareToOtherWays { background-image: url('icons/more-horiz-b.svg'); }
 
 /* file option menu */
 .icon-addTo { background-image: url('icons/addtolist-b.svg'); }

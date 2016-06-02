@@ -94,13 +94,14 @@ var attachDOMElementEvents = function() {
         btnComments = $('.btn-comments'),
         pageComments = $('#page-comments'),
         btnCommentsBack = $(pageComments, '.btn-back'),
-        areaControls = $(pageSystem, '.ban-controls');
+        barSubControlCommentsPage = $(pageComments, '.bar-sub-controls'),
+        barSubControlSystemPage = $(pageSystem, '.bar-sub-controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
         pageSystem.node.show();
     });
     // bugs: polyfill  shortcut to return to pageMain
-    $click(areaControls, function(e) {
+    $click(barSubControlSystemPage, function(e) {
         pageSystem.node.hide();
         pageMain.node.show();
     });
@@ -118,8 +119,15 @@ var attachDOMElementEvents = function() {
         // pageMain.node.show();
         pageComments.classList.add('page-hide-right');
         pageMain.classList.remove('page-hide-left');
+    });// JH-bugs: return btn on pageComments
+    // JH-bugs: this sub-controls should make player play song and return to #pagemain
+    // currrently just make it return to #pagemain
+    $click(barSubControlCommentsPage, function(e) {
+        // pageComments.node.hide();
+        // pageMain.node.show();
+        pageComments.classList.add('page-hide-right');
+        pageMain.classList.remove('page-hide-left');
     });
-    // JH-bugs: return btn on pageComments
 
 
     //onEVENTS-08: btnPlayMode click

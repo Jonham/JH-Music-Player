@@ -122,10 +122,10 @@ var stopMobileBrowserDefaultGesture = function( mobile, target ) {
     if (!mobile || !$.isDOMElement(target)) { return false; }
 
     $preventDefault(target, 'touchstart');
-    $stopPropagation(target, 'touchstart');
+    // $stopPropagation(target, 'touchstart');
     $preventDefault(target, 'touchmove');
-    $stopPropagation(target, 'touchmove');
+    // $stopPropagation(target, 'touchmove');
     $preventDefault(target, 'touchend');
-    $stopPropagation(target, 'touchend');
+    // $stopPropagation(target, 'touchend');
 };
 stopMobileBrowserDefaultGesture( NS.supports.moible, window);
