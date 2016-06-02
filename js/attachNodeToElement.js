@@ -364,13 +364,13 @@ var addDOMElementNodeProperty = function() {
         }
     });
 
-    //BINDUP-03: #view-container #view-album #view-disk
+    //BINDUP-03: #view-container #view-album #view-albumCover
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),
         viewLyric = $('#view-lyric'),
         viewAlbum = $('#view-album'),
-        viewDisk  = $(viewAlbum, '.view-disk'),
+        viewDisk  = $(viewAlbum, '.view-albumCover'),
 
         LYRIC = 0,
         ALBUM = 1,

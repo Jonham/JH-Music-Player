@@ -80,18 +80,18 @@
 }
 /* fadein */
 .fade-in {
-        animation: fadein 1s;
--webkit-animation: fadein 1s;
-   -moz-animation: fadein 1s;
+	        animation: fadein 1s;
+	-webkit-animation: fadein 1s;
+	   -moz-animation: fadein 1s;
 }
         @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 @-webkit-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
    @-moz-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 /* fadeout */
 .fade-out {
-        animation: fadeout 1s;
--webkit-animation: fadeout 1s;
-   -moz-animation: fadeout 1s;
+	        animation: fadeout 1s;
+	-webkit-animation: fadeout 1s;
+	   -moz-animation: fadeout 1s;
 }
         @keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
 @-webkit-keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
@@ -117,8 +117,15 @@ span.mask {
 	background-color: rgba(0,0,0,.4);
 }
 
+/* background default */
+.icon-userIcon {
+	background-image: url('../img/Default-Icon-800.jpg');
+	background-size: contain;
+	background-position: 50%;
+	background-repeat: no-repeat;
+}
 
-/* hide */
+/* hide of menu,page,sidebar */
 .menu-hidetoRB { /* hide to right bottom side */
     -webkit-transform-origin: right bottom;
         -moz-transform-origin:right bottom;
@@ -353,7 +360,7 @@ hr.divider {
     vertical-align: middle;
     opacity: 0;
 }
-#view-album > span.view-disk {
+#view-album > span.view-albumCover {
     display: inline-block;
     position: relative;
     top: 0;
@@ -361,7 +368,7 @@ hr.divider {
     border-radius: 10em;
     border: black 2.5em solid;
 
-    background-image: url('../OneRepublic.jpg');
+    /*background-image: url('../OneRepublic.jpg');*/
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50%;
@@ -861,11 +868,11 @@ ul#lyric {
 	cursor: pointer;
 }
 /*.ban-controls */
-.view-album {
+.view-albumCover {
 	display: inline-block;
 	background-repeat: no-repeat;
 	background-size: contain;
-	background-image: url('../OneRepublic.jpg');
+	/*background-image: url('../OneRepublic.jpg');*/
 	background-position: 50%;
 	padding: 1.5em;
 	margin: 0;
@@ -906,7 +913,8 @@ ul#lyric {
 .btn-songList { background-image: url('icons/list-r.svg'); }
 .ban-controls .btn-play {
 	background-image: url('icons/play-r.svg');
-	background-size: contain;
+	background-size: cover;
+	background-position: 50%;
 	background-repeat: no-repeat;
 	border: 2px solid red;
 	border-radius: 100%;
@@ -939,7 +947,7 @@ ul#lyric {
 	position: absolute;
 	background-color: white;
 
-	overflow-y: scroll;
+	overflow-y: hidden;
 }
 .sidebar #tag-userMessage{
 	width: 100%;
@@ -957,16 +965,18 @@ ul#lyric {
 	left: 0.5em;
 	display: inline-block;
 }
-.view-userMessage .icon-userIcon {
+.view-userMessage .container-userIcon {
 	display: block;
-	padding: 2em;
-	border-radius: 2em;
+	position: relative;
 	margin-bottom: 1em;
-
-	background-image: url('./icons/person-b.svg');
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: 50%;
+}
+.view-userMessage .container-userIcon .round-icon{
+	display: block;
+	position: absolute;
+	bottom: 0;
+	border-radius: 2em;
+	padding: 2em;
+	background-size: cover;
 }
 .view-userMessage .tag-userName {
 	color: white;
@@ -997,12 +1007,12 @@ ul#lyric {
 }
 .sidebar .bottom {
 	display: block;
-	position: fixed;
 	bottom: 0;
 	left: 0;
 	background-color: white;
 
-	width: 75%;
+	width: 100%;
+	max-width: 20em;
 	text-align: center;
 	height: 2em;
 }
@@ -1019,6 +1029,7 @@ ul#lyric {
 
 #sidebar-left {
     width: 75%;
+	max-width: 20em;
     left: 0;
     top: 0;
 }
@@ -1176,7 +1187,10 @@ span.header {
 	margin-right: .5em;
 	vertical-align: middle;
 }
-
+.round-icon{
+	display: block;
+	background-size: cover;
+}
 .icon-right-arrow { background-image: url('icons/arrow-right-w.svg'); }
 .icon-thumb-up { background-image: url('icons/thumb-up-w.svg')}
 /* system page */

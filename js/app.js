@@ -85,8 +85,6 @@ window.onload = function() {
 
     startPlay();
 
-    $id('page-main').style.backgroundImage = 'url(./OneRepublic.jpg)';
-
     var preloadImage = function( urlArray ) {
         if (!_.isArray(urlArray)) { return false; }
 

@@ -20,6 +20,7 @@ And you're welcome to fork and issue whatever come up in your mind.
 7. some other UI besides NetEase one.
 8. **History API** for using return button on browsers to route between each page and menu
 9. lyric search Engine or Song message search Engine, further album cover search engine
+10. make AJAX audio loading as a alternate plan when user device don't support AudioContext
 
 
 <hr>

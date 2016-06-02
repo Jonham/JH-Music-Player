@@ -131,7 +131,7 @@ var attachDOMElementEvents = function() {
     //onEVENTS-09: JH-bugs: when to turn lrc to album
     var viewContainer = $('#view-container'),
         viewAlbum = $('#view-album'),
-        viewDisk = $(viewAlbum, '.view-disk'),
+        viewDisk = $(viewAlbum, '.view-albumCover'),
         viewLyric = $('#view-lyric');
     $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) {
@@ -152,15 +152,14 @@ function startPlay() {
         'play':  "url('./style/icons/play-w.svg')",
         'pause': "url('./style/icons/pause-w.svg')"
     };
-    var once = false,
-        viewDisk = $('span.view-disk');
+    var once = true,
+        viewDisk = $('span.view-albumCover');
 
     var playOrPause = function() {
-        if (once) {
+        if (!once) {
             audio.paused ? audio.play() : audio.pause();
         }
         else { // first time
-            once = true;
 
             audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
@@ -196,6 +195,8 @@ function startPlay() {
                 var aFocus = Array.prototype.slice.apply(domLIs);
                 aFocus.forEach(function(ele) {ele.className = 'line';});
             });
+
+            once = false;
         }
     }; // playOrPause()
 
