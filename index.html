@@ -27,7 +27,7 @@
         <!-- this span.mask help identify click events -->
         <span class="mask"></span>
 
-        <div id="page-main" class="page ease-p3 page-hide-right">
+        <div id="page-main" class="page ease-p3 icon-userIcon page-hide-right">
             <div id="main">
                 <nav class='header row'>
                     <span id="btn-back" class='left btn btn-back'></span>
@@ -73,7 +73,7 @@
                     </div>
                     <!-- page2 -->
                     <div id='view-album' style="display:none;">
-                        <span class='view-disk ease-p6 btn'></span>
+                        <span class='view-albumCover icon-userIcon ease-p6 btn'></span>
                         <span class='song-opt-grp'>
                             <span id='btnFavorite' class="favorite btnToggle btn"></span>
                             <span class="btn-comments btn"><span>0</span></span>
@@ -93,14 +93,14 @@
                             <span class="range-btn" style="left:0%"></span>
                             <span class="empty"></span>
                         </div>
-                        <span id="tag-totalTime">04:55</span>
+                        <span id="tag-totalTime">06:06</span>
                     </div>
 
                     <div id='controls' class="container row ease-p6">
                         <audio src=""></audio>
                         <span id="btn-playMode" class='left'></span>
                         <span id="btn-preSong"></span>
-                        <span class="btn btn-play"></span>
+                        <span class="btn btn-play icon-btn-pause-w"></span>
                         <span class="btn btn-nextSong"></span>
                         <span id="btn-songList" class='right'></span>
                     </div>
@@ -140,15 +140,15 @@
                 </span>
             </span>
 
-            <span class="ban-controls">
-                <span class="view-album"></span>
+            <span class="bar-sub-controls">
+                <span class="view-albumCover icon-userIcon"></span>
                 <span class="tag-songMessage">
                     <span class="tag-songTitle tag-title">The Saltwater Room</span>
                     <span class="tag-songArtist tag-artist">Owl City</span>
                 </span>
                 <span class="view-controls right">
                     <span class="btn btn-songList"></span>
-                    <span class="btn btn-play"></span>
+                    <span class="btn btn-play icon-btn-pause-r"></span>
                     <span class="btn btn-nextSong"></span>
                 </span>
 
@@ -212,8 +212,8 @@
                 <li><span class="btn icon icon-download"></span>
                                 <span class="btn download">下载</span></li>
                 <li><span class="icon icon-tag-artist"></span>
-                                <span class='tag-artist'>歌手：
-                                        <span class="btn inline value">Owl City</span></span></li>
+                                <span class='tag-artist-wrapper'>歌手：
+                                        <span class="btn inline tag-artist">Owl City</span></span></li>
                 <li><span class="icon icon-tag-album"></span>
                                 <span class='tag-album'>专辑：
                                         <span class="btn inline value">The Saltwater Room</span></span></li>
@@ -234,8 +234,8 @@
                 <span class="btn btn-back"></span>
                 <span class="tag tag-commentCount">99</span>
             </span>
-            <span class="ban-controls">
-                <span class="view-album"></span>
+            <span class="bar-sub-controls">
+                <span class="view-albumCover icon-userIcon"></span>
                 <span class="tag-songMessage">
                     <span class="tag-songTitle tag-title">The Saltwater Room</span>
                     <span class="tag-songArtist tag-artist">Owl City</span>
@@ -286,7 +286,7 @@
         <div id="sidebar-left" class="sidebar ease-p3 sidebar-hide">
             <span id="tag-userMessage">
                 <span class="view-userMessage left">
-                    <span class="icon icon-userIcon"></span>
+                    <span class="container-userIcon"><span class="icon icon-userIcon round-icon"></span></span>
                     <span class="tag-userName">Jonham</span>
                     <span class="tag-userRank">Lv.6</span>
                 </span>
@@ -318,7 +318,6 @@
                                 <span class="label-driving">驾驶模式</span></li>
                 <li><span class="icon icon-cloud"></span>
                                 <span class="label-cloudDisk">我的音乐云盘</span></li>
-                <li>_</li>
             </ul>
             <span class="bottom">
                 <span class="btn">设置</span>

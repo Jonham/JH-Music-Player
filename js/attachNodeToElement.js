@@ -335,7 +335,9 @@ var addDOMElementNodeProperty = function() {
 
 
     //BINDUP-02: tagSongMessage.node.update(String title, String artist)
-    var tagSongMessage = $('#tag-songMessage');
+    var tagSongMessage = $('#tag-songMessage'),
+        tagTitleGroup = $('.tag-title'),
+        tagArtistGroup = $('.tag-artist');
     NS.dom.tagSongMessage = attachNodeTo(tagSongMessage, {
         update: function(vTitle, vArtist) {
             var setString = function(target, value) {
@@ -352,25 +354,25 @@ var addDOMElementNodeProperty = function() {
                 }
             };
 
-            var title = $(tagSongMessage, '#tag-songTitle'),
-                artist = $(tagSongMessage, '#tag-songArtist');
+            // var title = $(tagSongMessage, '#tag-songTitle'),
+            //     artist = $(tagSongMessage, '#tag-songArtist');
             if(_.isObject(vTitle)) {
-                setString(title, removeSubfix(vTitle.title) );
-                setString(artist, vTitle.artist);
+                _.each(tagTitleGroup, function( titleItem ) { setString(titleItem, removeSubfix(vTitle.title) );  } );
+                _.each(tagArtistGroup, function( artistItem ) { setString(artist, vTitle.artist);  } );
             } else {
-                setString(title, removeSubfix(vTitle) );
-                setString(artist, vArtist);
+                _.each(tagTitleGroup, function( titleItem ) { setString(titleItem, removeSubfix(vTitle) );  } );
+                _.each(tagArtistGroup, function( artistItem ) { setString(artistItem, vArtist );  } );
             }
         }
     });
 
-    //BINDUP-03: #view-container #view-album #view-disk
+    //BINDUP-03: #view-container #view-album #view-albumCover
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),
         viewLyric = $('#view-lyric'),
         viewAlbum = $('#view-album'),
-        viewDisk  = $(viewAlbum, '.view-disk'),
+        viewDisk  = $(viewAlbum, '.view-albumCover'),
 
         LYRIC = 0,
         ALBUM = 1,
@@ -444,5 +446,28 @@ var addDOMElementNodeProperty = function() {
     $click(dConsole.output, function(e) {
         dConsole.output.node.min();
     });
+
+    //BINDUP-06: audio control buttons
+    var btnPlaySystem = $(pageSystem, '.btn-play'),
+        btnPlayMainpage = $(pageMain, '.btn-play');
+    NS.dom.btnPlay = attachNodeTo( btnPlayMainpage, {
+        play: function() {
+            btnPlaySystem.classList.add('icon-btn-play-r');
+            btnPlaySystem.classList.remove('icon-btn-pause-r');
+
+            btnPlayMainpage.classList.add('icon-btn-play-w');
+            btnPlayMainpage.classList.remove('icon-btn-pause-w');
+        },
+        pause: function() {
+            btnPlaySystem.classList.add('icon-btn-pause-r');
+            btnPlaySystem.classList.remove('icon-btn-play-r');
+
+            btnPlayMainpage.classList.add('icon-btn-pause-w');
+            btnPlayMainpage.classList.remove('icon-btn-play-w');
+        }
+    });
+    btnPlaySystem.node = btnPlayMainpage.node;
+
+
 };
 addDOMElementNodeProperty();

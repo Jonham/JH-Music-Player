@@ -94,13 +94,14 @@ var attachDOMElementEvents = function() {
         btnComments = $('.btn-comments'),
         pageComments = $('#page-comments'),
         btnCommentsBack = $(pageComments, '.btn-back'),
-        areaControls = $(pageSystem, '.ban-controls');
+        barSubControlCommentsPage = $(pageComments, '.bar-sub-controls'),
+        barSubControlSystemPage = $(pageSystem, '.bar-sub-controls');
     $click(btnBack, function(e) {
         pageMain.node.hide();
         pageSystem.node.show();
     });
     // bugs: polyfill  shortcut to return to pageMain
-    $click(areaControls, function(e) {
+    $click(barSubControlSystemPage, function(e) {
         pageSystem.node.hide();
         pageMain.node.show();
     });
@@ -118,8 +119,15 @@ var attachDOMElementEvents = function() {
         // pageMain.node.show();
         pageComments.classList.add('page-hide-right');
         pageMain.classList.remove('page-hide-left');
+    });// JH-bugs: return btn on pageComments
+    // JH-bugs: this sub-controls should make player play song and return to #pagemain
+    // currrently just make it return to #pagemain
+    $click(barSubControlCommentsPage, function(e) {
+        // pageComments.node.hide();
+        // pageMain.node.show();
+        pageComments.classList.add('page-hide-right');
+        pageMain.classList.remove('page-hide-left');
     });
-    // JH-bugs: return btn on pageComments
 
 
     //onEVENTS-08: btnPlayMode click
@@ -131,7 +139,7 @@ var attachDOMElementEvents = function() {
     //onEVENTS-09: JH-bugs: when to turn lrc to album
     var viewContainer = $('#view-container'),
         viewAlbum = $('#view-album'),
-        viewDisk = $(viewAlbum, '.view-disk'),
+        viewDisk = $(viewAlbum, '.view-albumCover'),
         viewLyric = $('#view-lyric');
     $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) {
@@ -142,25 +150,57 @@ var attachDOMElementEvents = function() {
         viewContainer.node.toggle();
     });
 
+    //onEVENTS-10: audio controls buttons
+    (function() {
+        var btnPre = $id('btn-preSong'),
+            btnPlayGroup = $('.btn-play'),
+            btnNextGroup = $('.btn-nextSong');
+        var tagTotalTime = $('#tag-totalTime');
+
+        var timeOfAudioContext = 0;
+
+        var onPlaySong = function(e) {
+            e.stopPropagation();
+
+            var song = NS.audio.currentPlayingSong,
+                btn = btnPlayGroup[0];
+
+            if (!song) { // no song, load one?
+                $('input[type=file]').click();
+                return false;
+            }
+            else {
+                if (song.paused || song.stopped){
+                    if (song.duration) { tagTotalTime.innerHTML = song.duration; }
+                    timeOfAudioContext = NS.audio.ctx.currentTime;
+                    
+                    song.play();
+                    btn.node.play();
+                }
+                else {
+                    song.pause();
+                    btn.node.pause();
+                }
+            }
+        };
+        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songList.playPre(); };
+        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songList.playNext(); };
+
+        $click(btnPre, onPreSong);
+        _.each(btnNextGroup, function( btnNextsong ) { $click(btnNextsong, onNextSong); });
+        _.each(btnPlayGroup, function( btnPlay ) { $click(btnPlay, onPlaySong); });
+    })();
 
 };
 attachDOMElementEvents();
 
 // this work for <audio>
 function startPlay() {
-    var btnIcons = {
-        'play':  "url('./style/icons/play-w.svg')",
-        'pause': "url('./style/icons/pause-w.svg')"
-    };
-    var once = false,
-        viewDisk = $('span.view-disk');
-
     var playOrPause = function() {
-        if (once) {
+        if (!once) {
             audio.paused ? audio.play() : audio.pause();
         }
         else { // first time
-            once = true;
 
             audio.src = './music/OneRepublic - Good Life.mp3';
             // auto play
@@ -196,8 +236,10 @@ function startPlay() {
                 var aFocus = Array.prototype.slice.apply(domLIs);
                 aFocus.forEach(function(ele) {ele.className = 'line';});
             });
+
+            once = false;
         }
     }; // playOrPause()
 
-    $on(btnPlay, "click", playOrPause);
+    // $on(btnPlay, "click", playOrPause);
 }

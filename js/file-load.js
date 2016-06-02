@@ -135,6 +135,7 @@ var onFileLoad = function() {
             // if this is the first song add, play it right away
             song.connect(function() {
                 song.play(0);
+                NS.dom.btnPlay.node.play();
             });
 
         };
