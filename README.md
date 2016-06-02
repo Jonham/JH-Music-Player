@@ -48,10 +48,10 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] to hide FullScreen button when is not available
 07. Icons and Display
     - [x] Icons for each Page and Menu items
-    - [ ] sub-controls bar in #page-system ( btn-play circle display)
+    - [x] sub-controls bar in #page-system ( btn-play circle display)
     - [ ] zip up _svg_ files of icon
 01. touch events:
-    - [ ] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
+    - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
     - [ ] wait and react until animations stop
 03. lyric and cover

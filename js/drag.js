@@ -65,7 +65,7 @@ function addDragEventsTo( range ) {
     var moveListener = function(e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         var offset = getX(e) - o.clientX; // using clientX get horizontal offset
         var offsetPercent = parseFloat( offset/o.width );
         var totalPercent = o.percent + offsetPercent;   // [0,1]
@@ -117,3 +117,15 @@ function addDragEventsTo( range ) {
 NS.ranges = {};
 NS.ranges.time = new addDragEventsTo(rangeTime);
 NS.ranges.volume = new addDragEventsTo(rangeVolume);
+
+var stopMobileBrowserDefaultGesture = function( mobile, target ) {
+    if (!mobile || !$.isDOMElement(target)) { return false; }
+
+    $preventDefault(target, 'touchstart');
+    $stopPropagation(target, 'touchstart');
+    $preventDefault(target, 'touchmove');
+    $stopPropagation(target, 'touchmove');
+    $preventDefault(target, 'touchend');
+    $stopPropagation(target, 'touchend');
+};
+stopMobileBrowserDefaultGesture( NS.supports.moible, window);

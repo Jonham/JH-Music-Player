@@ -909,6 +909,7 @@ ul#lyric {
 	background-size: contain;
 	background-repeat: no-repeat;
 	border: 2px solid red;
+	border-radius: 100%;
 	margin: 0 .5em;
 	padding: .5em 1em;
 }
