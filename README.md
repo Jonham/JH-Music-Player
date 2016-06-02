@@ -36,24 +36,42 @@ And you're welcome to fork and issue whatever come up in your mind.
 
 <hr>
 ## Bugs need fix
-01. touch events:
-    - [ ] cancel browsers default gestures detection.    
-    ( e.preventDefault, e.stopPropagation )
 02. - [x] `<input type='file>` display
-03. - [ ] lyric loader and _timeupdate_ event for AudioContext decoded audio
 04. - [x] highlight Ranges objects
-05. - [x] dConsole display
-06. - [x] FullScreen API for devices
-07. - [x] Icons for each Page and Menu items
+18. - [x] #page-comments needs basic framework setup
+05. dConsole window display
+    - [x] dConsole display when button 'show console' was pressed
+    - [ ] display in FullScreen mode. [ change as a float window on the head of viewport]
+06. FullScreen API
+    - [x] FullScreen API for devices
+    - [ ] FullScreen Event listeners on other state change
+    - [ ] to hide FullScreen button when is not available
+07. Icons and Display
+    - [x] Icons for each Page and Menu items
+    - [ ] sub-controls bar in #page-system ( btn-play circle display)
+    - [ ] zip up _svg_ files of icon
+01. touch events:
+    - [ ] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
+    - [ ] prevent continuing clicks
+    - [ ] wait and react until animations stop
+03. lyric and cover
+    - [ ] lyric loader and _timeupdate_ event for AudioContext decoded audio
+    - [ ] lyric and album image load when another start
+00. control funcs and buttons
+    - [ ] play, nextSong buttons to work on SongList
+    - [ ] mute and volume controls on SongList
+00. Events
+    - [ ] rangeTime throw error when drag event happened before the audio is playing
+00. Pages, menus, sidebar display
+    - [ ] #sidebar-left bottom position
+    - [ ] #page-comments .btn-back position to highlight
+    - [ ] FOR ALL: add max-height or max-width to each
+    - [ ] FOR ALL: display style and position when on Desktop
 08. - [ ] mask layer for avoiding mistake touches and clicks
 09. - [ ] bind up related blocks
 10. - [ ] images and icons preload
 11. - [ ] songlist: play-modes, counts
-12. - [ ] prevent continuing clicks
-13. - [ ] play, nextSong buttons to work on SongList
-14. - [ ] mute and volume controls on SongList
-15. - [ ] wait and react until animations stop
-16. - [ ] zip up _svg_ files of icon
-17. - [ ] rangeTime throw error when drag event happened before the audio is playing
-18. - [ ] #page-comments needs basic framework setup
 19. - [ ] drag rangeTime and set value to undefined audio throw errors
+20. - [ ] controls in mainpage display in iPhone4 (narrow in width)
+21. - [ ] supports information for all kind of Browsers
+22. - [ ] open-screen animation
