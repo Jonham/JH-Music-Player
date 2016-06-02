@@ -34,7 +34,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     I've catch errors both in rangeTime and rangeVolume.
 02. **Song** and **SongList**
     - [ ] songlist .next, .play, .pause, .stop ...
-
+    - [ ] songlist .playNext, .playPre and related songlist.next and songlist.pre
 <hr>
 ## Bugs need fix
 02. - [x] `<input type='file>` display

@@ -150,19 +150,52 @@ var attachDOMElementEvents = function() {
         viewContainer.node.toggle();
     });
 
+    //onEVENTS-10: audio controls buttons
+    (function() {
+        var btnPre = $id('btn-preSong'),
+            btnPlayGroup = $('.btn-play'),
+            btnNextGroup = $('.btn-nextSong');
+        var tagTotalTime = $('#tag-totalTime');
+
+        var timeOfAudioContext = 0;
+
+        var onPlaySong = function(e) {
+            e.stopPropagation();
+
+            var song = NS.audio.currentPlayingSong,
+                btn = btnPlayGroup[0];
+
+            if (!song) { // no song, load one?
+                $('input[type=file]').click();
+                return false;
+            }
+            else {
+                if (song.paused || song.stopped){
+                    if (song.duration) { tagTotalTime.innerHTML = song.duration; }
+                    timeOfAudioContext = NS.audio.ctx.currentTime;
+                    
+                    song.play();
+                    btn.node.play();
+                }
+                else {
+                    song.pause();
+                    btn.node.pause();
+                }
+            }
+        };
+        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songList.playPre(); };
+        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songList.playNext(); };
+
+        $click(btnPre, onPreSong);
+        _.each(btnNextGroup, function( btnNextsong ) { $click(btnNextsong, onNextSong); });
+        _.each(btnPlayGroup, function( btnPlay ) { $click(btnPlay, onPlaySong); });
+    })();
 
 };
 attachDOMElementEvents();
 
 // this work for <audio>
 function startPlay() {
-    var btnIcons = {
-        'play':  "url('./style/icons/play-w.svg')",
-        'pause': "url('./style/icons/pause-w.svg')"
-    };
-    var once = true,
-        viewDisk = $('span.view-albumCover');
-
     var playOrPause = function() {
         if (!once) {
             audio.paused ? audio.play() : audio.pause();
@@ -208,5 +241,5 @@ function startPlay() {
         }
     }; // playOrPause()
 
-    $on(btnPlay, "click", playOrPause);
+    // $on(btnPlay, "click", playOrPause);
 }

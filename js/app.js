@@ -83,7 +83,7 @@ window.onload = function() {
 
 	// loadLrc("OneRepublic - Good Life.lrc", parseLrc);
 
-    startPlay();
+    // startPlay();
 
     var preloadImage = function( urlArray ) {
         if (!_.isArray(urlArray)) { return false; }
@@ -120,16 +120,11 @@ window.onload = function() {
     preloadImage(aImageURL);
 
 
-    // polyfill
-    var btnPre = $id('btn-preSong'),
-    btnNext = $(mainControls, '.btn-nextSong');
-    $click(btnNext, function(){audio.currentTime = 0; audio.play();});
-    $click(btnPre, function(){audio.currentTime = 0; audio.play();});
-
     // if window receive 'click' event, it will pop up all callback functions in stackShowup
     $click(window, function(e) {
 		NS.stackShowup.releaseAll();
 	}, false);
+    
     onSizeChange()();
 	onFileLoad();
 };

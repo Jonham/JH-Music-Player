@@ -434,7 +434,9 @@
 
                 // view works
                 NS.dom.viewDisk.node.turnOn();
+                // console.warn(me.title + me.artist);
                 NS.dom.tagSongMessage.node.update( me.title, me.artist );
+                // JH-bugs: me.artist is not defined
 
                 try {
                     // play one song only
@@ -562,6 +564,7 @@
         var SongList = function() {
             var songlist = [];
 
+            songlist.pre = 0;
             songlist.next = 1; // index for next one
             songlist.playing = 0; // index for current playing or paused songList
 
@@ -615,11 +618,21 @@
                     songlist[index].play(0);
                     songlist.playing = index;
                     songlist.next = (index + 1) >= songlist.length? 0: (index+1);
+                    songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
+                } else {
+                    var index = 0;
+                    songlist[index].play(0);
+                    songlist.playing = index;
+                    songlist.next = (index + 1) >= songlist.length? 0: (index+1);
+                    songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
                 }
             };
             songlist.playNext = function() {
                 // JH-todo: songlist should has a modes and playNext should add supports to that
                 songlist.play(songlist.next);
+            };
+            songlist.playPre = function() {
+                songlist.play( songlist.pre );
             };
             return songlist;
         };
