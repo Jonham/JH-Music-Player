@@ -64,9 +64,9 @@ And you're welcome to fork and issue whatever come up in your mind.
 00. Events
     - [ ] rangeTime throw error when drag event happened before the audio is playing
 00. Pages, menus, sidebar display
-    - [ ] #sidebar-left bottom position
-    - [ ] #page-comments .btn-back position to highlight
-    - [ ] FOR ALL: add max-height or max-width to each
+    - [x] #sidebar-left bottom position
+    - [x] #page-comments .btn-back position to highlight
+    - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
 08. - [ ] mask layer for avoiding mistake touches and clicks
 09. - [ ] bind up related blocks

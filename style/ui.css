@@ -603,8 +603,8 @@ ul#lyric {
 	background-color: white;
 	width: 100%;
 	/* debug need to remove the scroll bar here */
-	overflow-y: scroll;
-
+	overflow-y: hidden;
+	/*max-height: 20em;*/
 	z-index: 50;
 }
 .menu > ul, .sidebar ul {
@@ -629,8 +629,8 @@ ul#lyric {
 }
 
 #menu-songlist {
-    height: 60%;
-    top: 40%;
+    height: 65%;
+    top: 35%;
     text-align: left;
 	overflow: hidden;
 }
@@ -665,7 +665,7 @@ ul#lyric {
 }
 #menu-songlist span.container {
 	height: 25em;
-	overflow-y: scroll;
+	overflow-y: hidden;
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -687,15 +687,14 @@ ul#lyric {
 
 
 #menu-share {
-    height: 220px;
+    height: 18em;
 
     bottom: 0;
     text-align: left;
 }
 #menu-fileOpt {
-    height: 50%;
-
-    top:50%;
+    height: 65%;
+    top:35%;
     text-align: left;
 }
 #menu-fileOpt .tag-title {
@@ -725,6 +724,7 @@ ul#lyric {
 #page-comments .btn-back {
 	display: inline-block;
 	padding: .8em;
+	margin-top: .1em;
 	background-size: contain;
 }
 #page-comments .tag-commentCount {
