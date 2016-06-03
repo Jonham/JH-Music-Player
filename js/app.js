@@ -14,16 +14,6 @@ function addScrollLrc(lrc) {
     lyric.innerHTML = tempUL.innerHTML;
 }
 
-function formatTimestamp(time) {
-    // current time show like 01:01 under the play&pause button
-	var timeS = {}; // n: now; s: second; m: minute;
-	timeS.n = parseInt(time);
-	timeS.s = timeS.n % 60;
-	timeS.m = parseInt(timeS.n / 60);
-
-	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
-}
-
 var OFFSET = 0.5; // offset between lrc and audio : 0.5 for GoodLife.mp3 only
 var offsetTop = "";
 var lyricHightlightOriginTop = 160;
@@ -124,7 +114,7 @@ window.onload = function() {
     $click(window, function(e) {
 		NS.stackShowup.releaseAll();
 	}, false);
-    
+
     onSizeChange()();
 	onFileLoad();
 };

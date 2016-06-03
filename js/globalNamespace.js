@@ -211,6 +211,9 @@
             this.paused = false;
             this.stopped = false;
 
+            // playing state
+            this.timeOffset = 0;
+
             // if get argument file
             if (file && file.toString() === '[object File]') { this.init( file ); }
 
@@ -431,6 +434,8 @@
                 var me = this;
                 var inTime = _.isNumber(inTime)? inTime: 0;
                 var lastone = NS.audio.currentPlayingSong;
+                var tagTotalTime = $('#tag-totalTime'),
+                    format = NS.util.formatTimestamp;
 
                 // view works
                 NS.dom.viewDisk.node.turnOn();
@@ -446,6 +451,7 @@
                     // recover from stop or pause
                     if (me.paused) { // if play after pause, just connect to headGain
                         me.output.connect(NS.audio.headGain);
+                        tagTotalTime.innerHTML = format( me.duration );
                         me.paused = false;
                         me.stopped = false;
                         return me;
@@ -456,6 +462,8 @@
                             me.stopped = false;
                             me.paused = false;
                             me.play();
+                            me.getDuration();
+                            tagTotalTime.innerHTML = format( me.duration );
                         });
                         return me;
                     }
@@ -466,10 +474,14 @@
                         me.createGain();
                         me.output.connect(NS.audio.headGain);
                         me.sourceBufferNode.start( inTime );
+                        me.getDuration();
+                        tagTotalTime.innerHTML = format( me.duration );
                     } else {
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
                             me.sourceBufferNode.start(inTime);
+                            me.getDuration();
+                            tagTotalTime.innerHTML = format( me.duration );
                         });
                     }
 
@@ -484,6 +496,13 @@
                         // me.output.connect(NS.audio.headGain);
                     });
                 }
+                return me;
+            },
+            playAt: function( time ) {
+                var me = this;
+
+                me.createBufferSource();
+                me.sourceBufferNode.start(0, time);
                 return me;
             },
             stop: function( inTime ) {
@@ -679,6 +698,17 @@
         };
     })(document.documentElement);
 
+    // transform time format from 100 to 01:40
+    var formatTimestamp = function formatTimestamp(time) {
+        // current time show like 01:01 under the play&pause button
+    	var timeS = {}; // n: now; s: second; m: minute;
+    	timeS.n = parseInt(time);
+    	timeS.s = timeS.n % 60;
+    	timeS.m = parseInt(timeS.n / 60);
+
+    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+    };
+
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
@@ -695,6 +725,9 @@
     ns.supports.fullscreen = supportFullScreen; // call requestFullScreen/cancelFullScreen
 
     ns.audio = audioCtx();
+    ns.util = {
+        formatTimestamp: formatTimestamp,
+    };
 })(window);
 
 // initial global parameters

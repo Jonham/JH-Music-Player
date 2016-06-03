@@ -157,12 +157,14 @@ var attachDOMElementEvents = function() {
             btnNextGroup = $('.btn-nextSong');
         var tagTotalTime = $('#tag-totalTime');
 
-        var timeOfAudioContext = 0;
+        var timeOfAudioContext = 0,
+            stateAudioLoading = false;
 
         var onPlaySong = function(e) {
             e.stopPropagation();
 
             var song = NS.audio.currentPlayingSong,
+                format = NS.util.formatTimestamp,
                 btn = btnPlayGroup[0];
 
             if (!song) { // no song, load one?
@@ -171,9 +173,9 @@ var attachDOMElementEvents = function() {
             }
             else {
                 if (song.paused || song.stopped){
-                    if (song.duration) { tagTotalTime.innerHTML = song.duration; }
+                    if (song.duration) { tagTotalTime.innerHTML = format( song.duration ); }
                     timeOfAudioContext = NS.audio.ctx.currentTime;
-                    
+
                     song.play();
                     btn.node.play();
                 }
@@ -191,6 +193,12 @@ var attachDOMElementEvents = function() {
         _.each(btnPlayGroup, function( btnPlay ) { $click(btnPlay, onPlaySong); });
     })();
 
+    //onEVENTS-11: add songs
+    var btnAddSong = $('.btn-addSong');
+    $click(btnAddSong, function(e) {
+        e.stopPropagation();
+        $('input[type=file]').click();
+    });
 };
 attachDOMElementEvents();
 

@@ -245,7 +245,7 @@ nav {
 #tag-songArtist,
 #tag-songTitle {
 	padding: .2em;
-	max-height: 1em;
+	max-height: 1.3em;
 	display: block;
 	overflow: hidden;
 }
@@ -603,7 +603,7 @@ ul#lyric {
 	background-color: white;
 	width: 100%;
 	/* debug need to remove the scroll bar here */
-	overflow-y: hidden;
+	overflow-y: scroll;
 	/*max-height: 20em;*/
 	z-index: 50;
 }
@@ -632,7 +632,7 @@ ul#lyric {
     height: 65%;
     top: 35%;
     text-align: left;
-	overflow: hidden;
+	overflow: scroll; /* or hidden*/
 }
 #menu-songlist li {
 	margin-left: .6em;
@@ -919,7 +919,7 @@ ul#lyric {
 	border: 2px solid red;
 	border-radius: 100%;
 	margin: 0 .5em;
-	padding: .5em 1em;
+	padding: 0.25em 0.8em;
 }
 .bar-sub-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
 .bar-sub-controls .range {
@@ -947,7 +947,7 @@ ul#lyric {
 	position: absolute;
 	background-color: white;
 
-	overflow-y: hidden;
+	overflow-y: scroll;
 }
 .sidebar #tag-userMessage{
 	width: 100%;
@@ -1235,3 +1235,10 @@ span.header {
 .icon-bulb { background-image: url('icons/bulb-b.svg'); }
 .icon-clock { background-image: url('icons/clock-b.svg'); }
 .icon-cloud { background-image: url('icons/cloud-b.svg'); }
+
+
+
+/* global style */
+::-webkit-scrollbar {
+	display: none;
+}
