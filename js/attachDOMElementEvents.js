@@ -163,6 +163,7 @@ var attachDOMElementEvents = function() {
             e.stopPropagation();
 
             var song = NS.audio.currentPlayingSong,
+                format = NS.util.formatTimestamp,
                 btn = btnPlayGroup[0];
 
             if (!song) { // no song, load one?
@@ -171,9 +172,9 @@ var attachDOMElementEvents = function() {
             }
             else {
                 if (song.paused || song.stopped){
-                    if (song.duration) { tagTotalTime.innerHTML = song.duration; }
+                    if (song.duration) { tagTotalTime.innerHTML = format( song.duration ); }
                     timeOfAudioContext = NS.audio.ctx.currentTime;
-                    
+
                     song.play();
                     btn.node.play();
                 }
