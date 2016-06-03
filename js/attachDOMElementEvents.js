@@ -157,7 +157,8 @@ var attachDOMElementEvents = function() {
             btnNextGroup = $('.btn-nextSong');
         var tagTotalTime = $('#tag-totalTime');
 
-        var timeOfAudioContext = 0;
+        var timeOfAudioContext = 0,
+            stateAudioLoading = false;
 
         var onPlaySong = function(e) {
             e.stopPropagation();
@@ -192,6 +193,12 @@ var attachDOMElementEvents = function() {
         _.each(btnPlayGroup, function( btnPlay ) { $click(btnPlay, onPlaySong); });
     })();
 
+    //onEVENTS-11: add songs
+    var btnAddSong = $('.btn-addSong');
+    $click(btnAddSong, function(e) {
+        e.stopPropagation();
+        $('input[type=file]').click();
+    });
 };
 attachDOMElementEvents();
 

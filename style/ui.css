@@ -245,7 +245,7 @@ nav {
 #tag-songArtist,
 #tag-songTitle {
 	padding: .2em;
-	max-height: 1em;
+	max-height: 1.3em;
 	display: block;
 	overflow: hidden;
 }

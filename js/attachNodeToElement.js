@@ -305,10 +305,15 @@ var addDOMElementNodeProperty = function() {
                 case 'range-time':
                     return function( percent ) {
                         try {
-                            var a = $('audio');
-                            a.currentTime = percent * a.duration;
+                            // var a = $('audio');
+                            // a.currentTime = percent * a.duration;
+                            var song = NS.audio.currentPlayingSong;
+                            if (!song) { return false; }
+                            if (!song.duration) { song.getDuration(); }
+                            song.playAt( percent * song.duration );
+
                         } catch(e) { dConsole.error(e); jh = e; }
-                        return a.currentTime;
+                        return song;
                     }
                 default: // some new tag?
                     return function(v) { dConsole.log(type + " change to value " + v); };
@@ -370,6 +375,7 @@ var addDOMElementNodeProperty = function() {
     (function() {
         var main = $('#main'),
         viewContainer = $('#view-container'),
+        rangeVolume = $('#range-volume'),
         viewLyric = $('#view-lyric'),
         viewAlbum = $('#view-album'),
         viewDisk  = $(viewAlbum, '.view-albumCover'),
@@ -389,6 +395,7 @@ var addDOMElementNodeProperty = function() {
             toggle: function() {
                 if (currentView === LYRIC) {
                     viewLyric.style.opacity = 0;
+                    // rangeVolume.style.display = "none";
                     viewAlbum.style.display = '';
                     viewAlbum.style.opacity = 1;
                     // lighter the background
@@ -398,6 +405,7 @@ var addDOMElementNodeProperty = function() {
                 else { // currentView === ALBUM
                     viewLyric.style.opacity = 1;
                     viewAlbum.style.opacity = 0;
+                    // rangeVolume.style.display = "block";
                     viewAlbum.style.display = 'none';
                     // darken background
                     main.style.backgroundColor = 'rgba(0,0,0,.8)';
