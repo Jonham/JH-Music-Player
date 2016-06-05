@@ -11,7 +11,6 @@ var attachDOMElementEvents = function() {
 		});
 	});
 
-
     //onEVENTS-02: #menu-lyricOption click events
     var btnLyricOption = $('#btn-lyricOption'),
         menuLyricOption = $('#menu-lyricOption');
@@ -27,23 +26,45 @@ var attachDOMElementEvents = function() {
     });
 
 
+    // coverMask is helper layer to all menu here
+    var coverMask = $('.mask');
+    $click(coverMask, function(e) {
+        coverMask.node.hide();
+    });
+
+    // listener generator
+    var autoHide = function(target) {
+        if (!$.isDOMElement(target)) {
+            console.error('Error: autoHide get an illeagal arg.');
+            return function() {}; }
+        return function(e) {
+            e.stopPropagation();
+
+            NS.stackShowup.releaseAll();
+            NS.stackShowup.push(function(){
+                target.node.hide();
+                coverMask.node.hide();
+            });
+
+            target.node.show();
+            coverMask.node.show();
+        };
+    };
+    var bindBtntoMenu = function(btnSelector, menuSelector) {
+        if (_.isArray(btnSelector)) {
+            _.each( btnSelector, function( btn ) {
+                $click($( btn ), autoHide( $(menuSelector) ) );
+            });
+        } else {
+            $click($(btnSelector), autoHide( $(menuSelector) ) );
+        }
+    };
+
     //onEVENTS-03: menuSongList click
-    var btnSongList = $('#btn-songList'),
-        btnSongListSub = $('.btn-songList'),
-        menuSongList = $('#menu-songlist'),
-        containerSongList = $(menuSongList, '#songlist');
-    $stopPropagation(btnSongList, 'click');
-    $click(btnSongList, function(e) {
-        NS.stackShowup.releaseAll();
-        menuSongList.node.show();
-        NS.stackShowup.push(function(){ menuSongList.node.hide(); });
-    });
-    $click(btnSongListSub, function(e) {
-        e.stopPropagation();
-        NS.stackShowup.releaseAll();
-        menuSongList.node.show();
-        NS.stackShowup.push(function(){ menuSongList.node.hide(); });
-    });
+    bindBtntoMenu([ '#btn-songList',
+                    '.btn-songList'], '#menu-songlist');
+        // on list item click
+    var containerSongList = $('#songlist');
     $click(containerSongList, function(e) {
         if (e.target.tagName === 'LI') {
             e.stopPropagation();
@@ -56,35 +77,14 @@ var attachDOMElementEvents = function() {
 
 
     //onEVENTS-04: menuShare click
-    var btnShare = $('#btn-share'),
-        menuShare = $('#menu-share');
-    $stopPropagation(btnShare, 'click');
-    $click(btnShare, function(e) {
-        NS.stackShowup.releaseAll();
-        menuShare.node.show();
-        NS.stackShowup.push(function(){ menuShare.node.hide(); });
-    });
+    bindBtntoMenu('#btn-share', '#menu-share');
 
 
     //onEVENTS-05: btnFileOption
-    var btnFileOption = $('.btn-fileOpt'),
-        menuFileOption = $('#menu-fileOpt');
-    $stopPropagation(btnFileOption, 'click');
-    $click(btnFileOption, function(e) {
-        NS.stackShowup.releaseAll();
-        menuFileOption.node.show();
-        NS.stackShowup.push(function(){ menuFileOption.node.hide(); });
-    });
+    bindBtntoMenu('.btn-fileOpt', '#menu-fileOpt');
 
     //onEVENTS-05-1: btnSidebarLeft
-    var btnSidebarLeft = $('.icon-menu-w'),
-        sidebarLeft  = $('#sidebar-left');
-    $stopPropagation(btnSidebarLeft, 'click');
-    $click(btnSidebarLeft, function(e) {
-        NS.stackShowup.releaseAll();
-        sidebarLeft.node.show();
-        NS.stackShowup.push(function(){ sidebarLeft.node.hide(); });
-    });
+    bindBtntoMenu('.icon-menu-w', '#sidebar-left');
 
 
     //onEVENTS-06: btnBack : change between pageMain and pageSystem
@@ -97,36 +97,29 @@ var attachDOMElementEvents = function() {
         barSubControlCommentsPage = $(pageComments, '.bar-sub-controls'),
         barSubControlSystemPage = $(pageSystem, '.bar-sub-controls');
     $click(btnBack, function(e) {
-        pageMain.node.hide();
-        pageSystem.node.show();
+        pageMain.node.hideRight();
+        pageSystem.node.showLeft();
     });
-    // bugs: polyfill  shortcut to return to pageMain
     $click(barSubControlSystemPage, function(e) {
-        pageSystem.node.hide();
-        pageMain.node.show();
+        pageSystem.node.hideLeft();
+        pageMain.node.showRight();
     });
 
     //onEVENTS-07: bind up onBtnCommments
     // Notes: following and using onEVENTS-06
     $click(btnComments, function(e) {
-        // pageMain.node.hide();
-        // pageComments.node.show();
-        pageMain.classList.add('page-hide-left');
-        pageComments.classList.remove('page-hide-right');
+        pageMain.node.hideLeft();
+        pageComments.node.showRight();
     });
     $click(btnCommentsBack, function(e) {
-        // pageComments.node.hide();
-        // pageMain.node.show();
-        pageComments.classList.add('page-hide-right');
-        pageMain.classList.remove('page-hide-left');
+        pageComments.node.hideRight();
+        pageMain.node.showLeft();
     });// JH-bugs: return btn on pageComments
     // JH-bugs: this sub-controls should make player play song and return to #pagemain
     // currrently just make it return to #pagemain
     $click(barSubControlCommentsPage, function(e) {
-        // pageComments.node.hide();
-        // pageMain.node.show();
-        pageComments.classList.add('page-hide-right');
-        pageMain.classList.remove('page-hide-left');
+        pageComments.node.hideRight();
+        pageMain.node.showLeft();
     });
 
 

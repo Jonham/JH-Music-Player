@@ -19,76 +19,140 @@ var addDOMElementNodeProperty = function() {
         menuFileOption = $('#menu-fileOpt'),
         menuLyricOption   = $('#menu-lyricOption'),
         elemDConsole = $('#dConsole'),
-        btnPlayMode  = $('#btn-playMode');
+        btnPlayMode  = $('#btn-playMode'),
+        coverMask = $('.mask');
 
     var timers = {};
     if (NS.dom === undefined) { NS.dom = {}; }
     NS.dom.pageMain = attachNodeTo( pageMain, {
-        hide: function(second) {
+        hideRight: function(second) {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
                     function(){ pageMain.classList.add('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
-        show: function(second) {
+        showRight: function(second) {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
                     function(){ pageMain.classList.remove('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
-        toggle: function(second) {
+        hideLeft: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.add('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        showLeft: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.remove('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggleRight: function(second) {
             window.clearTimeout( timers.pageMain );
             timers.pageMain =
                 window.setTimeout(
                     function(){ pageMain.classList.toggle('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
+        toggleLeft: function(second) {
+            window.clearTimeout( timers.pageMain );
+            timers.pageMain =
+                window.setTimeout(
+                    function(){ pageMain.classList.toggle('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
     });
     NS.dom.pageSystem = attachNodeTo( pageSystem, {
-        hide: function(second) {
+        hideLeft: function(second) {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
                     function(){ pageSystem.classList.add('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
-        show: function(second) {
+        showLeft: function(second) {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
                     function(){ pageSystem.classList.remove('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
-        toggle: function(second) {
+        toggleLeft: function(second) {
             window.clearTimeout( timers.pageSystem );
             timers.pageSystem =
                 window.setTimeout(
                     function(){ pageSystem.classList.toggle('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
+        hideRight: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.add('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        showRight: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.remove('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggleRight: function(second) {
+            window.clearTimeout( timers.pageSystem );
+            timers.pageSystem =
+                window.setTimeout(
+                    function(){ pageSystem.classList.toggle('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
     });
     NS.dom.pageComments = attachNodeTo( pageComments, {
-        hide: function(second) {
+        hideRight: function(second) {
             window.clearTimeout( timers.pageComments );
             timers.pageComments =
                 window.setTimeout(
                     function(){ pageComments.classList.add('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
-        show: function(second) {
+        showRight: function(second) {
             window.clearTimeout( timers.pageComments );
             timers.pageComments =
                 window.setTimeout(
                     function(){ pageComments.classList.remove('page-hide-right'); },
                     _.isNumber(second)? second: 0
                 ); },
-        toggle: function(second) {
+        toggleRight: function(second) {
             window.clearTimeout( timers.pageComments );
             timers.pageComments =
                 window.setTimeout(
                     function(){ pageComments.classList.toggle('page-hide-right'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        hideLeft: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.add('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        showLeft: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.remove('page-hide-left'); },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggleLeft: function(second) {
+            window.clearTimeout( timers.pageComments );
+            timers.pageComments =
+                window.setTimeout(
+                    function(){ pageComments.classList.toggle('page-hide-left'); },
                     _.isNumber(second)? second: 0
                 ); },
     });
@@ -281,7 +345,41 @@ var addDOMElementNodeProperty = function() {
             var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
             btnPlayMode.style.backgroundImage = path(mode); }
     });
-
+    NS.dom.coverMask = attachNodeTo( coverMask, {
+        covered: false,
+        hide: function(second) {
+            window.clearTimeout( timers.coverMask );
+            timers.coverMask =
+                window.setTimeout(
+                    function(){
+                        coverMask.node.covered = false;
+                        coverMask.style.display = 'none'; },
+                    _.isNumber(second)? second: 0
+                ); },
+        show: function(second) {
+            window.clearTimeout( timers.coverMask );
+            timers.coverMask =
+                window.setTimeout(
+                    function(){
+                        coverMask.node.covered = true;
+                        coverMask.style.display = 'block'; },
+                    _.isNumber(second)? second: 0
+                ); },
+        toggle: function(second) {
+            window.clearTimeout( timers.coverMask );
+            timers.coverMask =
+                window.setTimeout(
+                    function(){
+                        if (coverMask.node.covered) { // covered
+                            coverMask.style.display = 'none';
+                        } else {
+                            coverMask.style.display = 'block';
+                        }
+                        coverMask.node.covered != coverMask.node.covered;
+                    },
+                    _.isNumber(second)? second: 0
+                ); },
+    });
 
     // binded up related object actions
     //BINDUP-01: Ranges: rangeTime and rangeVolume
