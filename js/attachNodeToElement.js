@@ -435,6 +435,16 @@ var addDOMElementNodeProperty = function() {
             change: bindViewToControler( range.id )
         });
     });
+    //BINDUP-07: audio time range binding
+    var audioTimestamps = $('.tag-audioTimestamp');
+    _.each(audioTimestamps, function( item ) {
+        attachNodeTo(item, {
+            update: function( time ) {
+                item.innerHTML = NS.util.formatTimestamp(time);
+                return item;
+            }
+        });
+    });
 
 
     //BINDUP-02: tagSongMessage.node.update(String title, String artist)

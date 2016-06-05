@@ -35,7 +35,7 @@ var attachDOMElementEvents = function() {
     // listener generator
     var autoHide = function(target) {
         if (!$.isDOMElement(target)) {
-            console.error('Error: autoHide get an illeagal arg.');
+            throw new Error('autoHide function receive an illeagal arg.');
             return function() {}; }
         return function(e) {
             e.stopPropagation();
@@ -63,7 +63,14 @@ var attachDOMElementEvents = function() {
     //onEVENTS-03: menuSongList click
     bindBtntoMenu([ '#btn-songList',
                     '.btn-songList'], '#menu-songlist');
-        // on list item click
+    //onEVENTS-04: menuShare click
+    bindBtntoMenu('#btn-share', '#menu-share');
+    //onEVENTS-05: btnFileOption
+    bindBtntoMenu('.btn-fileOpt', '#menu-fileOpt');
+    //onEVENTS-05-1: btnSidebarLeft
+    bindBtntoMenu('.icon-menu-w', '#sidebar-left');
+
+        // sub:03-1 on list item click
     var containerSongList = $('#songlist');
     $click(containerSongList, function(e) {
         if (e.target.tagName === 'LI') {
@@ -74,17 +81,6 @@ var attachDOMElementEvents = function() {
             songList.play(index);
         }
     });
-
-
-    //onEVENTS-04: menuShare click
-    bindBtntoMenu('#btn-share', '#menu-share');
-
-
-    //onEVENTS-05: btnFileOption
-    bindBtntoMenu('.btn-fileOpt', '#menu-fileOpt');
-
-    //onEVENTS-05-1: btnSidebarLeft
-    bindBtntoMenu('.icon-menu-w', '#sidebar-left');
 
 
     //onEVENTS-06: btnBack : change between pageMain and pageSystem

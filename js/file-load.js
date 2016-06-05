@@ -68,6 +68,8 @@ var onFileLoad = function() {
 
         var aMsg = name.split('.'),
         subfix = aMsg[ aMsg.length - 1];
+        typeMapBySubfix( subfix );
+        
         if (type !== '') {
             var aMIME = type.split('/');
             typeMapByMIME( aMIME[0] );
@@ -97,12 +99,8 @@ var onFileLoad = function() {
             default:
         }
 
-        fr.onload = function(e) {
-            callback(fr.result, loadingMode, fileMsg);
-        };
-        fr.onerror = function(e) {
-            dConsole.log('ERROR: FileReader=>' + e);
-        };
+        fr.onload  = function(e) { callback(fr.result, loadingMode, fileMsg); };
+        fr.onerror = function(e) { dConsole.log('ERROR: FileReader=>' + e); };
 
     };
 
@@ -113,8 +111,7 @@ var onFileLoad = function() {
      * bufferSources => ctx.createBufferSource() Instance ==> because their buffer can only set once
      *
     */
-    var onFileDecode = function( fileBuffer, loadingMode, fileMsg ) {
-        // var audioLoader = function( fileBuffer, fileMsg ) {
+    var onFileDecode = function( fileBuffer, loadingMode, fileMsg ) { // var audioLoader = function( fileBuffer, fileMsg ) {
         var audioLoader = function( song ) {
             if (!NS.audio) {
                 console.error('Your browser don\'t support AudioContext, Please use a modern browser and try me again.');
@@ -144,6 +141,7 @@ var onFileLoad = function() {
         var lyricLoader = function( fileBuffer, fileMsg ) {
             // debug
             // construct a lyric wrapper
+            console.log(fileMsg);
             loadedLRClist.push({
                 filename: fileMsg.name,
                 msg: fileMsg,
@@ -170,7 +168,8 @@ var onFileLoad = function() {
                 break;
             default:
         }
-    };
+    }; // onFileDecode
+
     if ( !NS.supports.mobile ) {
         // dConsole.log('support drag&drop');
         $on(document, 'dragstart', dragEvent);
