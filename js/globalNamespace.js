@@ -250,11 +250,6 @@
             },
             analyseFilename: function() {
                 var me = this;
-                // if ( me._targetStep < '1_init' ) {
-                //     me._NextToDo.push('analyseFilename');
-                //     me.until('1_init');
-                //     return me;
-                // }
 
                 // main works
                 // get rid of subfix
@@ -274,20 +269,6 @@
             //Notes: readFile is an asynchronous function
             readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
                 var me = this;
-                // if ( me._currentStep > '2_readFile' || me._state == 'ING' ) {
-                //     console.log('me._currentStep');
-                //     return me;
-                // }
-                // if ( me._targetStep < '2_readFile' ) {
-                //     me.until('2_readFile');
-                //     return me;
-                // }
-                // // already done
-                // if ( me._buffer && me._buffer.toString() === '[object FileReader]') {
-                //     console.log('already got one.');
-                //     me.next();
-                //     return me;
-                // }
 
                 // main work
                 me._state = 'ING';
@@ -315,11 +296,6 @@
             //Notes: decode is an asynchronous function
             decode: function DecodeAudioData( callback ) { // asynchronous function
                 var me = this;
-                // if ( me._currentStep > '3_decode' || me._state == 'ING') { return me; }
-                // if ( me._targetStep < '3_decode' ) {
-                //     me.until('3_decode');
-                //     return me;
-                // }
 
                 // main work
                 me._state = 'ING';
@@ -337,11 +313,6 @@
             },
             createBufferSource: function CreateBufferSourceNode( callback ) { // if you want to play one more time
                 var me = this;
-                // if ( me._currentStep > '4_sourceBuffer' || me._state == 'ING') { return me; }
-                // if ( me._targetStep < '4_sourceBuffer' ) {
-                //     me.until('4_sourceBuffer');
-                //     return me;
-                // }
 
                 // main works
                 var bs = ctx.createBufferSource();
@@ -381,30 +352,12 @@
             },
             getDuration: function GetSongDuration() {
                 var me = this;
-                // after you get to decode
-                // if ( me._targetStep < '3_decode' ) {
-                //     me._NextToDo.push('getDuration');
-                //     me.until('3_decode');
-                //     return me;
-                // }
-                // if ( me._state == 'ING' ) {
-                //     me._NextToDo.push('getDuration');
-                //     return me;
-                // }
 
                 me.duration = me._audioBuffer.duration;
                 return me.duration;
             },
             createGain: function createGain( createNewGain ) {
                 var me = this;
-                // create a new gain
-                // if (createNewGain) {
-                //     me.gainNode = ctx.createGain();
-                //     me.sourceBufferNode.connect(me.gainNode);
-                //     me.output = me.gainNode;
-                //
-                //     return me;
-                // }
 
                 // if can't get one, create one
                 if (!me.gainNode) {
@@ -606,48 +559,6 @@
                 audioContextTimeupdate();
 
             },
-
-            next: function next() {
-                // var me = this;
-                // console.log('coming to next again.');
-                //
-                // var current = me._currentStep,
-                //     target = me._targetStep,
-                //     todo = me._NextToDo,
-                //     state = me._state;
-                // // something processing: waiting for its call on next()
-                // if (state === 'ING') {
-                //     console.log('next: ING');
-                //     return me;
-                // }
-                // // console.log(current);
-                // // console.log(target);
-                // // steps reach or beyond target step
-                // if (current <= target) {
-                //     if (todo.length) {
-                //         var n = todo.shift();
-                //         console.log(n + ' is the next to do.');
-                //         me[n]();
-                //     }
-                // }
-                // else { // find next step and go
-                    // return me;
-                // }
-            },
-            until: function nextUntil( step ) {
-                // var me = this;
-                //
-                // var current = me._currentStep,
-                //     target = me._targetStep,
-                //     me = me,
-                //     state = me._state;
-                //
-                // target = step>target? step: target;
-                // if (state === 'DONE') {
-                //     console.log('set target: DONE');
-                //     me.next();
-                // }
-            },
             check: function check() {
                 var steps = this._Steps;
                 for (var step in steps) {
@@ -789,6 +700,193 @@
     	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
     };
 
+    // Lyric File
+    var Lyric = function Lyric( file ) {
+        if (this === window) { return new Lyric( file ); }
+        var me = this;
+
+        me._file = me._buffer = null;
+        me.fileName = me.size = me.type = null; // messages from File
+        me.title = me.artist = null;
+
+        // if get argument file
+        if (file && file.toString() === '[object File]') { me.init( file ); }
+
+        return me;
+    };
+    Lyric.prototype = {
+        init: function( file ) {
+            var me = this;
+
+            if (!file || file.toString() !== '[object File]') {
+                throw new Error('Song.init() receive something but file.');
+            }
+            else {
+                me._file = file;
+
+                me.fileName = file.name;
+                me.size = file.size;
+                me.type = file.type;
+
+                // analyseFilename for SongList update information
+                me.analyseFilename();
+
+                // overwrite init function
+                me.init = function() {
+                    console.error('Each Song can only init once.');
+                    return me;
+                };
+            }
+        },
+        analyseFilename: function() {
+            var me = this;
+
+            // main works
+            // get rid of subfix
+            var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+            // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
+            if (name.search('-') === -1) {
+                console.warn('Song: Not a Regular Filename.');
+                me.title = name;
+                return me;
+            }
+            var result = name.split('-');
+            me.artist = result[0].trim(); result.shift();
+            me.title = result.length === 1? result[0].trim(): result.join('-').trim();
+
+            return me;
+        },
+
+        //Notes: readFile is an asynchronous function
+        readFile: function GetFileUsingFileReader( callback, DOMEncoding ) { // asynchronous function
+            var me = this;
+
+            var fr = new FileReader();
+            fr.readAsText(me._file, DOMEncoding || 'GB2312');
+
+            fr.onload = function(e) { me._buffer = fr.result; callback(); };
+            fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
+            return me;
+        },
+
+        // notice: file encoding:
+        // utf-8
+        // ANSI
+        // UCS2 BigEndian
+        //      LittleEndian
+        decode: function() {
+            // parse lrc into Array Object
+            // Example
+            //[ti:Rolling In The Deep]
+            //[ar:
+            //Adele]
+            //[al:21]
+            // ==> ['ti:Rolling In The Deep',
+            //      'ar:Adele',
+            //      'al:21']
+            var splitLyricString = function splitLyricString( lyricString ) { // split by '[' or ']'
+                var rg = /[\[\]]/g;
+                var arr = lyricString.split(rg);
+
+                // combine multi-line content into one line
+                // by replacing '\n'
+                _.map(arr, function( str ) {
+                    return str.replace('\n', '');
+                });
+
+                return arr;
+            };
+            var classifyLyric = function classifyLyric(arr) {
+            	// two modes
+            	// 1. one TimeStamp one lyrics        normal
+            	// 2. several timeTags one lyrics   compressd
+
+            	// metamsg RegExp
+            	// ti : title
+            	// ar : artist
+            	// al : album
+            	// by : lyric maker
+            	var rgMetaMsg = /(ti|ar|al|by|offset):(.+)/,
+                    isMeta = function(str) { return rgMetaMsg.test(str); }
+            	// timetag regexp
+            	// 1. mm:ss.ms
+            	var rgTimetag = /^(\d{2,}):(\d{2})[.:]{1}(\d{2})$/,
+                    isTimetag = function(str) { return rgTimetag.test(str); }
+
+            	// function(timetag): to transform
+            	// "01:01.01" ==> 60 + 1 + .01
+            	var parseTimetag = function(timetag) {
+            		var aTMP = rgTimetag.exec(timetag);
+            		var floatTime = parseInt(aTMP[1]) * 60 + parseInt(aTMP[2]) + parseInt(aTMP[3]) / 100;
+            		return floatTime;
+            	};
+
+
+            	// returnArrayObject
+            	// prototype oResult[12.34] = []
+            	var oResult = {},
+                    lyrics = [],
+                    timeTags = [];
+
+            	// go through the array
+                for (var i=0; i < arr.length; i++) {
+                    if ( isMeta( arr[i] ) ) {         // handling meta messages
+                        var aTMP = rgMetaMsg.exec(arr[i]);
+                        oResult[aTMP[1]] = aTMP[2];
+                    }
+                    else if( isTimetag( arr[i] ) ) { // handling timestamp and lyrics
+
+                        // in compress mode:
+                        // to collect series of timestamp
+                        var timetagsofOneLyric = [];
+
+                        // collect all timeTags
+                        while ( isTimetag(arr[i]) ) {
+                            var floatTime = parseTimetag(arr[i]);
+                            timetagsofOneLyric.push( floatTime );
+                            timeTags.push( floatTime );
+                            i++;
+                        }
+
+                        // collect this line of lyric
+                        lyrics.push( arr[i] );
+                        var indexOftheLyric = lyrics.length - 1;
+
+                        // restore timetagsofOneLyric to oResult
+                        // oResult[ sNow ] = [ ref to index of lrc ]
+                        _.each(timetagsofOneLyric, function( tag ) {
+                            if (oResult[ tag ]) {
+                                oResult[ tag ].push( indexOftheLyric );
+                            } else {
+                                oResult[ tag ] = [ indexOftheLyric ];
+                            }
+                        });
+                    }
+                }
+
+
+                // sort
+            	var sortByNumber = function(a, b) { return a>b? 1: -1; };
+            	timeTags.sort(sortByNumber);
+
+                oResult.timeTags = timeTags;
+                oResult.lyrics = lyrics;
+            	return oResult;
+            };
+
+            var me = this;
+
+            if (!me._buffer) {
+                me.readFile( function(){ me[0] = classifyLyric( splitLyricString(me._buffer) ); } );
+                return me;
+            }
+            me[0] = classifyLyric( splitLyricString(me._buffer) );
+            return me;
+        },
+    }
+
+
+    // Binding to NS
     // adding to w.NS;
     var ns = w.NS;
     ns.localfilelist = new LocalFileList();
@@ -805,6 +903,10 @@
     ns.supports.fullscreen = supportFullScreen; // call requestFullScreen/cancelFullScreen
 
     ns.audio = audioCtx();
+    ns.lyric = {
+        Lyric: Lyric,
+        list: {}
+    }
     ns.util = {
         formatTimestamp: formatTimestamp,
     };

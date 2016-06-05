@@ -933,7 +933,7 @@ ul#lyric {
 	text-align: left;
 }
 .bar-sub-controls .range-fill {
-	width: 60%;
+	width: 0;
 	display: inline-block;
 	left: 0;
 	border: red solid 2px;
