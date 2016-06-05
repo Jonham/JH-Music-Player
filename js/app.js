@@ -52,7 +52,8 @@ $on(audio, "timeupdate", function(e) {
 				aChild[i - 1].className = "line focus";
 				aChild[i - 2].className = "line";
 				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
-			} else if (i >= 1) {
+			}
+            else if (i >= 1) {
 				aChild[i - 1].className = "line focus";
 				lyric.style.top = lyricHightlightOriginTop -(aChild[i - 1].offsetTop) + "px";
 			}

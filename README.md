@@ -33,47 +33,47 @@ And you're welcome to fork and issue whatever come up in your mind.
     **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
     I've catch errors both in rangeTime and rangeVolume.
 02. **Song** and **SongList**
-    - [ ] songlist .next, .play, .pause, .stop ...
-    - [ ] songlist .playNext, .playPre and related songlist.next and songlist.pre
+    - [x] songlist .next, .play, .pause, .stop ...
+    - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
+    - [ ] songlist: play-modes, counts
+    - [x] song.timeOffset records ctx.currentTime when song begin
+    - [x] requestAnimationFrame() to update audio time19. - [ ] open-screen animation :::: need more tests
 
 <hr>
 ## Bugs need fix
-02. - [x] `<input type='file>` display
-04. - [x] highlight Ranges objects
-18. - [x] #page-comments needs basic framework setup
-05. dConsole window display
+01. - [x] `<input type='file>` display
+02. - [x] highlight Ranges objects
+03. - [x] #page-comments needs basic framework setup
+04. dConsole window display
     - [x] dConsole display when button 'show console' was pressed
     - [ ] display in FullScreen mode. [ change as a float window on the head of viewport]
-06. FullScreen API
+05. FullScreen API
     - [x] FullScreen API for devices
     - [ ] FullScreen Event listeners on other state change
     - [ ] to hide FullScreen button when is not available
-07. Icons and Display
+06. Icons and Display
     - [x] Icons for each Page and Menu items
     - [x] sub-controls bar in #page-system ( btn-play circle display)
     - [ ] zip up _svg_ files of icon
-01. touch events:
+07. touch events:
     - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
     - [ ] wait and react until animations stop
-03. lyric and cover
+08. lyric and cover
     - [ ] lyric loader and _timeupdate_ event for AudioContext decoded audio
     - [ ] lyric and album image load when another start
-00. control funcs and buttons
-    - [ ] play, nextSong buttons to work on SongList
-    - [ ] mute and volume controls on SongList
-00. Events
-    - [ ] rangeTime throw error when drag event happened before the audio is playing
-00. Pages, menus, sidebar display
+09. control funcs and buttons
+    - [x] play, nextSong buttons to work on SongList
+    - [x] mute and volume controls on SongList
+10. Events
+    - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
+11. Pages, menus, sidebar display
     - [x] #sidebar-left bottom position
     - [x] #page-comments .btn-back position to highlight
     - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
-08. - [ ] mask layer for avoiding mistake touches and clicks
-09. - [ ] bind up related blocks
-10. - [ ] images and icons preload
-11. - [ ] songlist: play-modes, counts
-19. - [ ] drag rangeTime and set value to undefined audio throw errors
-20. - [ ] controls in mainpage display in iPhone4 (narrow in width)
-21. - [ ] supports information for all kind of Browsers
-22. - [ ] open-screen animation
+12. - [x] **mask layer** for avoiding mistake touches and clicks
+13. - [ ] bind up related blocks
+14. - [ ] images and icons preload
+17. - [ ] controls in mainpage display in iPhone4 (narrow in width)
+18. - [ ] supports information for all kind of Browsers

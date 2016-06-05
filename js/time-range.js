@@ -2,60 +2,28 @@ var rangeTime = $('#range-time'),
     rangeVolume = $('#range-volume');
 
 
-var onRangeTimeUpdate = function() {
-    var me = rangeTime;
+var onRangeTimeUpdate = function( audiocontext ) {
+    var me = rangeTime,
+        tagCurrentTime = $('#tag-currentTime'),
+        pageSystem = $('#page-system'),
+        rangeTimeSysPage = $(pageSystem, '.range');
 
     var audioPercent = function() {
-        var total = audio.duration,
-            now   = audio.currentTime;
+        var song = NS.audio.currentPlayingSong;
+        var total = song.duration,
+            now   = song.currentTime;
         return  now/total; // return [0, 100]
     };
     var listener = function(e) {
         me.node.rangeTo( audioPercent() );
+        rangeTimeSysPage.node.rangeTo( audioPercent() );
+        tagCurrentTime.node.update(NS.audio.currentPlayingSong.currentTime);
     };
 
-    $on(audio, 'timeupdate', listener);
+    $on( audiocontext, 'timeupdate', listener);
 };
-onRangeTimeUpdate();
+onRangeTimeUpdate( NS.audio.ctx );
 
-// var RangeClickFactory = function(range, type) {
-    // length is a value that given by resizeListener
-//     var rectRange = range.getBoundingClientRect(),
-//         left = rectRange.left,
-//         length = rectRange.width;
-//
-//     var changeAudioSth = function(per, type) {
-//         switch (type) {
-//             case 'time':
-//                 audio.currentTime = audio.duration * per;
-//             break;
-//             case 'volume':
-//                 audio.volume = per;
-//             break;
-//             default:
-//         }
-//
-//     };
-//
-//     var listener = function(e) {
-//         var point = e.clientX - 5; // get range-btn center point, .range-btn width=10px
-//         var per = (point - left) / length; //rectrangeTime.width;
-//         per = per < 0?
-//                 0 :
-//                 per > 1?
-//                     1 :
-//                     per;
-//         changeAudioSth(per, type);
-//         // what if outside of 0/100 what if resize
-//     };
-//     return listener;
-// };
-
-// var rangeTimelistener = RangeClickFactory(rangeTime, 'time');
-// $click(rangeTime, rangeTimelistener);
-//
-// var rangeVolumelistener = RangeClickFactory(rangeVolume, 'volume');
-// $click(rangeVolume, rangeVolumelistener);
 
 // listen to volume change event and reaction to that
 var onAudioVolumeChange = function( range, audio ) {
