@@ -2,21 +2,24 @@ var rangeTime = $('#range-time'),
     rangeVolume = $('#range-volume');
 
 
-var onRangeTimeUpdate = function() {
-    var me = rangeTime;
+var onRangeTimeUpdate = function( audiocontext ) {
+    var me = rangeTime,
+        tagCurrentTime = $('#tag-currentTime');
 
     var audioPercent = function() {
-        var total = audio.duration,
-            now   = audio.currentTime;
+        var song = NS.audio.currentPlayingSong;
+        var total = song.duration,
+            now   = song.currentTime;
         return  now/total; // return [0, 100]
     };
     var listener = function(e) {
         me.node.rangeTo( audioPercent() );
+        tagCurrentTime.node.update(NS.audio.currentPlayingSong.currentTime);
     };
 
-    $on(audio, 'timeupdate', listener);
+    $on( audiocontext, 'timeupdate', listener);
 };
-onRangeTimeUpdate();
+onRangeTimeUpdate( NS.audio.ctx );
 
 // var RangeClickFactory = function(range, type) {
     // length is a value that given by resizeListener

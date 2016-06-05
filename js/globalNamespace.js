@@ -151,17 +151,16 @@
 
         // this works as Center controller
         var controller = {
-            play: function( inTime ) {
+            play: function() {
                 var currentPlayingSong = NS.audio.currentPlayingSong;
-                console.log('play in ' + inTime);
                 if (currentPlayingSong.paused) {
                     currentPlayingSong.play();
                 }
                 return currentPlayingSong;
             },
-            pause: function( inTime ) {
+            pause: function() {
                 var currentPlayingSong = NS.audio.currentPlayingSong;
-                console.log('play in ' + inTime);
+
                 NS.audio.currentPlayingSong.pause();
                 return currentPlayingSong;
             },
@@ -190,6 +189,7 @@
                 '4_sourceBuffer':false
             };
 
+            this.context = ctx;
             this._NextToDo = ['init', 'readFile', 'decode', 'createBufferSource'];
             this._targetStep = '0_uninit';
             this._currentStep = '0_uninit';
@@ -212,7 +212,11 @@
             this.stopped = false;
 
             // playing state
-            this.timeOffset = 0;
+            this.currentTime = 0; // like audio
+            this.timeOffset = 0;  // offset between audio.currentTime and ctx.currentTime
+            this.__timer = null;  // for requestAnimationFrame to store ID
+            this.onTimeupdate = []; // functions that invoke when timeupdate
+            this.__TIMEUPDATE = false;
 
             // if get argument file
             if (file && file.toString() === '[object File]') { this.init( file ); }
@@ -223,9 +227,9 @@
             init: function InitwithAudioFileBuffer( file ) {
                 var me = this;
                 if (!file || file.toString() !== '[object File]') {
-                    console.warn('you send a wrong file.');
-                    return me;
-                } else {
+                    throw new Error('Song.init() receive something but file.');
+                }
+                else {
                     me._file = file;
                     me._Steps['1_init'] = true;
                     me._NextToDo.shift();
@@ -243,7 +247,6 @@
                         return me;
                     };
                 }
-                me.next();
             },
             analyseFilename: function() {
                 var me = this;
@@ -342,17 +345,25 @@
 
                 // main works
                 var bs = ctx.createBufferSource();
+
                 bs.onended = function(e) {
+                    me.stopped = true;
                     controller.songEnd( me ); // callback with song
                     console.log('songEnd: ' + me.title);
                 };
 
-                bs.buffer = this._audioBuffer;
+                // JH-bugs: what if this._audioBuffer is not set
+                bs.buffer = me._audioBuffer;
                 if(me.sourceBufferNode) {
                     me.sourceBufferNode.disconnect();
                 }
                 me.sourceBufferNode = bs;
-                console.log('new sourceBufferNode created.');
+                me.currentTime = 0;
+                me.timeOffset = 0;
+                cancelAnimationFrame( me.__timer );
+                me.__TIMEUPDATE = false;
+
+                // console.log('new sourceBufferNode created.');
 
                 if (me.gainNode) { // if there is a gainNode, connect to it
                     bs.connect(me.gainNode);
@@ -430,9 +441,8 @@
                 return me;
             },
 
-            play: function( inTime ) {
+            play: function() {
                 var me = this;
-                var inTime = _.isNumber(inTime)? inTime: 0;
                 var lastone = NS.audio.currentPlayingSong;
                 var tagTotalTime = $('#tag-totalTime'),
                     format = NS.util.formatTimestamp;
@@ -445,18 +455,22 @@
 
                 try {
                     // play one song only
-                    if (lastone && lastone !== me) {
-                        lastone.stop();
-                    }
-                    // recover from stop or pause
+                    if (lastone && lastone !== me) { lastone.stop(); }
+
+                    // when audio had been paused
                     if (me.paused) { // if play after pause, just connect to headGain
                         me.output.connect(NS.audio.headGain);
+
                         tagTotalTime.innerHTML = format( me.duration );
+
+                        me.timeupdate();
+
                         me.paused = false;
                         me.stopped = false;
                         return me;
                     }
 
+                    // when audio had been stop
                     if (me.stopped) { // create newe buffersource if me had been stop
                         me.createBufferSource(function() {
                             me.stopped = false;
@@ -464,6 +478,9 @@
                             me.play();
                             me.getDuration();
                             tagTotalTime.innerHTML = format( me.duration );
+
+                            me.currentTime = 0;
+                            me.timeupdate();
                         });
                         return me;
                     }
@@ -473,27 +490,34 @@
                         // play if sourceBufferNode was never been played
                         me.createGain();
                         me.output.connect(NS.audio.headGain);
-                        me.sourceBufferNode.start( inTime );
+
+                        me.sourceBufferNode.start(0);
                         me.getDuration();
                         tagTotalTime.innerHTML = format( me.duration );
-                    } else {
+
+                        me.currentTime = 0;
+                        me.timeupdate();
+                    }
+                    else {
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
-                            me.sourceBufferNode.start(inTime);
+                            me.sourceBufferNode.start(0);
                             me.getDuration();
                             tagTotalTime.innerHTML = format( me.duration );
+
+                            me.currentTime = 0;
+                            me.timeupdate();
                         });
                     }
 
-                } catch(e) { // sourceBufferNode is already play
+                }
+                catch(e) { // sourceBufferNode is already play
                     console.log(e);
                     me.output.disconnect();
 
                     me.createBufferSource(function(bufferSource) {
-                        console.log('createBufferSource callback');
                         me.createGain();
                         me.play();
-                        // me.output.connect(NS.audio.headGain);
                     });
                 }
                 return me;
@@ -501,11 +525,20 @@
             playAt: function( time ) {
                 var me = this;
 
+                if (me.__TIMEUPDATE) {
+                    cancelAnimationFrame( me.__timer );
+                    me.__TIMEUPDATE = false;
+                }
                 me.createBufferSource();
                 me.sourceBufferNode.start(0, time);
+
+                me.currentTime = time;
+                // console.log('play at time ' + time);
+                me.timeupdate();
+
                 return me;
             },
-            stop: function( inTime ) {
+            stop: function() {
                 var me = this;
                 if (me.stopped) { return me; }
                 if (me._Steps['4_sourceBuffer']) {
@@ -513,20 +546,67 @@
                     NS.dom.viewDisk.node.turnOff();
 
                     me.stopped = true;
+                    me.currentTime = me.duration;
+                    me.timeOffset = me.context.currentTime;
+                    cancelAnimationFrame( me.__timer );
+                    me.__TIMEUPDATE = false;
+
                     me.output.disconnect();
-                    me.sourceBufferNode.stop( inTime );
+                    me.sourceBufferNode.stop(0);
                 }
                 return me;
             },
-            pause: function( inTime ) {
+            pause: function() {
                 var me = this;
                 if (me.paused || me.stopped) { return me; }
                 NS.dom.viewDisk.node.turnOff();
 
                 me.output.disconnect(NS.audio.headGain);
                 me.paused = true;
+
+                cancelAnimationFrame( me.__timer );
+                me.__TIMEUPDATE = false;
+
                 return me;
             },
+            timeupdate: function() {
+                var me = this;
+
+                if ( (me.context.currentTime - me.timeOffset) > me.duration ) {
+                    cancelAnimationFrame( me.__timer );
+                    me.__TIMEUPDATE = false;
+
+                    return me;
+                }
+                if ( me.__TIMEUPDATE ) { return false; } // already updating
+
+                me.timeOffset = me.context.currentTime - me.currentTime;
+                // console.log('currentTime: ' + me.currentTime);
+                var audioContextTimeupdate = function() {
+                    me.currentTime = me.context.currentTime - me.timeOffset;
+
+                    // plan A: making a 'timeupdate' event on AudioContext
+                    me.context.dispatchEvent(new Event('timeupdate'), {
+                        'bubbles': true,
+                        'defaultPrevented': false,
+                        'isTrusted': true,
+                        'target': me,
+                        'originalTarget': me,
+                        'srcElement': me,
+                        'timeStamp': + new Date()
+                    });
+
+                    // plan B
+                    // _.each(me.onTimeupdate, function(fn) {
+                    //     fn( me.currentTime );
+                    // });
+                    me.__timer = requestAnimationFrame( audioContextTimeupdate );
+                    me.__TIMEUPDATE = true;
+                };
+                audioContextTimeupdate();
+
+            },
+
             next: function next() {
                 // var me = this;
                 // console.log('coming to next again.');

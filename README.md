@@ -33,11 +33,11 @@ And you're welcome to fork and issue whatever come up in your mind.
     **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
     I've catch errors both in rangeTime and rangeVolume.
 02. **Song** and **SongList**
-    - [ ] songlist .next, .play, .pause, .stop ...
-    - [ ] songlist .playNext, .playPre and related songlist.next and songlist.pre
+    - [x] songlist .next, .play, .pause, .stop ...
+    - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
     - [ ] songlist: play-modes, counts
-    - [ ] song.timeOffset records ctx.currentTime when song begin
-    - [ ] requestAnimationFrame() to update audio time19. - [ ] open-screen animation
+    - [x] song.timeOffset records ctx.currentTime when song begin
+    - [x] requestAnimationFrame() to update audio time19. - [ ] open-screen animation :::: need more tests
 
 <hr>
 ## Bugs need fix
@@ -72,7 +72,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] #page-comments .btn-back position to highlight
     - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
-12. - [ ] mask layer for avoiding mistake touches and clicks
+12. - [x] **mask layer** for avoiding mistake touches and clicks
 13. - [ ] bind up related blocks
 14. - [ ] images and icons preload
 17. - [ ] controls in mainpage display in iPhone4 (narrow in width)
