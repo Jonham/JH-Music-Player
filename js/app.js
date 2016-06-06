@@ -1,19 +1,3 @@
-function addScrollLrc(lrc) {
-    var lrc = lrc || loadedLRClist[0],
-        timeline = lrc.timeTags,
-        tempUL = document.createElement('ul');
-
-    for (var line = 0; line < timeline.length; line++) {
-        var t = lrc[timeline[line]][0];
-        var li = document.createElement("li");
-        li.className = "line";
-        li.dataset.line = t;
-        li.innerHTML = lrc.lrc[t];
-        tempUL.appendChild(li);
-    }
-    lyric.innerHTML = tempUL.innerHTML;
-}
-
 var OFFSET = 0.5; // offset between lrc and audio : 0.5 for GoodLife.mp3 only
 var offsetTop = "";
 var lyricHightlightOriginTop = 160;
