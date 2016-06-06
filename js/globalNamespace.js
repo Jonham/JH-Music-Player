@@ -525,17 +525,18 @@
             timeupdate: function() {
                 var me = this;
 
-                if ( (me.context.currentTime - me.timeOffset) > me.duration ) {
-                    cancelAnimationFrame( me.__timer );
-                    me.__TIMEUPDATE = false;
-
-                    return me;
-                }
-                if ( me.__TIMEUPDATE ) { return false; } // already updating
+                if ( me.__TIMEUPDATE ) { return me; } // already updating
 
                 me.timeOffset = me.context.currentTime - me.currentTime;
                 // console.log('currentTime: ' + me.currentTime);
                 var audioContextTimeupdate = function() {
+                    if ( (me.context.currentTime - me.timeOffset) > me.duration ) {
+                        cancelAnimationFrame( me.__timer );
+                        me.__TIMEUPDATE = false;
+
+                        return me;
+                    }
+
                     me.currentTime = me.context.currentTime - me.timeOffset;
 
                     // plan A: making a 'timeupdate' event on AudioContext
@@ -624,16 +625,17 @@
             };
             songlist.output = function() {};
             songlist.play = function( index ) {
-                if (_.isNumber(+index) && +index < songlist.length) {
+                var index = +index;
+                if (_.isNumber(index) && index < songlist.length) {
                     songlist[index].play(0);
                     songlist.playing = index;
-                    songlist.next = (index + 1) >= songlist.length? 0: (index+1);
+                    songlist.next = (index + 1) >= songlist.length? 0: (index + 1);
                     songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
                 } else {
                     var index = 0;
                     songlist[index].play(0);
                     songlist.playing = index;
-                    songlist.next = (index + 1) >= songlist.length? 0: (index+1);
+                    songlist.next = (index + 1) >= songlist.length? 0: (index + 1);
                     songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
                 }
             };
@@ -791,7 +793,7 @@
                 // combine multi-line content into one line
                 // by replacing '\n'
                 _.map(arr, function( str ) {
-                    return str.replace('\n', '');
+                    return str.replace("\n", '');
                 });
 
                 return arr;
@@ -883,6 +885,23 @@
             me[0] = classifyLyric( splitLyricString(me._buffer) );
             return me;
         },
+        generate: function() {
+            var me = this;
+            var wrapper = me[0],
+                lyrics = wrapper.lyrics,
+                tags = wrapper.timeTags,
+                ul = $dom('ul');
+
+            _.each(tags, function( tag ) {
+                var index = wrapper[tag];
+                var li = $dom('li');
+                li.className = 'line';
+                li.dataset.line = index;
+                li.innerHTML = lyrics[index];
+                ul.appendChild(li);
+            });
+            return ul.innerHTML;
+        }
     }
 
 
