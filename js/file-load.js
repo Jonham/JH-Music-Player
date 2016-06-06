@@ -141,6 +141,10 @@ var onFileLoad = function() {
         // lyric file loader
         var handleLyricFile = function( lyric ) {
             NS.lyric.list[ lyric.fileName ] = lyric;
+
+            lyric.analyseFilename();
+            NS.lyric.map[ lyric.title ] = lyric.fileName;
+
             dConsole.log(lyric.fileName + ' added to NS.lyric.list.');
             lyric.decode();
         };

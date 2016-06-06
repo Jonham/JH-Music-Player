@@ -511,6 +511,7 @@ var addDOMElementNodeProperty = function() {
                     currentView = ALBUM;
                 }
                 else { // currentView === ALBUM
+                    NS.lyric.lookup( NS.audio.currentPlayingSong.title );
                     viewLyric.style.opacity = 1;
                     viewAlbum.style.opacity = 0;
                     // rangeVolume.style.display = "block";

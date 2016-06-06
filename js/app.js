@@ -19,7 +19,7 @@ $on(audio, "timeupdate", function(e) {
 		offsetTop = lyric.offsetTop;
 
 		lyric.style.top = lyricHightlightOriginTop + "px";
-		addScrollLrc();
+		// addScrollLrc();
 		ONCE = false;
 	}
 
