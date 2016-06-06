@@ -405,6 +405,7 @@
                 // console.warn(me.title + me.artist);
                 NS.dom.tagSongMessage.node.update( me.title, me.artist );
                 // JH-bugs: me.artist is not defined
+                NS.lyric.lookup( NS.audio.currentPlayingSong.title );
 
                 try {
                     // play one song only
@@ -711,6 +712,13 @@
         me.fileName = me.size = me.type = null; // messages from File
         me.title = me.artist = null;
 
+        me.states = {
+            init: false,
+            analyseFilename: false,
+            readFile: false,
+            decode: false
+        };
+
         // if get argument file
         if (file && file.toString() === '[object File]') { me.init( file ); }
 
@@ -729,6 +737,8 @@
                 me.fileName = file.name;
                 me.size = file.size;
                 me.type = file.type;
+
+                me.states.init = true;
 
                 // analyseFilename for SongList update information
                 me.analyseFilename();
@@ -756,6 +766,8 @@
             me.artist = result[0].trim(); result.shift();
             me.title = result.length === 1? result[0].trim(): result.join('-').trim();
 
+            me.states.analyseFilename = true;
+
             return me;
         },
 
@@ -766,7 +778,7 @@
             var fr = new FileReader();
             fr.readAsText(me._file, DOMEncoding || 'GB2312');
 
-            fr.onload = function(e) { me._buffer = fr.result; callback(); };
+            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; callback(); };
             fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
             return me;
         },
@@ -776,7 +788,7 @@
         // ANSI
         // UCS2 BigEndian
         //      LittleEndian
-        decode: function() {
+        decode: function( callback ) {
             // parse lrc into Array Object
             // Example
             //[ti:Rolling In The Deep]
@@ -879,10 +891,14 @@
             var me = this;
 
             if (!me._buffer) {
-                me.readFile( function(){ me[0] = classifyLyric( splitLyricString(me._buffer) ); } );
+                me.readFile( function(){ me[0] = classifyLyric( splitLyricString(me._buffer) ); callback&&callback(); } );
                 return me;
             }
             me[0] = classifyLyric( splitLyricString(me._buffer) );
+
+            me.states.decode = true;
+
+            callback&&callback();
             return me;
         },
         generate: function() {
@@ -924,7 +940,114 @@
     ns.audio = audioCtx();
     ns.lyric = {
         Lyric: Lyric,
-        list: {}
+        list: {},
+        map: {}, // title ==> lyric
+        currentLyric: null,
+        currentView: null,
+        bindLyric: function( lyric, callback ) {
+            var me = ns.lyric;
+
+            me.currentLyric = lyric;
+            if (!lyric.states.decode) {
+                lyric.decode(function() {
+                    callback&&callback();
+                });
+            } else {
+                callback&&callback();
+            }
+        },
+        bindView: function( view, lyric ){
+            if (!$.isDOMElement(view) ) { return false; }
+            var me = ns.lyric;
+
+            var ul = $(view, 'ul');
+            if (!ul) { ul = $dom('ul'); view.appendChild(ul); }
+
+            me.currentView = view;
+
+            // JH-bugs: what if lyric is not lyric.states.decode ?
+            if ( _.isObject(me.currentLyric) ) {
+                var linesLyric = me.currentLyric.generate();
+                ul.innerHTML = linesLyric;
+            }
+            else if ( _.isObject( lyric ) ) {
+                var linesLyric = lyric.generate();
+                ul.innerHTML = linesLyric;
+            }
+        },
+        __lastListener: null,
+        start: function( lyric ) {
+            var me = ns.lyric;
+
+            // ensure lyric is decoded.
+            if (!lyric.states.decode) {
+                lyric.decode(function() {
+                    me.start( lyric );
+                });
+                return me;
+            }
+
+            $off(NS.audio.ctx, 'timeupdate', me.__lastListener);
+
+            // setup for scroll lyrics
+            var offsetTop = "";
+            var lyricHightlightOriginTop = 160;
+
+            me.bindLyric(lyric, function() {
+                me.bindView($('#view-lyric'));
+            });
+
+            var lrc = lyric[0];
+            var timetags = lrc.timeTags;
+            var lyricsList = lrc.lyrics;
+
+            var ul = $(me.currentView, 'ul');
+
+            me.__lastListener = $on(NS.audio.ctx, 'timeupdate', function() {
+                var song = NS.audio.currentPlayingSong;
+
+                var curTime = song.currentTime + OFFSET;
+
+                    // auto scroll lyrics
+            	for (var i=0; i<timetags.length; i++) {
+                    // find the index of next line of lyrics: i
+            		if (curTime <= timetags[i]) {
+            			var arrlyricsList = lrc[ timetags[i-1] ] || []; // get lyric array by lrc[time]
+
+            			var LIs = ul.childNodes;
+
+                        // scroll the lyrics as audio play
+            			if (i - 2 >= 0) {
+            				LIs[i - 1].className = "line focus";
+            				LIs[i - 2].className = "line";
+            				ul.style.top = lyricHightlightOriginTop -(LIs[i - 1].offsetTop) + "px";
+            			}
+                        else if (i >= 1) {
+            				LIs[i - 1].className = "line focus";
+            				ul.style.top = lyricHightlightOriginTop -(LIs[i - 1].offsetTop) + "px";
+            			}
+
+
+            			var strLrcTMP = "";
+            			// JH-bugs: multi-line what?
+            			for (var j=0; j < arrlyricsList.length; j++) {
+            				strLrcTMP += lyricsList[ arrlyricsList[j] ];
+            			}
+
+            			return strLrcTMP;
+            		}
+            	}
+            });
+        },
+        lookup: function( title ) {
+            var me = ns.lyric;
+            if (me.map[ title ]) {
+                me.start(
+                    me.list[
+                        me.map[ title ]
+                ]);
+            }
+        }
     }
     ns.util = {
         formatTimestamp: formatTimestamp,
