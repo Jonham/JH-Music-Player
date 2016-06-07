@@ -10,6 +10,7 @@ visit [JH Music Player](http://music.jonham.cn/) (http://music.jonham.cn/) to en
 And you're welcome to fork and issue whatever come up in your mind.
 
 <hr>
+
 ## Features going to add
 1. **WebSocket**, with the help of _[Pusher](https://pusher.com/)_: makes **Remote Controls**.
 2. **Canvas**: visual display of music.
@@ -22,8 +23,10 @@ And you're welcome to fork and issue whatever come up in your mind.
 9. lyric search Engine or Song message search Engine, further album cover search engine
 10. make AJAX audio loading as a alternate plan when user device don't support AudioContext
 11. **"Functional HTML DOM Elements"** constructions
+12. **Event-Driven** or **State-Driven** mode.
 
 <hr>
+
 ## Features or Functions need tests
 01. **Supports for Browsers**: both Wechat and UC won't crack, but with same error message
     - [x] Wechat(enbeded QQ Browser): auto crack down    
@@ -33,13 +36,17 @@ And you're welcome to fork and issue whatever come up in your mind.
     **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
     I've catch errors both in rangeTime and rangeVolume.
 02. **Song** and **SongList**
+    - [ ] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
+    - [ ] songlist **mode** detail completion
     - [x] songlist .next, .play, .pause, .stop ...
     - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
-    - [ ] songlist: play-modes, counts
+    - [x] songlist: play-modes, counts
     - [x] song.timeOffset records ctx.currentTime when song begin
     - [x] requestAnimationFrame() to update audio time19. - [ ] open-screen animation :::: need more tests
 
 <hr>
+
+
 ## Bugs need fix
 
 01. main DOM elements display
@@ -48,7 +55,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] #page-comments needs basic framework setup
 04. **dConsole** window display
     - [x] dConsole display when button 'show console' was pressed
-    - [ ] display in FullScreen mode. [ change as a float window on the head of viewport]
+    - [x] display in FullScreen mode. [ change as a float window on the head of viewport]
 05. **FullScreen** API
     - [x] FullScreen API for devices
     - [ ] FullScreen Event listeners on other state change

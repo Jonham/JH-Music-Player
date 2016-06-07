@@ -4,6 +4,61 @@
     // add anything you like under NS.something
     //==> declare at the beginning of this file,
     //==> add to NS at the bottom
+
+    //utils: transform time format from 100 to 01:40
+    var formatTimestamp = function formatTimestamp(time) {
+        // current time show like 01:01 under the play&pause button
+    	var timeS = {}; // n: now; s: second; m: minute;
+    	timeS.n = parseInt(time);
+    	timeS.s = timeS.n % 60;
+    	timeS.m = parseInt(timeS.n / 60);
+
+    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+    };
+    //utils: preloadImage
+    var preloadImage = function( urlArray, loadedCallback ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+
+                loadedCallback && loadedCallback();
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    //utils: test if file isFile
+    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); };
+    //utils: compare file
+    var isOneFile = function( fileA, fileB ) {
+        if (isFile(fileA) && isFile(fileB)) {
+            if (fileA.size === fileB.size && fileA.name === fileB.name) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+
     var LocalFileList = function() {
 
         // FileContainer will store the true data
@@ -219,14 +274,14 @@
             this.__TIMEUPDATE = false;
 
             // if get argument file
-            if (file && file.toString() === '[object File]') { this.init( file ); }
+            if ( isFile(file) ) { this.init( file ); }
 
             return this;
         };
         Song.prototype = {
             init: function InitwithAudioFileBuffer( file ) {
                 var me = this;
-                if (!file || file.toString() !== '[object File]') {
+                if (!isFile(file)) {
                     throw new Error('Song.init() receive something but file.');
                 }
                 else {
@@ -638,7 +693,26 @@
                 });
                 return songTitles;//.splice(0, itemCount > 0? itemCount: undefined);
             };
-            songlist.output = function() {};
+
+            // private function to generate next song index by songlist.mode
+            var _whichIsNext = function() { // generate next song index
+                var me = songlist,
+                    mode = me.mode;
+                switch (mode) {
+                    case 'LOOP':
+
+                        break;
+                    case 'SHUFFLE':
+
+                        break;
+                    case 'REPEATONE':
+
+                        break;
+                    default:
+
+                }
+            };
+
             songlist.play = function( index ) {
                 var index = +index;
                 if (_.isNumber(index) && index < songlist.length) {
@@ -703,59 +777,6 @@
         };
     })(document.documentElement);
 
-    //utils: transform time format from 100 to 01:40
-    var formatTimestamp = function formatTimestamp(time) {
-        // current time show like 01:01 under the play&pause button
-    	var timeS = {}; // n: now; s: second; m: minute;
-    	timeS.n = parseInt(time);
-    	timeS.s = timeS.n % 60;
-    	timeS.m = parseInt(timeS.n / 60);
-
-    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
-    };
-    //utils: preloadImage
-    var preloadImage = function( urlArray, loadedCallback ) {
-        if (!_.isArray(urlArray)) { return false; }
-
-        var startTime = +new Date(), success = [], fail = [];
-        var process = function(index) {
-            if (index === urlArray.length - 1) {
-                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
-
-                loadedCallback && loadedCallback();
-            }
-        };
-        _.each( urlArray ,function(url, index) {
-            var i = new Image();
-            i.src = url;
-            i.onload = function() {
-                success.push({
-                    url: url,
-                    time: +new Date()
-                });
-                process(index);
-            };
-            i.onerror = function(e) {
-                fail.push({
-                    url: url,
-                    time: +new Date()
-                });
-            };
-        });
-    };
-    //utils: test if file isFile
-    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); };
-    //utils: compare file
-    var isOneFile = function( fileA, fileB ) {
-        if (isFile(fileA) && isFile(fileB)) {
-            if (fileA.size === fileB.size && fileA.name === fileB.name) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-
     // Lyric File
     var Lyric = function Lyric( file ) {
         if (this === window) { return new Lyric( file ); }
@@ -773,7 +794,7 @@
         };
 
         // if get argument file
-        if (file && file.toString() === '[object File]') { me.init( file ); }
+        if ( isFile(file) ) { me.init( file ); }
 
         return me;
     };
@@ -781,7 +802,7 @@
         init: function( file ) {
             var me = this;
 
-            if (!file || file.toString() !== '[object File]') {
+            if (!isFile(file)) {
                 throw new Error('Song.init() receive something but file.');
             }
             else {
@@ -973,6 +994,90 @@
         }
     }
 
+    // Image File : album covers
+    var AlbumCover = function( file ) {
+        if (this === window) { return new AlbumCover( file ); }
+        var me = this;
+
+        me._file = me._buffer = null;
+        me.fileName = me.size = me.type = null; // messages from File
+        me.title = me.artist = null;
+
+        me.states = {
+            init: false,
+            analyseFilename: false,
+            readFile: false
+        };
+
+        // if get argument file
+        if ( isFile(file) ) { me.init( file ); }
+
+        return me;
+    };
+    AlbumCover.prototype = {
+        init: function( file ) {
+            var me = this;
+
+            if (!isFile(file)) { throw new Error('Song.init() receive something but file.'); }
+            else {
+                me._file = file;
+
+                me.fileName = file.name;
+                me.size = file.size;
+                me.type = file.type;
+
+                me.states.init = true;
+
+                // analyseFilename for SongList update information
+                me.analyseFilename();
+
+                // overwrite init function
+                me.init = function() {
+                    console.error('Each Song can only init once.');
+                    return me;
+                };
+            }
+        },
+        analyseFilename: function() {
+            var me = this;
+
+            // main works
+            // get rid of subfix
+            var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+            // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
+            if (name.search('-') === -1) {
+                console.warn('Song: Not a Regular Filename.');
+                me.title = name.trim();
+                return me;
+            }
+
+            var result = name.split('-');
+            me.artist = result[0].trim(); result.shift();
+            me.title = result.length === 1? result[0].trim(): result.join('-').trim();
+
+            me.states.analyseFilename = true;
+
+            return me;
+        },
+
+        //Notes: readFile is an asynchronous function
+        readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
+            var me = this;
+
+            var fr = new FileReader();
+            fr.readAsDataURL(me._file);
+
+            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; callback(); };
+            fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
+            return me;
+        },
+        setBackgroundTo: function setBackgroundTo( target ) {
+            if(!$.isDOMElement(target)) { return false; }
+            var me = this;
+
+            target.style.backgroundImage = 'url(' + me._buffer + ")";
+        },
+    }
 
     // Binding to NS
     // adding to w.NS;
@@ -1104,7 +1209,11 @@
                 ]);
             }
         }
-    }
+    };
+    ns.album = {
+        AlbumCover: AlbumCover,
+        list: {}
+    };
     ns.util = {
         formatTimestamp: formatTimestamp,
         preloadImage:    preloadImage,
