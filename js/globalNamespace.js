@@ -170,7 +170,7 @@
                 headGain.gain.value = 0;
             },
             songEnd: function(song) {
-                NS.audio.songList.playNext();
+                NS.audio.songlist.playNext();
             },
         };
 
@@ -572,16 +572,28 @@
             constructor: Song
         };
 
-        // extendable songList
+        // extendable songlist
         var SongList = function() {
             var songlist = [];
 
             songlist.pre = 0;
             songlist.next = 1; // index for next one
-            songlist.playing = 0; // index for current playing or paused songList
+            songlist.playing = 0; // index for current playing or paused songlist
+
+            // bind songlist to #btn-playMode to change songlist.mode when button is clicked
+            songlist.init = function init( target ) {
+                target = $.isDOMElement(target)? target : $('#btn-playMode');
+                var me = songlist;
+
+                $on(target, 'playmodechange', function() {
+                    me.mode = target.node.mode;
+                });
+
+                return songlist;
+            }
 
             songlist.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
-
+            // private data set for songlist.mode
             var _mode = 'LOOP';
             // mode for playlist 'LOOP' 'REPEATONE' 'SHUFFLE'
             Object.defineProperty(songlist, 'mode', {
@@ -617,6 +629,8 @@
                     return songlist;
                 });
             };
+            songlist.output = function() {};
+
             songlist.titles = function( itemCount ) {
                 var songTitles = [];
                 songlist.forEach(function(song) {
@@ -642,14 +656,11 @@
             };
             songlist.playNext = function() {
                 // JH-todo: songlist should has a modes and playNext should add supports to that
-                songlist.play(songlist.next);
-            };
-            songlist.playPre = function() {
-                songlist.play( songlist.pre );
-            };
+                songlist.play(songlist.next); };
+            songlist.playPre = function() { songlist.play( songlist.pre ); };
             return songlist;
         };
-        var songList = new SongList();
+        var songlist = new SongList();
 
         return {
             Song: Song, // Song creator function
@@ -657,7 +668,7 @@
 
             ctx: ctx,
             headGain: headGain,
-            songList: songList,
+            songlist: songlist,
             currentPlayingSong: currentPlayingSong,
             controller: controller,
         }
@@ -733,7 +744,7 @@
         });
     };
     //utils: test if file isFile
-    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); }
+    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); };
     //utils: compare file
     var isOneFile = function( fileA, fileB ) {
         if (isFile(fileA) && isFile(fileB)) {
@@ -743,7 +754,7 @@
         }
 
         return false;
-    }
+    };
 
     // Lyric File
     var Lyric = function Lyric( file ) {

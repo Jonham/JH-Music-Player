@@ -526,7 +526,7 @@ div.bottom {
     cursor: pointer;
 }
 
-#btn-playMode, #btn-songList {
+#btn-playMode, #btn-songlist {
     padding: 1em;
     background-size: contain;
     margin-top: 20px;
@@ -552,7 +552,7 @@ div.bottom {
     margin: 0 1.5em;
 }
 #btn-playMode {
-    background-image: url('icons/mode-shuffle-w.svg');
+    background-image: url('icons/mode-loop-w.svg');
 }
 #btn-preSong {
     background-image: url('icons/pre-w.svg');
@@ -560,7 +560,7 @@ div.bottom {
 .btn-nextSong {
     background-image: url('icons/next-w.svg');
 }
-#btn-songList {
+#btn-songlist {
     background-image: url('icons/list-w.svg');
 }
 
@@ -902,7 +902,7 @@ ul#lyric {
 	position: absolute;
 	right: 0;
 }
-.bar-sub-controls .btn-songList,
+.bar-sub-controls .btn-songlist,
 .bar-sub-controls .btn-nextSong {
 	margin: 0;
 	padding: 1em;
@@ -911,7 +911,7 @@ ul#lyric {
 	background-position: 50%;
 	border: 0;
 }
-.btn-songList { background-image: url('icons/list-r.svg'); }
+.btn-songlist { background-image: url('icons/list-r.svg'); }
 .bar-sub-controls .btn-play {
 	/*background-image: url('icons/play-r.svg');*/
 	background-size: cover;

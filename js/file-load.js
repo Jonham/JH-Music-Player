@@ -107,7 +107,7 @@ var onFileLoad = function() {
 
     /* audioLoader: NS.audio
      ------------------------------------------------
-     *         songList => playlist, current one is in songList[0]
+     *         songlist => playlist, current one is in songlist[0]
      *         ctx   => AudioContext Instance
      * bufferSources => ctx.createBufferSource() Instance ==> because their buffer can only set once
      *
@@ -120,12 +120,12 @@ var onFileLoad = function() {
             }
 
             // let
-            var songList = NS.audio.songList;
+            var songlist = NS.audio.songlist;
 
-            songList.push( song );
+            songlist.push( song );
 
             // if there is other song on the songlist, add this song to the list too
-            if (songList.length > 1) {
+            if (songlist.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }

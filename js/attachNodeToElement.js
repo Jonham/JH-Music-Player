@@ -328,21 +328,30 @@ var addDOMElementNodeProperty = function() {
         },
     });
     NS.dom.btnPlayMode = attachNodeTo( btnPlayMode, {
-        state: 0,
-        mode: 'SHUFFLE',
+        state: 1, // 'LOOP' by default
+        mode: 'LOOP',
         Modes: ['SHUFFLE', 'LOOP', 'REPEATONE'],
         // toggle: function() {
         //     btnPlayMode.node.next();
         //     },
         next: function() {
                     var n = btnPlayMode.node;
-                    var map = ['SHUFFLE', 'LOOP', 'REPEATONE'];
+                    var map = n.Modes;
                     var nextState = ++n.state > 2? 0: n.state;
 
                     n.mode = map[nextState];
                     n.state = nextState;
 
                     n.update(n.mode);
+
+                    btnPlayMode.dispatchEvent(new Event('playmodechange'), {
+                        'bubbles': false,
+                        'defaultPrevented': true,
+                        'isTrusted': true,
+                        'target': btnPlayMode,
+                        'originalTarget': btnPlayMode,
+                        'srcElement': btnPlayMode
+                    });
                 },
         update: function( mode ) {
             var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
