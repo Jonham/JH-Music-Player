@@ -21,7 +21,7 @@ And you're welcome to fork and issue whatever come up in your mind.
 8. **History API** for using return button on browsers to route between each page and menu
 9. lyric search Engine or Song message search Engine, further album cover search engine
 10. make AJAX audio loading as a alternate plan when user device don't support AudioContext
-
+11. **"Functional HTML DOM Elements"** constructions
 
 <hr>
 ## Features or Functions need tests
@@ -41,6 +41,7 @@ And you're welcome to fork and issue whatever come up in your mind.
 
 <hr>
 ## Bugs need fix
+
 01. - [x] `<input type='file>` display
 02. - [x] highlight Ranges objects
 03. - [x] #page-comments needs basic framework setup
@@ -60,8 +61,10 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] prevent continuing clicks
     - [ ] wait and react until animations stop
 08. lyric and cover
-    - [ ] lyric loader and _timeupdate_ event for AudioContext decoded audio
+    - [x] lyric loader and _timeupdate_ event for AudioContext decoded audio
     - [ ] lyric and album image load when another start
+    - [ ] lyric parser for compressed lyric files
+    - [ ] lyric Empty lines handling
 09. control funcs and buttons
     - [x] play, nextSong buttons to work on SongList
     - [x] mute and volume controls on SongList

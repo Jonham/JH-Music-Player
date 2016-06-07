@@ -250,6 +250,7 @@ var addDOMElementNodeProperty = function() {
                 ); },
         update: function( arrTitles ) {
             var songlist = $('#songlist'),
+                viewCount = $(menuSonglist, '.count'),
                 temp = $wrap('ul');
             _.each(arrTitles, function(value, index, array){
                 temp.add( $wrap('li').html(value).data('index', index).getNode() );
@@ -257,6 +258,8 @@ var addDOMElementNodeProperty = function() {
             // add all titles to songlist
             $wrap( songlist ).empty()
                     .html( temp.html() );
+            // update #menuSonglist song counts
+            viewCount.innerHTML = arrTitles.length;
         },
         bind: function( songlist ) {
             if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
@@ -511,7 +514,7 @@ var addDOMElementNodeProperty = function() {
                     currentView = ALBUM;
                 }
                 else { // currentView === ALBUM
-                    NS.lyric.lookup( NS.audio.currentPlayingSong.title );
+                    NS.lyric.lookup( NS.audio.currentPlayingSong && NS.audio.currentPlayingSong.title );
                     viewLyric.style.opacity = 1;
                     viewAlbum.style.opacity = 0;
                     // rangeVolume.style.display = "block";

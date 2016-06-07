@@ -192,11 +192,11 @@
 
         // redirect all error message onto me.log
         // mainly for mobile device without console
-        $on(window, 'error', function(e) {
-            e.preventDefault();
-            me.error(e);
-            // me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        });
+        // $on(window, 'error', function(e) {
+        //     e.preventDefault();
+        //     me.error(e);
+        //     // me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        // });
 		return this;
 	};
 })(window);

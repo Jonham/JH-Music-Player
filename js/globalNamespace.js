@@ -405,7 +405,7 @@
                 // console.warn(me.title + me.artist);
                 NS.dom.tagSongMessage.node.update( me.title, me.artist );
                 // JH-bugs: me.artist is not defined
-                NS.lyric.lookup( NS.audio.currentPlayingSong.title );
+                NS.lyric.lookup( me.title );
 
                 try {
                     // play one song only
@@ -599,7 +599,7 @@
                 }
             });
 
-            songlist.push = function(){
+            songlist.push = function(){ // overwrite native Array.push to fulfill testing
                 var args = Array.prototype.slice.apply(arguments);
                 args.forEach(function(value) {
                     if ( value.toString() === '[object Song]' && value._state > '0_uninit' ) {
@@ -1003,7 +1003,7 @@
 
             var ul = $(me.currentView, 'ul');
 
-            me.__lastListener = $on(NS.audio.ctx, 'timeupdate', function() {
+            me.__lastListener = function() {
                 var song = NS.audio.currentPlayingSong;
 
                 var curTime = song.currentTime + OFFSET;
@@ -1037,7 +1037,9 @@
             			return strLrcTMP;
             		}
             	}
-            });
+            };
+
+            $on(NS.audio.ctx, 'timeupdate', me.__lastListener);
         },
         lookup: function( title ) {
             var me = ns.lyric;
