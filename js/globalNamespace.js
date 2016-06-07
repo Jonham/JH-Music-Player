@@ -236,6 +236,8 @@
         var Song = function Song( file ) {
             if (this === window) { return new Song( file ); }
 
+            this.constructor = Song;
+
             this._Steps = {
                 '0_uninit':true,
                 '1_init':false,
@@ -246,8 +248,6 @@
 
             this.context = ctx;
             this._NextToDo = ['init', 'readFile', 'decode', 'createBufferSource'];
-            this._targetStep = '0_uninit';
-            this._currentStep = '0_uninit';
             this._state = 'DONE'; // 'DONE'/'ING'
 
             // 1_init
@@ -426,11 +426,6 @@
             },
             connect: function ConnectSongToAudioContext( anotherAudioContextNode ) {
                 var me = this;
-                // if ( me._targetStep < '4_sourceBuffer' ) {
-                //     me._NextToDo.push('connect');
-                //     me.until('4_sourceBuffer');
-                //     return me;
-                // }
                 me.readFile(function() {
                     me.decode(function() {
                         me.createBufferSource();
@@ -624,9 +619,10 @@
                 return step; // all done
             },
             toString: function() { return '[object Song]'},
-            constructor: Song
         };
-
+        var isSong = function( song ) {
+            return song && song.constructor && song.constructor === Song;
+        }
         // extendable songlist
         var SongList = function() {
             var songlist = [];
@@ -669,13 +665,13 @@
             songlist.push = function(){ // overwrite native Array.push to fulfill testing
                 var args = Array.prototype.slice.apply(arguments);
                 args.forEach(function(value) {
-                    if ( value.toString() === '[object Song]' && value._state > '0_uninit' ) {
+                    if ( isSong(value) && value._state > '0_uninit' ) {
                         Array.prototype.push.call(songlist, value);
                         value.analyseFilename();
 
                         // callback functions when update
                         if (typeof(songlist.output) === 'function') {
-                            songlist.output( songlist.titles() );
+                            songlist.output( songlist.message() );
                         }
 
                         return songlist;
@@ -686,12 +682,15 @@
             };
             songlist.output = function() {};
 
-            songlist.titles = function( itemCount ) {
-                var songTitles = [];
+            songlist.message = function( itemCount ) {
+                var songMessage = [];
                 songlist.forEach(function(song) {
-                    songTitles.push( song.title ); // every Song will invoke Song.analyseFilename() before push into SongList
+                    songMessage.push( {
+                        title: song.title,
+                        artist: song.artist
+                    }); // every Song will invoke Song.analyseFilename() before push into SongList
                 });
-                return songTitles;//.splice(0, itemCount > 0? itemCount: undefined);
+                return songMessage;//.splice(0, itemCount > 0? itemCount: undefined);
             };
 
             // private function to generate next song index by songlist.mode
@@ -720,7 +719,8 @@
                     songlist.playing = index;
                     songlist.next = (index + 1) >= songlist.length? 0: (index + 1);
                     songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
-                } else {
+                }
+                else {
                     var index = 0;
                     songlist[index].play(0);
                     songlist.playing = index;
@@ -782,6 +782,8 @@
         if (this === window) { return new Lyric( file ); }
         var me = this;
 
+        me.constructor = Lyric;
+
         me._file = me._buffer = null;
         me.fileName = me.size = me.type = null; // messages from File
         me.title = me.artist = null;
@@ -832,7 +834,7 @@
             var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
             // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
             if (name.search('-') === -1) {
-                console.warn('Song: Not a Regular Filename.');
+                console.warn('Lyric: Not a Regular Filename.');
                 me.title = name;
                 return me;
             }
@@ -848,6 +850,9 @@
         //Notes: readFile is an asynchronous function
         readFile: function GetFileUsingFileReader( callback, DOMEncoding ) { // asynchronous function
             var me = this;
+
+            // already read
+            if ( me.states.readFile ) { callback && callback(); return me; }
 
             var fr = new FileReader();
             fr.readAsText(me._file, DOMEncoding || 'GB2312');
@@ -993,11 +998,16 @@
             return ul.innerHTML;
         }
     }
+    var isLyric = function( lyric ) {
+        return lyric && lyric.constructor && lyric.constructor === Lyric;
+    };
 
     // Image File : album covers
     var AlbumCover = function( file ) {
         if (this === window) { return new AlbumCover( file ); }
         var me = this;
+
+        me.constructor = AlbumCover;
 
         me._file = me._buffer = null;
         me.fileName = me.size = me.type = null; // messages from File
@@ -1046,7 +1056,7 @@
             var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
             // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
             if (name.search('-') === -1) {
-                console.warn('Song: Not a Regular Filename.');
+                console.warn('AlbumCover: Not a Regular Filename.');
                 me.title = name.trim();
                 return me;
             }
@@ -1064,6 +1074,8 @@
         readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
             var me = this;
 
+            if ( me.states.readFile ) { callback && callback(); return me; }
+
             var fr = new FileReader();
             fr.readAsDataURL(me._file);
 
@@ -1078,6 +1090,9 @@
             target.style.backgroundImage = 'url(' + me._buffer + ")";
         },
     }
+    var isCover = function( cover ) {
+        return cover && cover.constructor && cover.constructor === AlbumCover;
+    };
 
     // Binding to NS
     // adding to w.NS;
@@ -1099,7 +1114,32 @@
     ns.lyric = {
         Lyric: Lyric,
         list: {},
-        map: {}, // title ==> lyric
+        push: function( lyric ) {
+            var me = ns.lyric,
+                list = me.list;
+
+            if ( !isLyric(lyric) ) { return false; }
+
+            var fileOneTitle = list[ lyric.title ];
+            if (_.isArray( fileOneTitle )) {
+
+                for (var i = 0; i < fileOneTitle.length; i++) {
+
+                    if (isOneFile(l, lyric)) { return true; }
+                }
+
+                // no same file
+                fileOneTitle.push(lyric);
+            }
+            if (fileOneTitle) {
+                // same file
+                if ( isOneFile(fileOneTitle, lyric)) { return true; }
+                // same title but different files
+                list[ lyric.title ] = [ fileOneTitle, lyric ];
+            }
+
+            list[ lyric.title ] = lyric;
+        },
         currentLyric: null,
         currentView: null,
         bindLyric: function( lyric, callback ) {
@@ -1202,23 +1242,56 @@
         },
         lookup: function( title ) {
             var me = ns.lyric;
-            if (me.map[ title ]) {
-                me.start(
-                    me.list[
-                        me.map[ title ]
-                ]);
+            if (me.list[ title ]) {
+                me.start( me.list[ title ] );
             }
         }
     };
     ns.album = {
         AlbumCover: AlbumCover,
-        list: {}
+        list: {},
+        push: function( cover ) {
+            var me = ns.album,
+                list = me.list;
+
+            if ( !isCover(cover) ) { return false; }
+
+            var fileOneTitle = list[ cover.title ];
+            if (_.isArray( fileOneTitle )) {
+
+                for (var i = 0; i < fileOneTitle.length; i++) {
+
+                    if (isOneFile(l, cover)) { return true; }
+                }
+
+                // no same file
+                fileOneTitle.push(cover);
+            }
+            if (fileOneTitle) {
+                // same file
+                if ( isOneFile(fileOneTitle, cover)) { return true; }
+                // same title but different files
+                list[ cover.title ] = [ fileOneTitle, cover ];
+            }
+
+            list[ cover.title ] = cover;
+        },
+        lookup: function( title ) {
+            var me = ns.album;
+            if (me.list[ title ]) {
+                me.start( me.list[ title ] );
+            }
+        },
+        start: function( cover ) {
+            cover.readFile(function(){ cover.setBackgroundTo( $('#page-main')); });
+        },
     };
     ns.util = {
         formatTimestamp: formatTimestamp,
         preloadImage:    preloadImage,
         isFile:          isFile,
-        isOneFile:       isOneFile
+        isOneFile:       isOneFile,
+        isLyric:         isLyric,
     };
 })(window);
 

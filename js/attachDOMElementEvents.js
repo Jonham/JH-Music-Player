@@ -79,6 +79,7 @@ var attachDOMElementEvents = function() {
             var songlist = NS.audio.songlist;
 
             songlist.play(index);
+            $('#menu-songlist').node.current(+index);
         }
     });
 
@@ -174,8 +175,8 @@ var attachDOMElementEvents = function() {
                 }
             }
         };
-        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playPre(); };
-        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playNext(); };
+        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playNext(); };
+        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playPre(); };
 
         $click(btnPre, onPreSong);
         _.each(btnNextGroup, function( btnNextsong ) { $click(btnNextsong, onNextSong); });
