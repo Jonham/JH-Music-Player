@@ -8,12 +8,24 @@ var concat = require('gulp-concat');
 // var csslint = require('gulp-csslint');
 
 gulp.task('default', function(){
-    return gulp.src(['js/$getter.js','js/app.js','js/time-range.js','js/file-load.js'])
-        .pipe(babel({
-            presets: ['es2015']
-        }))
+    return gulp.src([
+        "js/cross-browser.js",
+        "js/$getter.js",
+        "js/globalNamespace.js",
+
+        "js/attachNodeToElement.js",
+        "js/attachDOMElementEvents.js",
+        "js/app.js",
+        "js/time-range.js",
+        "js/file-load.js",
+        "js/drag.js",
+        "js/debug-shorthand.js"])
+        // 'js/$getter.js','js/app.js','js/attachDOMElementEvents.js','js/attachNodeTo.js','js/cross-browser.js','js/debug-shorthand.js','js/time-range.js','js/file-load.js'])
+        // .pipe(babel({
+        //     presets: ['es2015']
+        // }))
         .pipe(concat('all.js'))
-        .pipe(beautify({intentSize: 4}))
+        // .pipe(beautify({intentSize: 4}))
         .pipe(gulp.dest('js'));
 });
 //

@@ -857,7 +857,7 @@
             var fr = new FileReader();
             fr.readAsText(me._file, DOMEncoding || 'GB2312');
 
-            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; callback(); };
+            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; NS.lyric.lookup( NS.audio.currentPlayingSong.title ); callback(); };
             fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
             return me;
         },
