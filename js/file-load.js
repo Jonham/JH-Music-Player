@@ -21,18 +21,6 @@ var onFileLoad = function() {
     };
     // file loading mode: 1:media; 2:lyric; 3:image
     var onFileRead = function(file, callback) {
-        var fr = new FileReader();
-
-        var type = file.type,
-            size = file.size,
-            name = file.name,
-            fileMsg = {
-                name: name,
-                size:  size,
-                type:  type
-            };
-            // dConsole.debug(fileMsg);
-        // dConsole.log('is a file of ' + type + ' || size:' + size);
 
         // test type support
         var loadingMode = -1;
@@ -66,6 +54,8 @@ var onFileLoad = function() {
             }
         };
 
+        var type = file.type,
+            name = file.name;
         var aMsg = name.split('.'),
         subfix = aMsg[ aMsg.length - 1];
         typeMapBySubfix( subfix );
@@ -73,46 +63,41 @@ var onFileLoad = function() {
         if (type !== '') {
             var aMIME = type.split('/');
             typeMapByMIME( aMIME[0] );
-            // dConsole.log('File MIME: ' + type + " || treat it as a " + aMIME[0] + ' file.');
         } else {
         }
-        // test twice
-        // dConsole.log('File subfix: ' + subfix + " || treat it as a " + typeMapBySubfix(subfix));
 
         if (!loadingMode) { return false; }
 
         switch (loadingMode) {
             case 1: // media file
-                dConsole.log('FileReader: loading ' + file.name);
-                // fr.readAsArrayBuffer(file); JH-debug: change audio callback
-                callback( new NS.audio.Song( file ), loadingMode, fileMsg );
+                dConsole.log('onFileRead: loading ' + file.name);
+                callback( new NS.audio.Song( file ), loadingMode );
                 break;
             case 2: // pure-text file Lyric
-                dConsole.log('FileReader: loading ' + file.name);
-                callback( new NS.lyric.Lyric( file ), loadingMode, fileMsg );
-                // fr.readAsText(file, 'GB2312');
-                // fr.readAsText(file);
+                dConsole.log('onFileRead: loading ' + file.name);
+                callback( new NS.lyric.Lyric( file ), loadingMode );
                 break;
             case 3:
-                dConsole.log('FileReader: loading ' + file.name);
-                fr.readAsDataURL(file);
+                dConsole.log('onFileRead: loading ' + file.name);
+                callback( new NS.album.AlbumCover( file ), loadingMode );
+                // fr.readAsDataURL(file);
                 break;
             default:
         }
 
-        fr.onload  = function(e) { callback(fr.result, loadingMode, fileMsg); };
-        fr.onerror = function(e) { dConsole.log('ERROR: FileReader=>' + e); };
+        // fr.onload  = function(e) { callback(fr.result, loadingMode, fileMsg); };
+        // fr.onerror = function(e) { dConsole.log('ERROR: FileReader=>' + e); };
 
     };
 
     /* audioLoader: NS.audio
      ------------------------------------------------
-     *         songList => playlist, current one is in songList[0]
+     *         songlist => playlist, current one is in songlist[0]
      *         ctx   => AudioContext Instance
      * bufferSources => ctx.createBufferSource() Instance ==> because their buffer can only set once
      *
     */
-    var handleFile = function( fileBuffer, loadingMode, fileMsg ) { // var audioLoader = function( fileBuffer, fileMsg ) {
+    var handleFile = function( file, loadingMode ) { // var audioLoader = function( file, fileMsg ) {
         var handleAudioFile = function( song ) {
             if (!NS.audio) {
                 console.error('Your browser don\'t support AudioContext, Please use a modern browser and try me again.');
@@ -120,12 +105,12 @@ var onFileLoad = function() {
             }
 
             // let
-            var songList = NS.audio.songList;
+            var songlist = NS.audio.songlist;
 
-            songList.push( song );
+            songlist.push( song );
 
             // if there is other song on the songlist, add this song to the list too
-            if (songList.length > 1) {
+            if (songlist.length > 1) {
                 dConsole.log('audioLoader: song added to Playlist.');
                 return false;
             }
@@ -141,7 +126,7 @@ var onFileLoad = function() {
         // lyric file loader
         var handleLyricFile = function( lyric ) {
             NS.lyric.list[ lyric.fileName ] = lyric;
-
+            // JH-bugs: what if overwrite?
             lyric.analyseFilename();
             NS.lyric.map[ lyric.title ] = lyric.fileName;
 
@@ -150,21 +135,23 @@ var onFileLoad = function() {
         };
 
         // image file loader
-        var handleImageFile = function( fileBuffer ) {
+        var handleImageFile = function( cover ) {
             // dConsole.log('imageLoader: set image as new background.');
-            $wrap( $('#page-main') ).backgroundImage(fileBuffer);
+            // $wrap( $('#page-main') ).backgroundImage(file);
+            NS.album.list[ cover.title ] = cover;
+            cover.readFile(function(){ cover.setBackgroundTo( $('#page-main')); });
         };
 
         // handling logic
         switch (loadingMode) {
             case 1:
-                handleAudioFile(fileBuffer, fileMsg);
+                handleAudioFile(file);
                 break;
             case 2:
-                handleLyricFile(fileBuffer, fileMsg);
+                handleLyricFile(file);
                 break;
             case 3:
-                handleImageFile(fileBuffer, fileMsg);
+                handleImageFile(file);
                 break;
             default:
         }

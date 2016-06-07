@@ -61,8 +61,8 @@ var attachDOMElementEvents = function() {
     };
 
     //onEVENTS-03: menuSongList click
-    bindBtntoMenu([ '#btn-songList',
-                    '.btn-songList'], '#menu-songlist');
+    bindBtntoMenu([ '#btn-songlist',
+                    '.btn-songlist'], '#menu-songlist');
     //onEVENTS-04: menuShare click
     bindBtntoMenu('#btn-share', '#menu-share');
     //onEVENTS-05: btnFileOption
@@ -76,9 +76,9 @@ var attachDOMElementEvents = function() {
         if (e.target.tagName === 'LI') {
             e.stopPropagation();
             var index = $wrap(e.target).data('index');
-            var songList = NS.audio.songList;
+            var songlist = NS.audio.songlist;
 
-            songList.play(index);
+            songlist.play(index);
         }
     });
 
@@ -174,8 +174,8 @@ var attachDOMElementEvents = function() {
                 }
             }
         };
-        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songList.playPre(); };
-        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songList.playNext(); };
+        var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playPre(); };
+        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playNext(); };
 
         $click(btnPre, onPreSong);
         _.each(btnNextGroup, function( btnNextsong ) { $click(btnNextsong, onNextSong); });
@@ -188,7 +188,7 @@ var attachDOMElementEvents = function() {
         e.stopPropagation();
         $('input[type=file]').click();
     });
-};
+};// attachDOMElementEvents() end
 attachDOMElementEvents();
 
 // this work for <audio>

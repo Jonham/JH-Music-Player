@@ -4,6 +4,61 @@
     // add anything you like under NS.something
     //==> declare at the beginning of this file,
     //==> add to NS at the bottom
+
+    //utils: transform time format from 100 to 01:40
+    var formatTimestamp = function formatTimestamp(time) {
+        // current time show like 01:01 under the play&pause button
+    	var timeS = {}; // n: now; s: second; m: minute;
+    	timeS.n = parseInt(time);
+    	timeS.s = timeS.n % 60;
+    	timeS.m = parseInt(timeS.n / 60);
+
+    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+    };
+    //utils: preloadImage
+    var preloadImage = function( urlArray, loadedCallback ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+
+                loadedCallback && loadedCallback();
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    //utils: test if file isFile
+    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); };
+    //utils: compare file
+    var isOneFile = function( fileA, fileB ) {
+        if (isFile(fileA) && isFile(fileB)) {
+            if (fileA.size === fileB.size && fileA.name === fileB.name) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+
     var LocalFileList = function() {
 
         // FileContainer will store the true data
@@ -170,7 +225,7 @@
                 headGain.gain.value = 0;
             },
             songEnd: function(song) {
-                NS.audio.songList.playNext();
+                NS.audio.songlist.playNext();
             },
         };
 
@@ -219,14 +274,14 @@
             this.__TIMEUPDATE = false;
 
             // if get argument file
-            if (file && file.toString() === '[object File]') { this.init( file ); }
+            if ( isFile(file) ) { this.init( file ); }
 
             return this;
         };
         Song.prototype = {
             init: function InitwithAudioFileBuffer( file ) {
                 var me = this;
-                if (!file || file.toString() !== '[object File]') {
+                if (!isFile(file)) {
                     throw new Error('Song.init() receive something but file.');
                 }
                 else {
@@ -405,7 +460,7 @@
                 // console.warn(me.title + me.artist);
                 NS.dom.tagSongMessage.node.update( me.title, me.artist );
                 // JH-bugs: me.artist is not defined
-                NS.lyric.lookup( NS.audio.currentPlayingSong.title );
+                NS.lyric.lookup( me.title );
 
                 try {
                     // play one song only
@@ -572,16 +627,28 @@
             constructor: Song
         };
 
-        // extendable songList
+        // extendable songlist
         var SongList = function() {
             var songlist = [];
 
             songlist.pre = 0;
             songlist.next = 1; // index for next one
-            songlist.playing = 0; // index for current playing or paused songList
+            songlist.playing = 0; // index for current playing or paused songlist
+
+            // bind songlist to #btn-playMode to change songlist.mode when button is clicked
+            songlist.init = function init( target ) {
+                target = $.isDOMElement(target)? target : $('#btn-playMode');
+                var me = songlist;
+
+                $on(target, 'playmodechange', function() {
+                    me.mode = target.node.mode;
+                });
+
+                return songlist;
+            }
 
             songlist.MODES = ['LOOP', 'REPEATONE', 'SHUFFLE'];
-
+            // private data set for songlist.mode
             var _mode = 'LOOP';
             // mode for playlist 'LOOP' 'REPEATONE' 'SHUFFLE'
             Object.defineProperty(songlist, 'mode', {
@@ -599,7 +666,7 @@
                 }
             });
 
-            songlist.push = function(){
+            songlist.push = function(){ // overwrite native Array.push to fulfill testing
                 var args = Array.prototype.slice.apply(arguments);
                 args.forEach(function(value) {
                     if ( value.toString() === '[object Song]' && value._state > '0_uninit' ) {
@@ -617,6 +684,8 @@
                     return songlist;
                 });
             };
+            songlist.output = function() {};
+
             songlist.titles = function( itemCount ) {
                 var songTitles = [];
                 songlist.forEach(function(song) {
@@ -624,7 +693,26 @@
                 });
                 return songTitles;//.splice(0, itemCount > 0? itemCount: undefined);
             };
-            songlist.output = function() {};
+
+            // private function to generate next song index by songlist.mode
+            var _whichIsNext = function() { // generate next song index
+                var me = songlist,
+                    mode = me.mode;
+                switch (mode) {
+                    case 'LOOP':
+
+                        break;
+                    case 'SHUFFLE':
+
+                        break;
+                    case 'REPEATONE':
+
+                        break;
+                    default:
+
+                }
+            };
+
             songlist.play = function( index ) {
                 var index = +index;
                 if (_.isNumber(index) && index < songlist.length) {
@@ -642,14 +730,11 @@
             };
             songlist.playNext = function() {
                 // JH-todo: songlist should has a modes and playNext should add supports to that
-                songlist.play(songlist.next);
-            };
-            songlist.playPre = function() {
-                songlist.play( songlist.pre );
-            };
+                songlist.play(songlist.next); };
+            songlist.playPre = function() { songlist.play( songlist.pre ); };
             return songlist;
         };
-        var songList = new SongList();
+        var songlist = new SongList();
 
         return {
             Song: Song, // Song creator function
@@ -657,7 +742,7 @@
 
             ctx: ctx,
             headGain: headGain,
-            songList: songList,
+            songlist: songlist,
             currentPlayingSong: currentPlayingSong,
             controller: controller,
         }
@@ -692,17 +777,6 @@
         };
     })(document.documentElement);
 
-    // transform time format from 100 to 01:40
-    var formatTimestamp = function formatTimestamp(time) {
-        // current time show like 01:01 under the play&pause button
-    	var timeS = {}; // n: now; s: second; m: minute;
-    	timeS.n = parseInt(time);
-    	timeS.s = timeS.n % 60;
-    	timeS.m = parseInt(timeS.n / 60);
-
-    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
-    };
-
     // Lyric File
     var Lyric = function Lyric( file ) {
         if (this === window) { return new Lyric( file ); }
@@ -720,7 +794,7 @@
         };
 
         // if get argument file
-        if (file && file.toString() === '[object File]') { me.init( file ); }
+        if ( isFile(file) ) { me.init( file ); }
 
         return me;
     };
@@ -728,7 +802,7 @@
         init: function( file ) {
             var me = this;
 
-            if (!file || file.toString() !== '[object File]') {
+            if (!isFile(file)) {
                 throw new Error('Song.init() receive something but file.');
             }
             else {
@@ -920,6 +994,90 @@
         }
     }
 
+    // Image File : album covers
+    var AlbumCover = function( file ) {
+        if (this === window) { return new AlbumCover( file ); }
+        var me = this;
+
+        me._file = me._buffer = null;
+        me.fileName = me.size = me.type = null; // messages from File
+        me.title = me.artist = null;
+
+        me.states = {
+            init: false,
+            analyseFilename: false,
+            readFile: false
+        };
+
+        // if get argument file
+        if ( isFile(file) ) { me.init( file ); }
+
+        return me;
+    };
+    AlbumCover.prototype = {
+        init: function( file ) {
+            var me = this;
+
+            if (!isFile(file)) { throw new Error('Song.init() receive something but file.'); }
+            else {
+                me._file = file;
+
+                me.fileName = file.name;
+                me.size = file.size;
+                me.type = file.type;
+
+                me.states.init = true;
+
+                // analyseFilename for SongList update information
+                me.analyseFilename();
+
+                // overwrite init function
+                me.init = function() {
+                    console.error('Each Song can only init once.');
+                    return me;
+                };
+            }
+        },
+        analyseFilename: function() {
+            var me = this;
+
+            // main works
+            // get rid of subfix
+            var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+            // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
+            if (name.search('-') === -1) {
+                console.warn('Song: Not a Regular Filename.');
+                me.title = name.trim();
+                return me;
+            }
+
+            var result = name.split('-');
+            me.artist = result[0].trim(); result.shift();
+            me.title = result.length === 1? result[0].trim(): result.join('-').trim();
+
+            me.states.analyseFilename = true;
+
+            return me;
+        },
+
+        //Notes: readFile is an asynchronous function
+        readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
+            var me = this;
+
+            var fr = new FileReader();
+            fr.readAsDataURL(me._file);
+
+            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; callback(); };
+            fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
+            return me;
+        },
+        setBackgroundTo: function setBackgroundTo( target ) {
+            if(!$.isDOMElement(target)) { return false; }
+            var me = this;
+
+            target.style.backgroundImage = 'url(' + me._buffer + ")";
+        },
+    }
 
     // Binding to NS
     // adding to w.NS;
@@ -992,6 +1150,7 @@
             // setup for scroll lyrics
             var offsetTop = "";
             var lyricHightlightOriginTop = 160;
+            var OFFSET = 0; // for lyric to show earlier
 
             me.bindLyric(lyric, function() {
                 me.bindView($('#view-lyric'));
@@ -1003,7 +1162,7 @@
 
             var ul = $(me.currentView, 'ul');
 
-            me.__lastListener = $on(NS.audio.ctx, 'timeupdate', function() {
+            me.__lastListener = function() {
                 var song = NS.audio.currentPlayingSong;
 
                 var curTime = song.currentTime + OFFSET;
@@ -1037,7 +1196,9 @@
             			return strLrcTMP;
             		}
             	}
-            });
+            };
+
+            $on(NS.audio.ctx, 'timeupdate', me.__lastListener);
         },
         lookup: function( title ) {
             var me = ns.lyric;
@@ -1048,9 +1209,16 @@
                 ]);
             }
         }
-    }
+    };
+    ns.album = {
+        AlbumCover: AlbumCover,
+        list: {}
+    };
     ns.util = {
         formatTimestamp: formatTimestamp,
+        preloadImage:    preloadImage,
+        isFile:          isFile,
+        isOneFile:       isOneFile
     };
 })(window);
 

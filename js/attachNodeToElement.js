@@ -250,6 +250,7 @@ var addDOMElementNodeProperty = function() {
                 ); },
         update: function( arrTitles ) {
             var songlist = $('#songlist'),
+                viewCount = $(menuSonglist, '.count'),
                 temp = $wrap('ul');
             _.each(arrTitles, function(value, index, array){
                 temp.add( $wrap('li').html(value).data('index', index).getNode() );
@@ -257,6 +258,8 @@ var addDOMElementNodeProperty = function() {
             // add all titles to songlist
             $wrap( songlist ).empty()
                     .html( temp.html() );
+            // update #menuSonglist song counts
+            viewCount.innerHTML = arrTitles.length;
         },
         bind: function( songlist ) {
             if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
@@ -325,21 +328,30 @@ var addDOMElementNodeProperty = function() {
         },
     });
     NS.dom.btnPlayMode = attachNodeTo( btnPlayMode, {
-        state: 0,
-        mode: 'SHUFFLE',
+        state: 1, // 'LOOP' by default
+        mode: 'LOOP',
         Modes: ['SHUFFLE', 'LOOP', 'REPEATONE'],
         // toggle: function() {
         //     btnPlayMode.node.next();
         //     },
         next: function() {
                     var n = btnPlayMode.node;
-                    var map = ['SHUFFLE', 'LOOP', 'REPEATONE'];
+                    var map = n.Modes;
                     var nextState = ++n.state > 2? 0: n.state;
 
                     n.mode = map[nextState];
                     n.state = nextState;
 
                     n.update(n.mode);
+
+                    btnPlayMode.dispatchEvent(new Event('playmodechange'), {
+                        'bubbles': false,
+                        'defaultPrevented': true,
+                        'isTrusted': true,
+                        'target': btnPlayMode,
+                        'originalTarget': btnPlayMode,
+                        'srcElement': btnPlayMode
+                    });
                 },
         update: function( mode ) {
             var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
@@ -511,7 +523,7 @@ var addDOMElementNodeProperty = function() {
                     currentView = ALBUM;
                 }
                 else { // currentView === ALBUM
-                    NS.lyric.lookup( NS.audio.currentPlayingSong.title );
+                    NS.lyric.lookup( NS.audio.currentPlayingSong && NS.audio.currentPlayingSong.title );
                     viewLyric.style.opacity = 1;
                     viewAlbum.style.opacity = 0;
                     // rangeVolume.style.display = "block";
