@@ -125,20 +125,14 @@ var onFileLoad = function() {
 
         // lyric file loader
         var handleLyricFile = function( lyric ) {
-            NS.lyric.list[ lyric.fileName ] = lyric;
-            // JH-bugs: what if overwrite?
-            lyric.analyseFilename();
-            NS.lyric.map[ lyric.title ] = lyric.fileName;
-
-            dConsole.log(lyric.fileName + ' added to NS.lyric.list.');
+            NS.lyric.push(lyric);
             lyric.decode();
+            dConsole.log(lyric.fileName + ' added to NS.lyric.list.');
         };
 
         // image file loader
         var handleImageFile = function( cover ) {
-            // dConsole.log('imageLoader: set image as new background.');
-            // $wrap( $('#page-main') ).backgroundImage(file);
-            NS.album.list[ cover.title ] = cover;
+            NS.album.push( cover );
             cover.readFile(function(){ cover.setBackgroundTo( $('#page-main')); });
         };
 

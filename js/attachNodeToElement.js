@@ -248,18 +248,22 @@ var addDOMElementNodeProperty = function() {
                     function(){ menuSonglist.classList.toggle('menu-hide'); },
                     _.isNumber(second)? second: 0
                 ); },
-        update: function( arrTitles ) {
+        update: function( arrMessage ) {
             var songlist = $('#songlist'),
                 viewCount = $(menuSonglist, '.count'),
                 temp = $wrap('ul');
-            _.each(arrTitles, function(value, index, array){
-                temp.add( $wrap('li').html(value).data('index', index).getNode() );
+            _.each(arrMessage, function(value, index, array){
+                temp.add(
+                    $wrap('li').html(value.title)
+                               .data('index', index)
+                               .add( $wrap('span').html( " - " + value.artist ).getNode() )
+                               .getNode() );
             });
             // add all titles to songlist
             $wrap( songlist ).empty()
                     .html( temp.html() );
             // update #menuSonglist song counts
-            viewCount.innerHTML = arrTitles.length;
+            viewCount.innerHTML = arrMessage.length;
         },
         bind: function( songlist ) {
             if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
@@ -269,6 +273,22 @@ var addDOMElementNodeProperty = function() {
                 };
             }
                 },
+        current: function( index ) {
+            var me = menuSonglist;
+            var last = $(me, '.current');
+            if (last && _.isNumber(last.length) ) {
+                _.each(last, function(item){ item.classList.remove('current');});
+            } else {
+                if (last) { last.classList.remove('current'); }
+            }
+
+            var group = $(me, 'li');
+            if (group.length) {
+                group[ index ].classList.add('current');
+            } else {
+                group && group.classList.add('current');
+            }
+        },
     });
     NS.dom.menuLyricOption = attachNodeTo( menuLyricOption, {
         hide: function(second) {
@@ -596,7 +616,6 @@ var addDOMElementNodeProperty = function() {
         }
     });
     btnPlaySystem.node = btnPlayMainpage.node;
-
 
 };
 addDOMElementNodeProperty();

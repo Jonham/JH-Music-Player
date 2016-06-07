@@ -679,12 +679,24 @@ ul#lyric {
 	padding: 0;
 	margin: 0;
 }
+/* space placer */
 #menu-songlist ul:before {
 	content: 'E';
 	height: 3em;
 	display: block;
 }
 
+#menu-songlist li > span {
+	font-size: .6em;
+}
+#menu-songlist li.current {
+	color: red;
+}
+#menu-songlist li.current:before {
+	content: " ";
+	display: inline-block;
+	background-color: red;
+}
 
 
 #menu-share {
