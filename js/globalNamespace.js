@@ -692,7 +692,7 @@
         };
     })(document.documentElement);
 
-    // transform time format from 100 to 01:40
+    //utils: transform time format from 100 to 01:40
     var formatTimestamp = function formatTimestamp(time) {
         // current time show like 01:01 under the play&pause button
     	var timeS = {}; // n: now; s: second; m: minute;
@@ -702,6 +702,48 @@
 
     	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
     };
+    //utils: preloadImage
+    var preloadImage = function( urlArray, loadedCallback ) {
+        if (!_.isArray(urlArray)) { return false; }
+
+        var startTime = +new Date(), success = [], fail = [];
+        var process = function(index) {
+            if (index === urlArray.length - 1) {
+                dConsole.log('Images loaded: success x ' + success.length + "|| fail x " + fail.length);
+
+                loadedCallback && loadedCallback();
+            }
+        };
+        _.each( urlArray ,function(url, index) {
+            var i = new Image();
+            i.src = url;
+            i.onload = function() {
+                success.push({
+                    url: url,
+                    time: +new Date()
+                });
+                process(index);
+            };
+            i.onerror = function(e) {
+                fail.push({
+                    url: url,
+                    time: +new Date()
+                });
+            };
+        });
+    };
+    //utils: test if file isFile
+    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); }
+    //utils: compare file
+    var isOneFile = function( fileA, fileB ) {
+        if (isFile(fileA) && isFile(fileB)) {
+            if (fileA.size === fileB.size && fileA.name === fileB.name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     // Lyric File
     var Lyric = function Lyric( file ) {
@@ -992,6 +1034,7 @@
             // setup for scroll lyrics
             var offsetTop = "";
             var lyricHightlightOriginTop = 160;
+            var OFFSET = 0; // for lyric to show earlier
 
             me.bindLyric(lyric, function() {
                 me.bindView($('#view-lyric'));
@@ -1053,6 +1096,9 @@
     }
     ns.util = {
         formatTimestamp: formatTimestamp,
+        preloadImage:    preloadImage,
+        isFile:          isFile,
+        isOneFile:       isOneFile
     };
 })(window);
 

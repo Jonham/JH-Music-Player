@@ -42,41 +42,46 @@ And you're welcome to fork and issue whatever come up in your mind.
 <hr>
 ## Bugs need fix
 
-01. - [x] `<input type='file>` display
-02. - [x] highlight Ranges objects
-03. - [x] #page-comments needs basic framework setup
-04. dConsole window display
+01. main DOM elements display
+    - [x] `<input type='file>` display
+    - [x] highlight Ranges objects
+    - [x] #page-comments needs basic framework setup
+04. **dConsole** window display
     - [x] dConsole display when button 'show console' was pressed
     - [ ] display in FullScreen mode. [ change as a float window on the head of viewport]
-05. FullScreen API
+05. **FullScreen** API
     - [x] FullScreen API for devices
     - [ ] FullScreen Event listeners on other state change
     - [ ] to hide FullScreen button when is not available
-06. Icons and Display
+06. **Icons** and Display
     - [x] Icons for each Page and Menu items
     - [x] sub-controls bar in #page-system ( btn-play circle display)
     - [ ] zip up _svg_ files of icon
-07. touch events:
+    - [ ] images and icons preload
+10. **Events**
+    - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
+07. **touch** events:
     - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
     - [ ] wait and react until animations stop
-08. lyric and cover
+08. **lyric** and cover
     - [x] lyric loader and _timeupdate_ event for AudioContext decoded audio
     - [ ] lyric and album image load when another start
     - [ ] lyric parser for compressed lyric files
     - [ ] lyric Empty lines handling
-09. control funcs and buttons
+09. **control** funcs and buttons
     - [x] play, nextSong buttons to work on SongList
     - [x] mute and volume controls on SongList
-10. Events
-    - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
-11. Pages, menus, sidebar display
+11. main parts display: Pages, menus, sidebar
     - [x] #sidebar-left bottom position
     - [x] #page-comments .btn-back position to highlight
     - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
-12. - [x] **mask layer** for avoiding mistake touches and clicks
-13. - [ ] bind up related blocks
-14. - [ ] images and icons preload
-17. - [ ] controls in mainpage display in iPhone4 (narrow in width)
-18. - [ ] supports information for all kind of Browsers
+12. **Supports** among browsers
+    - [ ] controls in mainpage display in iPhone4 (narrow in width)
+    - [ ] supports information for all kind of Browsers
+    - [ ] supports for Devices like iPhone or other weak supports of HTML5, to provide a alternate options to load a remote file and lyric to enjoy the player
+13. **mask layer**
+    - [x] mask layer for avoiding mistake touches and clicks
+14. **Integration**
+    - [ ] bind up related blocks
