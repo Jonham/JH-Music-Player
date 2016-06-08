@@ -857,7 +857,7 @@
             var fr = new FileReader();
             fr.readAsText(me._file, DOMEncoding || 'GB2312');
 
-            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; NS.lyric.lookup( NS.audio.currentPlayingSong.title ); callback(); };
+            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; NS.lyric.lookup( NS.audio.currentPlayingSong && NS.audio.currentPlayingSong.title ); callback(); };
             fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
             return me;
         },
@@ -942,7 +942,8 @@
                         }
 
                         // collect this line of lyric
-                        lyrics.push( arr[i] );
+                        var lyriccontent = arr[i].search(/[^\s]/g) !== -1? arr[i] : '...'; // to place a '_' in empty lines
+                        lyrics.push( lyriccontent );
                         var indexOftheLyric = lyrics.length - 1;
 
                         // restore timetagsofOneLyric to oResult
