@@ -374,6 +374,17 @@ hr.divider {
     background-size: cover;
     background-position: 50%;
 }
+#view-lyric span.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+#view-canvas {
+	position: absolute;
+	top: -50px;
+	left: -150px;
+}
+
 span.song-opt-grp {
     position: absolute;
     bottom: 0;
