@@ -189,5 +189,29 @@ var attachDOMElementEvents = function() {
         e.stopPropagation();
         $('input[type=file]').click();
     });
+
+    //onEVENTS-12: #pageSystem subpage
+    var subpagesSystem = $(pageSystem, '.subpage-container'),
+        subpagesBtns = $(pageSystem, '.icon-group');
+        _.each($(subpagesBtns, 'span'), function(v,i){v.dataset.index=i;});
+        $click(subpagesBtns, function(e) {
+                console.log(e.target);
+            if (e.target.tagName === 'SPAN') {
+                switch (e.target.dataset.index) {
+                    case "0":
+                        subpagesSystem.node.turnTo1();
+                        break;
+                    case "1":
+                        subpagesSystem.node.turnTo2();
+                        break;
+                    case "2":
+                        subpagesSystem.node.turnTo3();
+                        break;
+                    default:
+
+                }
+            }
+        });
+
 };// attachDOMElementEvents() end
 attachDOMElementEvents();

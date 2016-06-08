@@ -24,6 +24,8 @@
 </head>
 <body>
     <div id="viewport">
+        <!-- hidden image for better display on Wechat-->
+        <image style="display:none;" src="img/Default-Icon-800.jpg"></image>
         <!-- this span.mask help identify click events -->
         <span class="mask"></span>
 
@@ -124,25 +126,36 @@
                 </span>
                 <span class="btn icon icon-search"></span>
             </span>
-            <span class="subpage-container">
-                <span id="subpage-netease" class="sub-page">
-                    <span class="file-loader">
-                        <span>Click here to add files.</span>
-                        <input id="fileLoader" class="btn" class=".layer-6" type="file" multiple="true" />
+            <span class="paddingUpDown">
+                <span class="subpage-container">
+                <div class="ease-p3">
+                    <span id="subpage-netease" class="sub-page">
+                        <span>
+                            <button id="btn-tryout" class="btn">Try It Now!</button>
+                        </span>
+                        <span class="file-loader">
+                            <span>Click here to add files.</span>
+                            <input id="fileLoader" class="btn" class=".layer-6" type="file" multiple="true" />
+                        </span>
+                        <span>
+                            <button id="btn-showConsole" class="btn">Show Console</button>
+                        </span>
+                        <span>
+                            <button id="btn-fullscreen" class="btn">Go FullScreen Now!</button>
+                        </span>
                     </span>
-                    <span>
-                        <button id="btn-showConsole">Show Console</button>
+                </div>
+                <div class="page-hide-right ease-p3">
+                    <span id="subpage-music" class="sub-page">
+                        <span style="display:block;">Subpage-Music</span>
                     </span>
-                    <span>
-                        <button id="btn-fullscreen" class="btn">Go FullScreen Now!</button>
+                </div>
+                <div class="page-hide-right ease-p3">
+                    <span id="subpage-people" class="sub-page">
+                        <span style="display:block;">Subpage-People</span>
                     </span>
-                </span>
-                <span id="subpage-music" class="sub-page">
-                    <span style="display:block;">Subpage-Music</span>
-                </span>
-                <span id="subpage-people" class="sub-page">
-                    <span style="display:block;">Subpage-People</span>
-                </span>
+                </div>
+            </span>
             </span>
 
             <span class="bar-sub-controls">
@@ -173,7 +186,7 @@
             </span>
             <span class='container'>
                 <ul id="songlist">
-                    
+
                 </ul>
             </span>
         </div>

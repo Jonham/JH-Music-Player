@@ -12,6 +12,7 @@ var addDOMElementNodeProperty = function() {
 
     var pageMain     = $('#page-main'),
         pageSystem   = $('#page-system'),
+        subpagesSystem = $(pageSystem, '.subpage-container'),
         pageComments   = $('#page-comments'),
         sidebarLeft  = $('#sidebar-left'),
         menuSonglist = $('#menu-songlist'),
@@ -112,6 +113,35 @@ var addDOMElementNodeProperty = function() {
                     _.isNumber(second)? second: 0
                 ); },
     });
+    NS.dom.subpagesSystem = attachNodeTo( subpagesSystem, {
+        currentPage: 1,
+        page1: $(subpagesSystem, 'div')[0],
+        page2: $(subpagesSystem, 'div')[1],
+        page3: $(subpagesSystem, 'div')[2],
+        turnTo1: function(){
+            var me = subpagesSystem.node;
+            me.page1.classList.remove('page-hide-left');
+            me.page2.classList.add('page-hide-right');
+            me.page3.classList.add('page-hide-right');
+            me.currentPage = 1;
+        },
+        turnTo2: function(){
+            var me = subpagesSystem.node;
+            me.page2.classList.remove('page-hide-left');
+            me.page2.classList.remove('page-hide-right');
+            me.page1.classList.add('page-hide-left');
+            me.page3.classList.add('page-hide-right');
+            me.currentPage = 2;
+        },
+        turnTo3: function(){
+            var me = subpagesSystem.node;
+            me.page3.classList.remove('page-hide-right');
+            me.page2.classList.remove('page-hide-right');
+            me.page2.classList.add('page-hide-left');
+            me.page1.classList.add('page-hide-left');
+            me.currentPage = 3;
+        },
+    }),
     NS.dom.pageComments = attachNodeTo( pageComments, {
         hideRight: function(second) {
             window.clearTimeout( timers.pageComments );
