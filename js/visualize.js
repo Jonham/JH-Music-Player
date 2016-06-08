@@ -42,7 +42,8 @@ var v = function( height, width, gain ) {
         for (var i = 0; i < bufferLength; i++) {
             barHeight = dataArray[i];
 
-            canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',' + 20 + ',' + 20 +')';
+            canvasCtx.fillStyle = 'rgb(0,0,0)';
+            // canvasCtx.fillStyle = 'rgb(' + (255 - barHeight) + ',' + (255 - barHeight) + ',' + (255 -barHeight) +')';
             // canvasCtx.fillRect(x, 0, barWidth, barHeight / 2);
             canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
 

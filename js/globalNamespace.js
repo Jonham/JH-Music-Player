@@ -46,7 +46,7 @@
         });
     };
     //utils: test if file isFile
-    var isFile = function( file ) { return !!(file.size && file.toString && file.toString() === '[object File]'); };
+    var isFile = function( file ) { return !!(typeof(file) === 'object' && file.size >= 0 && file.toString && file.toString() === '[object File]'); };
     //utils: compare file
     var isOneFile = function( fileA, fileB ) {
         if (isFile(fileA) && isFile(fileB)) {
@@ -517,8 +517,9 @@
                     }
 
                     NS.audio.currentPlayingSong = me;
-                    if (me._Steps['4_sourceBuffer']) {
+                    if (me._Steps['3_decode']) {
                         // play if sourceBufferNode was never been played
+                        me.createBufferSource();
                         me.createGain();
                         me.output.connect(NS.audio.headGain);
 
@@ -530,6 +531,7 @@
                         me.timeupdate();
                     }
                     else {
+                        console.log('connect here?');
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
                             me.sourceBufferNode.start(0);
