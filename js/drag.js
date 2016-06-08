@@ -121,11 +121,11 @@ NS.ranges.volume = new addDragEventsTo(rangeVolume);
 var stopMobileBrowserDefaultGesture = function( mobile, target ) {
     if (!mobile || !$.isDOMElement(target)) { return false; }
 
-    $preventDefault(target, 'touchstart');
+    // $preventDefault(target, 'touchstart');
     // $stopPropagation(target, 'touchstart');
-    $preventDefault(target, 'touchmove');
+    // $preventDefault(target, 'touchmove');
     // $stopPropagation(target, 'touchmove');
-    $preventDefault(target, 'touchend');
+    // $preventDefault(target, 'touchend');
     // $stopPropagation(target, 'touchend');
 };
 stopMobileBrowserDefaultGesture( NS.supports.moible, window);

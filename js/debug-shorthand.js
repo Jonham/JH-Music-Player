@@ -2,3 +2,40 @@ var list = NS.audio.songlist;
 list.init();
 NS.dom.menuSonglist.node.bind( list );
 var lyric = NS.lyric;
+
+var script = $dom('script');
+script.src = './js/visualize.js';
+document.body.appendChild(script);
+script.onload = function() { v(); };
+
+var btnTryout = $('#btn-tryout'),
+    btnTryoutState = true;
+$click(btnTryout, function(e) {
+    var load = function( path, callback, responseType ) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', path);
+        xhr.onload = function() { callback( xhr.response ); };
+        xhr.onerror = function(e) { throw Error( e.toString() ); };
+        if (responseType) { xhr.responseType = responseType; }
+        xhr.send();
+    }
+    if (btnTryoutState) {
+        btnTryoutState = false;
+
+        load('music/OneRepublic - Good Life.lrc', function(result) {
+            var lrc = new NS.lyric.Lyric( new File([], 'OneRepublic - Good Life.lrc') );
+            lrc._buffer = result;
+            lrc.states.readFile = true;
+            lrc.decode(function(){NS.lyric.push(lrc);});
+        });
+        load('music/OneRepublic - Good Life.mp3', function(result) {
+            var song = new NS.audio.Song( new File([], 'OneRepublic - Good Life.mp3') );
+            song._buffer = result;
+            song._Steps['2_readFile'] = true;
+            song.decode( function(){
+                NS.audio.songlist.push(song);
+                song.play();
+            } );
+        }, 'arraybuffer');
+    }
+});

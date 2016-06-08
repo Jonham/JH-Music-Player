@@ -374,6 +374,17 @@ hr.divider {
     background-size: cover;
     background-position: 50%;
 }
+#view-lyric span.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+#view-canvas {
+	position: absolute;
+	top: -50px;
+	left: -150px;
+}
+
 span.song-opt-grp {
     position: absolute;
     bottom: 0;
@@ -847,17 +858,37 @@ ul#lyric {
 	position: absolute;
 	right: 0;
 }
+#page-system span.paddingUpDown {
+	padding-bottom: 8em;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	position: absolute;
+}
 #page-system > .subpage-container {
-	position: relative;
+	position: absolute;
 	width: 100%;
 	padding: 0;
 	margin: 0;
-	overflow: hidden;
+}
+.subpage-container > div {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 90%;
+	overflow-y: scroll;
 }
 .sub-page {
 	display: inline-block;
 	position: relative;
 	width: 100%;
+}
+#subpage-netease, #subpage-music, #subpage-people {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
 }
 #subpage-netease {
 
@@ -899,6 +930,8 @@ ul#lyric {
 .tag-songMessage span {
 	display: block;
 	position: relative;
+	white-space: nowrap;
+	max-width:
 }
 .tag-songTitle {
 	top: 0;
@@ -909,7 +942,7 @@ ul#lyric {
 	font-size: .6em;
 }
 .bar-sub-controls .view-controls {
-	margin-top: 1em;
+	margin-top: .8em;
 	display: inline-block;
 	position: absolute;
 	right: 0;
@@ -932,7 +965,7 @@ ul#lyric {
 	border: 2px solid red;
 	border-radius: 100%;
 	margin: 0 .5em;
-	padding: 0.25em 0.8em;
+	padding: 0.2em 0.8em;
 }
 .bar-sub-controls .btn-nextSong { background-image: url('icons/next-r.svg'); }
 .bar-sub-controls .range {
@@ -1138,12 +1171,22 @@ button#btn-fullscreen {
     color: white;
 	z-index: -1;
 	text-align: center;
+	border: none;
 }
 button#btn-showConsole {
 	height: 2em;
 	width: 100%;
 	box-sizing: border-box;
 	font-size: 20px;
+	border: none;
+}
+button#btn-tryout {
+	border: none;
+	background-color: white;
+	color: green;
+	height: 2em;
+	font-size: 20px;
+	width: 100%;
 }
 
 #dConsole {
