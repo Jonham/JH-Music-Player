@@ -185,6 +185,33 @@
         //   and browser support AudioContext() [webkitAudioContext() included]
         return NS.supports.audioContext && result !== -1;
     };
+    // FullScreen
+    var supportFullScreen = (function(docElem) {
+        var fullscreen = cancelFullscreen = null;
+        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
+            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
+        var requestFullScreen = function( elem ) {
+            for (var index = 0; index < fsWays.length; index++) {
+                if (docElem[ fsWays[index] ]) {
+                    fullscreen = fsWays[index]; break;
+                }
+            }
+            if (!fullscreen) { return false; }
+            return elem[fullscreen]();
+        };
+        var cancelFullScreen = function() {
+            for (var index = 0; index < cfsWays.length; index++) {
+                if (document[ cfsWays[index] ]) {
+                    cancelFullscreen = cfsWays[index]; break;
+                }
+            }
+            return document[cancelFullscreen]();
+        }
+        return {
+            requestFullScreen: requestFullScreen,
+            cancelFullScreen:  cancelFullScreen
+        };
+    })(document.documentElement);
 
 
     // AudioContext
@@ -746,36 +773,7 @@
             currentPlayingSong: currentPlayingSong,
             controller: controller,
         }
-    }
-
-
-    // FullScreen
-    var supportFullScreen = (function(docElem) {
-        var fullscreen = cancelFullscreen = null;
-        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
-            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
-        var requestFullScreen = function( elem ) {
-            for (var index = 0; index < fsWays.length; index++) {
-                if (docElem[ fsWays[index] ]) {
-                    fullscreen = fsWays[index]; break;
-                }
-            }
-            if (!fullscreen) { return false; }
-            return elem[fullscreen]();
-        };
-        var cancelFullScreen = function() {
-            for (var index = 0; index < cfsWays.length; index++) {
-                if (document[ cfsWays[index] ]) {
-                    cancelFullscreen = cfsWays[index]; break;
-                }
-            }
-            return document[cancelFullscreen]();
-        }
-        return {
-            requestFullScreen: requestFullScreen,
-            cancelFullScreen:  cancelFullScreen
-        };
-    })(document.documentElement);
+    };
 
     // Lyric File
     var Lyric = function Lyric( file ) {
@@ -1112,6 +1110,9 @@
 
     ns.audio = audioCtx();
     ns.lyric = {
+        defaults: {
+            currentView: $('#view-lyric'),
+        },
         Lyric: Lyric,
         list: {},
         push: function( lyric ) {
@@ -1164,11 +1165,11 @@
             me.currentView = view;
 
             // JH-bugs: what if lyric is not lyric.states.decode ?
-            if ( _.isObject(me.currentLyric) ) {
+            if ( isLyric(me.currentLyric) ) {
                 var linesLyric = me.currentLyric.generate();
                 ul.innerHTML = linesLyric;
             }
-            else if ( _.isObject( lyric ) ) {
+            else if ( isLyric( lyric ) ) {
                 var linesLyric = lyric.generate();
                 ul.innerHTML = linesLyric;
             }
@@ -1180,7 +1181,7 @@
             // ensure lyric is decoded.
             if (!lyric.states.decode) {
                 lyric.decode(function() {
-                    me.start( lyric );
+                    me.lookup( lyric.title ); // in case user change another song
                 });
                 return me;
             }
@@ -1193,7 +1194,7 @@
             var OFFSET = 0; // for lyric to show earlier
 
             me.bindLyric(lyric, function() {
-                me.bindView($('#view-lyric'));
+                me.bindView( me.defaults.currentView );
             });
 
             var lrc = lyric[0];
@@ -1240,14 +1241,31 @@
 
             $on(NS.audio.ctx, 'timeupdate', me.__lastListener);
         },
+        end: function() {
+            var me = ns.lyric;
+            $off(NS.audio.ctx, 'timeupdate', me.__lastListener);
+            if (!me.currentView) { me.bindView(me.defaults.currentView); }
+
+            var ul = $(me.currentView, 'ul');
+            ul.innerHTML = '<span class="btn" style="color:rgba(255,255,255,0.6);" onclick="$(\'input[type=file]\').click();">Click option button to add a lyric file.</span>';
+        },
         lookup: function( title ) {
             var me = ns.lyric;
-            if (me.list[ title ]) {
+            if (me.list[ title ]) { // match
                 me.start( me.list[ title ] );
+            }
+            else { // no match
+                me.end();
             }
         }
     };
     ns.album = {
+        defaults: {
+            toCover: [
+                $('#page-main'),
+                $.toArray( $('.view-albumCover') )
+            ],
+        },
         AlbumCover: AlbumCover,
         list: {},
         push: function( cover ) {
@@ -1283,7 +1301,16 @@
             }
         },
         start: function( cover ) {
-            cover.readFile(function(){ cover.setBackgroundTo( $('#page-main')); });
+            var me = ns.album;
+            _.each(me.defaults.toCover, function( elem ){
+                if (_.isArray( elem )) {
+                    _.each(elem, function(item) {
+                        cover.readFile(function(){ cover.setBackgroundTo( item ); });
+                    });
+                } else {
+                    cover.readFile(function(){ cover.setBackgroundTo( elem ); });
+                }
+            });
         },
     };
     ns.util = {
@@ -1301,7 +1328,4 @@
     var elem = $dom('div#dConsole');
 	document.body.appendChild(elem);
 	w.dConsole = new DebugConsole(elem);
-
-    // for loaded lrc
-    w.loadedLRClist = [];
 })(window);

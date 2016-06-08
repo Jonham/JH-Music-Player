@@ -133,10 +133,10 @@ var attachDOMElementEvents = function() {
         viewLyric = $('#view-lyric');
     $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) {
-        if (e.target.tagName == 'LI') {
-            // when click on Lyric lines stop turning
-            return false;
-        }
+        // if (e.target.tagName == 'LI') {
+        //     // when click on Lyric lines stop turning
+        //     return false;
+        // }
         viewContainer.node.toggle();
     });
 
@@ -191,53 +191,3 @@ var attachDOMElementEvents = function() {
     });
 };// attachDOMElementEvents() end
 attachDOMElementEvents();
-
-// this work for <audio>
-function startPlay() {
-    var playOrPause = function() {
-        if (!once) {
-            audio.paused ? audio.play() : audio.pause();
-        }
-        else { // first time
-
-            audio.src = './music/OneRepublic - Good Life.mp3';
-            // auto play
-            $on(audio, "canplay", function() {
-                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
-                if (audio.paused) { audio.play(); }
-            });
-
-            $on(audio, "durationchange", function() {
-                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
-            });
-            $on(audio, "loadedmetadata", function() {
-                tagTotalTime.innerHTML = formatTimestamp(audio.duration);
-            });
-
-            $on(audio, 'play', function() {
-                btnPlay.style.backgroundImage = btnIcons.pause;
-                viewDisk.classList.add('goRound');
-            });
-            $on(audio, 'pause', function() {
-                btnPlay.style.backgroundImage = btnIcons.play;
-				viewDisk.classList.remove('goRound');
-            });
-            // media loaded seekable range
-            var loaded = $('span.loaded');
-            $on(audio, 'progress', function(e){
-              loaded.style.width = this.seekable.length * 100 + '%';
-            });
-
-            // turnoff all hightlighted lines when user seekable
-            $on(audio, 'seeking', function(e) {
-                var domLIs = $(lyric, '.focus');
-                var aFocus = Array.prototype.slice.apply(domLIs);
-                aFocus.forEach(function(ele) {ele.className = 'line';});
-            });
-
-            once = false;
-        }
-    }; // playOrPause()
-
-    // $on(btnPlay, "click", playOrPause);
-}

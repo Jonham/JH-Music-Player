@@ -133,7 +133,7 @@ var onFileLoad = function() {
         // image file loader
         var handleImageFile = function( cover ) {
             NS.album.push( cover );
-            cover.readFile(function(){ cover.setBackgroundTo( $('#page-main')); });
+            NS.album.start( cover );
         };
 
         // handling logic
