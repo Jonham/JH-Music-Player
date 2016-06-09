@@ -31,7 +31,7 @@ $click(btnTryout, function(e) {
         load('music/OneRepublic - Good Life.mp3', function(result) {
             var song = new NS.audio.Song( new File([], 'OneRepublic - Good Life.mp3') );
             song._buffer = result;
-            song._Steps['2_readFile'] = true;
+            song.states.readFile = true;
             song.decode( function(){
                 NS.audio.songlist.push(song);
                 song.play();

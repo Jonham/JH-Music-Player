@@ -8,12 +8,14 @@
     //utils: transform time format from 100 to 01:40
     var formatTimestamp = function formatTimestamp(time) {
         // current time show like 01:01 under the play&pause button
-    	var timeS = {}; // n: now; s: second; m: minute;
-    	timeS.n = parseInt(time);
-    	timeS.s = timeS.n % 60;
-    	timeS.m = parseInt(timeS.n / 60);
+    	var num = parseInt(time),
+            sec = num % 60,
+            min = parseInt( num / 60);
+        var mtTwo = function(n) {
+            return n < 0? '00':
+                     n < 10? '0'+n: ''+n; }; // more than two digits
 
-    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+    	return mtTwo(min) + ":" + mtTwo(sec);
     };
     //utils: preloadImage
     var preloadImage = function( urlArray, loadedCallback ) {
@@ -57,6 +59,46 @@
 
         return false;
     };
+
+
+    // desktop browsers don't support touch events
+    var mobileOrDestop = function() { return null === document.ontouchend; };
+    // another way: not completed
+    var mobileOrDestop1 = function() {
+        var ug = navigator.userAgent;
+        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
+        dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
+        // return true if userAgent fulfill desktop-browser conditions
+        //   and browser support AudioContext() [webkitAudioContext() included]
+        return NS.supports.audioContext && result !== -1;
+    };
+    // FullScreen
+    var supportFullScreen = (function(docElem) {
+        var fullscreen = cancelFullscreen = null;
+        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
+            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
+        var requestFullScreen = function( elem ) {
+            for (var index = 0; index < fsWays.length; index++) {
+                if (docElem[ fsWays[index] ]) {
+                    fullscreen = fsWays[index]; break;
+                }
+            }
+            if (!fullscreen) { return false; }
+            return elem[fullscreen]();
+        };
+        var cancelFullScreen = function() {
+            for (var index = 0; index < cfsWays.length; index++) {
+                if (document[ cfsWays[index] ]) {
+                    cancelFullscreen = cfsWays[index]; break;
+                }
+            }
+            return document[cancelFullscreen]();
+        }
+        return {
+            requestFullScreen: requestFullScreen,
+            cancelFullScreen:  cancelFullScreen
+        };
+    })(document.documentElement);
 
 
     var LocalFileList = function() {
@@ -172,48 +214,6 @@
     };
 
 
-    // desktop browsers don't support touch events
-    var mobileOrDestop = function() {
-        return null === document.ontouchend;
-    };
-    // another way: not completed
-    var mobileOrDestop1 = function() {
-        var ug = navigator.userAgent;
-        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
-        dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
-        // return true if userAgent fulfill desktop-browser conditions
-        //   and browser support AudioContext() [webkitAudioContext() included]
-        return NS.supports.audioContext && result !== -1;
-    };
-    // FullScreen
-    var supportFullScreen = (function(docElem) {
-        var fullscreen = cancelFullscreen = null;
-        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
-            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
-        var requestFullScreen = function( elem ) {
-            for (var index = 0; index < fsWays.length; index++) {
-                if (docElem[ fsWays[index] ]) {
-                    fullscreen = fsWays[index]; break;
-                }
-            }
-            if (!fullscreen) { return false; }
-            return elem[fullscreen]();
-        };
-        var cancelFullScreen = function() {
-            for (var index = 0; index < cfsWays.length; index++) {
-                if (document[ cfsWays[index] ]) {
-                    cancelFullscreen = cfsWays[index]; break;
-                }
-            }
-            return document[cancelFullscreen]();
-        }
-        return {
-            requestFullScreen: requestFullScreen,
-            cancelFullScreen:  cancelFullScreen
-        };
-    })(document.documentElement);
-
-
     // AudioContext
     var supportAudioContext = function() { return !!window.AudioContext; };
     // this contains Song(), SongList()
@@ -235,7 +235,7 @@
         var controller = {
             play: function() {
                 var currentPlayingSong = NS.audio.currentPlayingSong;
-                if (currentPlayingSong.paused) {
+                if (currentPlayingSong.PAUSED) {
                     currentPlayingSong.play();
                 }
                 return currentPlayingSong;
@@ -261,49 +261,48 @@
         // "I think maybe I just quit and go back home to make noodles."
         // I think this gay works like a Promise
         var Song = function Song( file ) {
-            if (this === window) { return new Song( file ); }
+            var me = this;
+            if (me === window) { return new Song( file ); }
 
-            this.constructor = Song;
+            me.constructor = Song;
 
-            this._Steps = {
-                '0_uninit':true,
-                '1_init':false,
-                '2_readFile':false,
-                '3_decode':false,
-                '4_sourceBuffer':false
+            me.states = {
+                init: false,
+                analyseFilename: false,
+                readFile: false,
+                decode: false,
+                createBufferSource: false
             };
 
-            this.context = ctx;
-            this._NextToDo = ['init', 'readFile', 'decode', 'createBufferSource'];
-            this._state = 'DONE'; // 'DONE'/'ING'
+            me.context = ctx; // AudioContext
+            me.ASYNCHRONOUS = false;    // is this song doing asynchronous works
 
-            // 1_init
-            this._file = null;
-            this.fileName = this.size = this.type = null; // messages from File
-            // extra: message after analyse fileName
-            this.title = this.artist = null;
-            // 2_getBuffer
-            this._buffer = null;
-            // 3_decode
-            this._audioBuffer = null;
-            // 4_sourceBuffer
-            this.output = this.sourceBufferNode = this.gainNode = null;
-            this.duration = null; // message after audio decode
-            // for state after play
-            this.paused = false;
-            this.stopped = false;
+            // init
+            me._file = null;
+            me.fileName = me.size = me.type = null; // messages from File
+            me.title = me.artist = null;
+            // getBuffer
+            me._buffer = null;
+            // decode
+            me._audioBuffer = null;
+            // createBufferSource
+            me.output = me.bufferSourceNode = me.gainNode = null;
+            // message after audio decode
+            me.duration = null;
+            // playing states
+            me.PAUSED = false;
+            me.STOPPED = false;
 
-            // playing state
-            this.currentTime = 0; // like audio
-            this.timeOffset = 0;  // offset between audio.currentTime and ctx.currentTime
-            this.__timer = null;  // for requestAnimationFrame to store ID
-            this.onTimeupdate = []; // functions that invoke when timeupdate
-            this.__TIMEUPDATE = false;
+            // wrapped as an Audio object
+            me.currentTime = 0; // like audio
+            me.timeOffset = 0;  // offset between audio.currentTime and ctx.currentTime
+            me.__timer = null;  // for requestAnimationFrame to store ID
+            me.__TIMEUPDATE = false;
 
             // if get argument file
-            if ( isFile(file) ) { this.init( file ); }
+            if ( isFile(file) ) { me.init( file ); }
 
-            return this;
+            return me;
         };
         Song.prototype = {
             init: function InitwithAudioFileBuffer( file ) {
@@ -312,22 +311,18 @@
                     throw new Error('Song.init() receive something but file.');
                 }
                 else {
+                    if (me.states.init) { console.error('Each Song can only init once.'); return me;}
+
                     me._file = file;
-                    me._Steps['1_init'] = true;
-                    me._NextToDo.shift();
+                    me.states.init = true;
 
                     me.fileName = file.name;
                     me.size = file.size;
                     me.type = file.type;
 
                     // analyseFilename for SongList update information
-                    me.analyseFilename();
+                    me.analyseFilename(); // filling title,artist
 
-                    // overwrite init function
-                    me.init = function() {
-                        console.error('Each Song can only init once.');
-                        return me;
-                    };
                 }
             },
             analyseFilename: function() {
@@ -335,118 +330,112 @@
 
                 // main works
                 // get rid of subfix
-                var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+                var name = me.fileName.substring(0, me.fileName.lastIndexOf('.') );
                 // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
                 if (name.search('-') === -1) {
                     console.warn('Song: Not a Regular Filename.');
-                    me.title = name;
+                    me.title = name.trim();
                     return me;
                 }
                 var result = name.split('-');
                 me.artist = result[0].trim(); result.shift();
-                me.title = result.length === 1? result[0].trim(): result.join('-').trim();
+                me.title  = result.length === 1? result[0].trim(): result.join('-').trim();
+                me.states.analyseFilename = true;
 
                 return me;
             },
             //Notes: readFile is an asynchronous function
-            readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
+            readFile: function ReadFileUsingFileReader( callback ) { // asynchronous function
                 var me = this;
+                if (me.states.readFile) { typeof(callback) === 'function' && callback(); return me;}
+                if (me.ASYNCHRONOUS) { throw new Error('Song is processing.'); }
 
                 // main work
-                me._state = 'ING';
+                me.ASYNCHRONOUS = true;
 
                 var fr = new FileReader();
                 fr.readAsArrayBuffer( me._file );
-                // console.log(fr + 'readAsArrayBuffer');
                 fr.onload = function(e) {
                     me._buffer = fr.result;
-                    me._Steps['2_readFile'] = true;
-                    me._NextToDo.shift();
-                    console.log('file loaded.');
+                    me.states.readFile = true;
+                    console.log('Song: ' + me.title + ' loaded.');
 
-                    me._state = 'DONE'
-                    callback();
-                    // me.next();
+                    me.ASYNCHRONOUS = false;
+                    typeof(callback) === 'function' && callback();
                 };
                 fr.onerror = function(e) {
-                    console.error('Song load buffer ERROR:');
-                    console.log(e);
-                    me._state = 'DONE';
+                    console.error(e);
+                    me.ASYNCHRONOUS = false;
+                    throw new Error('Song load buffer failed.');
                 };
                 return me;
             },
             //Notes: decode is an asynchronous function
             decode: function DecodeAudioData( callback ) { // asynchronous function
                 var me = this;
+                if (!me.states.readFile) { me.readFile(function(){ me.decode(callback); }); return me;}
+                if (me.states.decode) { typeof(callback) === 'function' && callback(); return me;}
+                if (me.ASYNCHRONOUS) { throw new Error('Song is processing.'); }
+
 
                 // main work
-                me._state = 'ING';
+                me.ASYNCHRONOUS = true;
                 // decode using AudioContext
                 ctx.decodeAudioData(me._buffer, function( audioBuffer ) {
                     me._audioBuffer = audioBuffer;
-                    me._Steps['3_decode'] = true;
-                    me._NextToDo.shift();
+                    me.states.decode = true;
 
-                    me._state = 'DONE';
-                    callback();
-                    // me.next();
+                    me.ASYNCHRONOUS = false;
+                    typeof(callback) === 'function' && callback();
                 });
                 return me;
             },
-            createBufferSource: function CreateBufferSourceNode( callback ) { // if you want to play one more time
+            createBufferSource: function ( callback ) { // if you want to play one more time
                 var me = this;
+                if (!me.states.decode) { me.decode(function(){ me.createBufferSource(callback); }); return me;}
 
                 // main works
                 var bs = ctx.createBufferSource();
-
+                bs.buffer = me._audioBuffer;
                 bs.onended = function(e) {
-                    me.stopped = true;
+                    me.STOPPED = true;
                     controller.songEnd( me ); // callback with song
-                    console.log('songEnd: ' + me.title);
+                    console.log('SongEnd: ' + me.title);
                 };
 
-                // JH-bugs: what if this._audioBuffer is not set
-                bs.buffer = me._audioBuffer;
-                if(me.sourceBufferNode) {
-                    me.sourceBufferNode.disconnect();
-                }
-                me.sourceBufferNode = bs;
+                if(me.bufferSourceNode) { me.bufferSourceNode.disconnect(); }
+                me.bufferSourceNode = bs;
+
                 me.currentTime = 0;
                 me.timeOffset = 0;
                 cancelAnimationFrame( me.__timer );
                 me.__TIMEUPDATE = false;
 
-                // console.log('new sourceBufferNode created.');
+                // if there is a gainNode, connect to it
+                if (me.gainNode) { bs.connect(me.gainNode); }
+                // otherwise, set bufferSourceNode to me.output
+                else { me.output = bs; }
 
-                if (me.gainNode) { // if there is a gainNode, connect to it
-                    bs.connect(me.gainNode);
-                }
-                else { // otherwise, set sourceBufferNode to me.output
-                    me.output = bs;
-                }
+                me.states.createBufferSource = true;
 
-                me._Steps['4_sourceBuffer'] = true;
-
-                if (_.isFunction(callback)) {
-                    callback( me.sourceBufferNode );
-                }
+                typeof(callback) === 'function' && callback( me.bufferSourceNode );
                 return me;
             },
             getDuration: function GetSongDuration() {
                 var me = this;
+                if (!me.states.decode) { me.decode(function(){ me.getDuration(); }); return me;}
 
                 me.duration = me._audioBuffer.duration;
                 return me.duration;
             },
-            createGain: function createGain( createNewGain ) {
+            createGain: function createGain() {
                 var me = this;
+                if (!me.states.createBufferSource) { me.createBufferSource(function(){ me.createGain(); }); return me;}
 
                 // if can't get one, create one
-                if (!me.gainNode) {
-                    me.gainNode = ctx.createGain();
-                }
+                if (!me.gainNode) { me.gainNode = ctx.createGain(); }
 
-                me.sourceBufferNode.connect(me.gainNode);
+                me.bufferSourceNode.connect(me.gainNode);
                     me.output = me.gainNode;
 
                 return me;
@@ -461,7 +450,9 @@
 
                         if (anotherAudioContextNode && anotherAudioContextNode.disconnect) {
                             me.output.connect( anotherAudioContextNode );
-                        } else {
+                        }
+                        else {
+                                // get a function
                             if ( typeof(anotherAudioContextNode) === 'function' ) { anotherAudioContextNode(); }
                             me.output.connect( headGain );
                         }
@@ -488,24 +479,24 @@
                     // play one song only
                     if (lastone && lastone !== me) { lastone.stop(); }
 
-                    // when audio had been paused
-                    if (me.paused) { // if play after pause, just connect to headGain
+                    // when audio had been PAUSED
+                    if (me.PAUSED) { // if play after pause, just connect to headGain
                         me.output.connect(NS.audio.headGain);
 
                         tagTotalTime.innerHTML = format( me.duration );
 
                         me.timeupdate();
 
-                        me.paused = false;
-                        me.stopped = false;
+                        me.PAUSED = false;
+                        me.STOPPED = false;
                         return me;
                     }
 
                     // when audio had been stop
-                    if (me.stopped) { // create newe buffersource if me had been stop
+                    if (me.STOPPED) { // create newe buffersource if me had been stop
                         me.createBufferSource(function() {
-                            me.stopped = false;
-                            me.paused = false;
+                            me.STOPPED = false;
+                            me.PAUSED = false;
                             me.play();
                             me.getDuration();
                             tagTotalTime.innerHTML = format( me.duration );
@@ -517,13 +508,13 @@
                     }
 
                     NS.audio.currentPlayingSong = me;
-                    if (me._Steps['3_decode']) {
-                        // play if sourceBufferNode was never been played
+                    if (me.states.decode) {
+                        // play if bufferSourceNode was never been played
                         me.createBufferSource();
                         me.createGain();
                         me.output.connect(NS.audio.headGain);
 
-                        me.sourceBufferNode.start(0);
+                        me.bufferSourceNode.start(0);
                         me.getDuration();
                         tagTotalTime.innerHTML = format( me.duration );
 
@@ -534,7 +525,7 @@
                         console.log('connect here?');
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
-                            me.sourceBufferNode.start(0);
+                            me.bufferSourceNode.start(0);
                             me.getDuration();
                             tagTotalTime.innerHTML = format( me.duration );
 
@@ -544,7 +535,7 @@
                     }
 
                 }
-                catch(e) { // sourceBufferNode is already play
+                catch(e) { // bufferSourceNode is already play
                     console.log(e);
                     me.output.disconnect();
 
@@ -563,7 +554,7 @@
                     me.__TIMEUPDATE = false;
                 }
                 me.createBufferSource();
-                me.sourceBufferNode.start(0, time);
+                me.bufferSourceNode.start(0, time);
 
                 me.currentTime = time;
                 // console.log('play at time ' + time);
@@ -573,29 +564,29 @@
             },
             stop: function() {
                 var me = this;
-                if (me.stopped) { return me; }
-                if (me._Steps['4_sourceBuffer']) {
+                if (me.STOPPED) { return me; }
+                if (me.states.createBufferSource) {
 
                     NS.dom.viewDisk.node.turnOff();
 
-                    me.stopped = true;
+                    me.STOPPED = true;
                     me.currentTime = me.duration;
                     me.timeOffset = me.context.currentTime;
                     cancelAnimationFrame( me.__timer );
                     me.__TIMEUPDATE = false;
 
                     me.output.disconnect();
-                    me.sourceBufferNode.stop(0);
+                    me.bufferSourceNode.stop(0);
                 }
                 return me;
             },
             pause: function() {
                 var me = this;
-                if (me.paused || me.stopped) { return me; }
+                if (me.PAUSED || me.STOPPED) { return me; }
                 NS.dom.viewDisk.node.turnOff();
 
                 me.output.disconnect(NS.audio.headGain);
-                me.paused = true;
+                me.PAUSED = true;
 
                 cancelAnimationFrame( me.__timer );
                 me.__TIMEUPDATE = false;
@@ -640,13 +631,6 @@
                 audioContextTimeupdate();
 
             },
-            check: function check() {
-                var steps = this._Steps;
-                for (var step in steps) {
-                    if (!steps[step]) { return step; }
-                }
-                return step; // all done
-            },
             toString: function() { return '[object Song]'},
         };
         var isSong = function( song ) {
@@ -658,7 +642,7 @@
 
             songlist.pre = 0;
             songlist.next = 1; // index for next one
-            songlist.playing = 0; // index for current playing or paused songlist
+            songlist.playing = 0; // index for current playing or PAUSED songlist
 
             // bind songlist to #btn-playMode to change songlist.mode when button is clicked
             songlist.init = function init( target ) {
@@ -694,7 +678,7 @@
             songlist.push = function(){ // overwrite native Array.push to fulfill testing
                 var args = Array.prototype.slice.apply(arguments);
                 args.forEach(function(value) {
-                    if ( isSong(value) && value._state > '0_uninit' ) {
+                    if ( isSong(value) && value.states.init ) {
                         Array.prototype.push.call(songlist, value);
                         value.analyseFilename();
 
@@ -779,8 +763,8 @@
 
     // Lyric File
     var Lyric = function Lyric( file ) {
-        if (this === window) { return new Lyric( file ); }
         var me = this;
+        if (me === window) { return new Lyric( file ); }
 
         me.constructor = Lyric;
 
@@ -794,6 +778,7 @@
             readFile: false,
             decode: false
         };
+        me.ASYNCHRONOUS = false;
 
         // if get argument file
         if ( isFile(file) ) { me.init( file ); }
@@ -804,26 +789,20 @@
         init: function( file ) {
             var me = this;
 
-            if (!isFile(file)) {
-                throw new Error('Song.init() receive something but file.');
-            }
+            if (!isFile(file)) { throw new Error('Lyric.init() receive something but file.'); }
             else {
+                if (me.states.init) { console.error('Each Song can only init once.'); return me;}
+
                 me._file = file;
+                me.states.init = true;
 
                 me.fileName = file.name;
                 me.size = file.size;
                 me.type = file.type;
 
-                me.states.init = true;
 
                 // analyseFilename for SongList update information
                 me.analyseFilename();
-
-                // overwrite init function
-                me.init = function() {
-                    console.error('Each Song can only init once.');
-                    return me;
-                };
             }
         },
         analyseFilename: function() {
@@ -831,37 +810,48 @@
 
             // main works
             // get rid of subfix
-            var name = this.fileName.substring(0, me.fileName.lastIndexOf('.') );
+            var name = me.fileName.substring(0, me.fileName.lastIndexOf('.') );
             // JH-bugs: what if fileName not obey standard 'ARTIST-TITLE'
             if (name.search('-') === -1) {
                 console.warn('Lyric: Not a Regular Filename.');
-                me.title = name;
+                me.title = name.trim();
                 return me;
             }
             var result = name.split('-');
             me.artist = result[0].trim(); result.shift();
-            me.title = result.length === 1? result[0].trim(): result.join('-').trim();
-
+            me.title  = result.length === 1? result[0].trim(): result.join('-').trim();
             me.states.analyseFilename = true;
 
             return me;
         },
-
         //Notes: readFile is an asynchronous function
         readFile: function GetFileUsingFileReader( callback, DOMEncoding ) { // asynchronous function
             var me = this;
+            if (me.states.readFile) { typeof(callback) === 'function' && callback(); return me;}
+            if (me.ASYNCHRONOUS) { throw new Error('Lyric is processing.'); }
 
-            // already read
-            if ( me.states.readFile ) { callback && callback(); return me; }
+            // main work
+            me.ASYNCHRONOUS = true;
 
             var fr = new FileReader();
             fr.readAsText(me._file, DOMEncoding || 'GB2312');
 
-            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; NS.lyric.lookup( NS.audio.currentPlayingSong.title ); callback(); };
-            fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
+            fr.onload = function(e) {
+                me._buffer = fr.result;
+                me.states.readFile = true;
+                console.log('Lyric: ' + me.title + ' loaded.');
+
+                me.ASYNCHRONOUS = false;
+                typeof(callback) === 'function' && callback();
+            };
+            fr.onerror = function(e) {
+                console.error(e);
+                me.ASYNCHRONOUS = false;
+                throw new Error('Lyric load buffer failed.');
+            };
+
             return me;
         },
-
         // notice: file encoding:
         // utf-8
         // ANSI
@@ -942,7 +932,8 @@
                         }
 
                         // collect this line of lyric
-                        lyrics.push( arr[i] );
+                        var lyriccontent = arr[i].search(/[^\s]/g) !== -1? arr[i] : '...'; // to place a '_' in empty lines
+                        lyrics.push( lyriccontent );
                         var indexOftheLyric = lyrics.length - 1;
 
                         // restore timetagsofOneLyric to oResult
@@ -968,20 +959,19 @@
             };
 
             var me = this;
+            if (!me.states.readFile) { me.readFile(function(){ me.decode(callback); }); return me; }
 
-            if (!me._buffer) {
-                me.readFile( function(){ me[0] = classifyLyric( splitLyricString(me._buffer) ); callback&&callback(); } );
-                return me;
-            }
             me[0] = classifyLyric( splitLyricString(me._buffer) );
 
             me.states.decode = true;
 
-            callback&&callback();
+            typeof(callback) === 'function' && callback();
             return me;
         },
         generate: function() {
             var me = this;
+            if (!me.states.readFile) { me.readFile(function(){ me.decode(); me.generate(); return me; }); }
+
             var wrapper = me[0],
                 lyrics = wrapper.lyrics,
                 tags = wrapper.timeTags,
@@ -1004,8 +994,8 @@
 
     // Image File : album covers
     var AlbumCover = function( file ) {
-        if (this === window) { return new AlbumCover( file ); }
         var me = this;
+        if (me === window) { return new AlbumCover( file ); }
 
         me.constructor = AlbumCover;
 
@@ -1018,6 +1008,7 @@
             analyseFilename: false,
             readFile: false
         };
+        me.ASYNCHRONOUS = false;
 
         // if get argument file
         if ( isFile(file) ) { me.init( file ); }
@@ -1028,24 +1019,20 @@
         init: function( file ) {
             var me = this;
 
-            if (!isFile(file)) { throw new Error('Song.init() receive something but file.'); }
+            if (!isFile(file)) { throw new Error('AlbumCover.init() receive something but file.'); }
             else {
+                if (me.states.init) { console.error('Each Song can only init once.'); return me;}
+
                 me._file = file;
+                me.states.init = true;
 
                 me.fileName = file.name;
                 me.size = file.size;
                 me.type = file.type;
 
-                me.states.init = true;
 
                 // analyseFilename for SongList update information
                 me.analyseFilename();
-
-                // overwrite init function
-                me.init = function() {
-                    console.error('Each Song can only init once.');
-                    return me;
-                };
             }
         },
         analyseFilename: function() {
@@ -1069,30 +1056,41 @@
 
             return me;
         },
-
         //Notes: readFile is an asynchronous function
         readFile: function GetFileUsingFileReader( callback ) { // asynchronous function
             var me = this;
+            if (me.states.readFile) { typeof(callback) === 'function' && callback(); return me;}
+            if (me.ASYNCHRONOUS) { throw new Error('AlbumCover is processing.'); }
 
-            if ( me.states.readFile ) { callback && callback(); return me; }
+            me.ASYNCHRONOUS = true;
 
             var fr = new FileReader();
             fr.readAsDataURL(me._file);
 
-            fr.onload = function(e) { me._buffer = fr.result; me.states.readFile = true; callback(); };
-            fr.onerror = function(e) { console.error('Song load buffer ERROR:'); dConsole.error(e); };
+            fr.onload = function(e) {
+                me._buffer = fr.result;
+                me.states.readFile = true;
+                console.log('AlbumCover: ' + me.title + ' loaded.');
+
+                me.ASYNCHRONOUS = false;
+                typeof(callback) === 'function' && callback();
+            };
+            fr.onerror = function(e) {
+                console.error(e);
+                me.ASYNCHRONOUS = false;
+                throw new Error('AlbumCover load buffer failed.');
+            };
             return me;
         },
         setBackgroundTo: function setBackgroundTo( target ) {
             if(!$.isDOMElement(target)) { return false; }
             var me = this;
+            if (!me.states.readFile) { me.readFile(function(){ me.setBackgroundTo( target ); }); return me; }
 
             target.style.backgroundImage = 'url(' + me._buffer + ")";
         },
     }
-    var isCover = function( cover ) {
-        return cover && cover.constructor && cover.constructor === AlbumCover;
-    };
+    var isCover = function( cover ) { return cover && cover.constructor && cover.constructor === AlbumCover; };
 
     // Binding to NS
     // adding to w.NS;
