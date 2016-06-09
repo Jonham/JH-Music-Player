@@ -20,10 +20,72 @@ var attachDOMElementEvents = function() {
         menuLyricOption.node.toggle();
 		NS.stackShowup.push(function() { menuLyricOption.node.hide();} ); // auto close in 3s
     });
-    $click(menuLyricOption, function(e) {
-        menuLyricOption.node.toggle();
-        dConsole.log(e.target.innerHTML);
-    });
+    // btn on menuLyricOption
+    (function(){
+        var _G = {
+            'btnRangeLyric' : {
+                selector: '.btn-rangeLyric',
+                target: null,
+                state: false,
+                onclick: function(e) {
+                    dConsole.log('Range Lyric upward or downward.');
+                },
+            },
+            'btnEditLyric' : {
+                selector: '.btn-editLyric',
+                target: null,
+                state: false,
+                onclick: function(e) {
+                    dConsole.log('Jump to Lyric Editing page.');
+                },
+            },
+            'btnToggleLyric' : {
+                selector: '.btn-toggleLyric',
+                target: null,
+                state: true,
+                onclick: function(e) {
+                    e.stopPropagation();
+                    var me = _G.btnToggleLyric;
+                    if (me.state) {
+                        $('#lyric').style.display = 'none';
+                        this.innerHTML = '显示歌词';
+                    }
+                    else {
+                        $('#lyric').style.display = '';
+                        this.innerHTML = '关闭歌词';
+                    }
+                    me.state = !me.state;
+                },
+            },
+            'btnToggleCanvas' : {
+                selector: '.btn-toggleCanvas',
+                target: null,
+                state: true,
+                onclick: function(e) {
+                    e.stopPropagation();
+                    var me = _G.btnToggleCanvas;
+                    if (me.state) {
+                        $('#view-canvas').style.display = 'none';
+                        this.innerHTML = "显示音效图";
+                    }
+                    else {
+                        $('#view-canvas').style.display = '';
+                        this.innerHTML = "关闭音效图";
+                    }
+                    me.state = !me.state;
+                },
+            },
+        };
+
+        _.each(_G, function(item, index) {
+            item.target = $(menuLyricOption, item.selector);
+            $click(item.target, item.onclick);
+        })
+    }());
+    // $click(menuLyricOption, function(e) {
+    //     menuLyricOption.node.toggle();
+    //     dConsole.log(e.target.innerHTML);
+    // });
 
 
     // coverMask is helper layer to all menu here

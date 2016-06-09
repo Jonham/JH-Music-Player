@@ -483,6 +483,7 @@ span.btn-fileOpt {
     list-style: none;
     padding: .6em 2em;
     border-bottom: 1px solid white;
+	text-align: center;
 
     cursor: pointer;
 }
