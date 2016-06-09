@@ -224,7 +224,7 @@ var attachDOMElementEvents = function() {
                 return false;
             }
             else {
-                if (song.paused || song.stopped){
+                if (song.PAUSED || song.STOPPED){
                     if (song.duration) { tagTotalTime.innerHTML = format( song.duration ); }
                     timeOfAudioContext = NS.audio.ctx.currentTime;
 
@@ -257,7 +257,6 @@ var attachDOMElementEvents = function() {
         subpagesBtns = $(pageSystem, '.icon-group');
         _.each($(subpagesBtns, 'span'), function(v,i){v.dataset.index=i;});
         $click(subpagesBtns, function(e) {
-                console.log(e.target);
             if (e.target.tagName === 'SPAN') {
                 switch (e.target.dataset.index) {
                     case "0":
