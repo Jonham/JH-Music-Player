@@ -8,12 +8,14 @@
     //utils: transform time format from 100 to 01:40
     var formatTimestamp = function formatTimestamp(time) {
         // current time show like 01:01 under the play&pause button
-    	var timeS = {}; // n: now; s: second; m: minute;
-    	timeS.n = parseInt(time);
-    	timeS.s = timeS.n % 60;
-    	timeS.m = parseInt(timeS.n / 60);
+    	var num = parseInt(time),
+            sec = num % 60,
+            min = parseInt( num / 60);
+        var mtTwo = function(n) {
+            return n < 0? '00':
+                     n < 10? '0'+n: ''+n; }; // more than two digits
 
-    	return ("00" + timeS.m).substr(-2) + ":" + ("00" + timeS.s).substr(-2);
+    	return mtTwo(min) + ":" + mtTwo(sec);
     };
     //utils: preloadImage
     var preloadImage = function( urlArray, loadedCallback ) {
@@ -57,6 +59,48 @@
 
         return false;
     };
+
+
+    // desktop browsers don't support touch events
+    var mobileOrDestop = function() {
+        return null === document.ontouchend;
+    };
+    // another way: not completed
+    var mobileOrDestop1 = function() {
+        var ug = navigator.userAgent;
+        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
+        dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
+        // return true if userAgent fulfill desktop-browser conditions
+        //   and browser support AudioContext() [webkitAudioContext() included]
+        return NS.supports.audioContext && result !== -1;
+    };
+    // FullScreen
+    var supportFullScreen = (function(docElem) {
+        var fullscreen = cancelFullscreen = null;
+        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
+            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
+        var requestFullScreen = function( elem ) {
+            for (var index = 0; index < fsWays.length; index++) {
+                if (docElem[ fsWays[index] ]) {
+                    fullscreen = fsWays[index]; break;
+                }
+            }
+            if (!fullscreen) { return false; }
+            return elem[fullscreen]();
+        };
+        var cancelFullScreen = function() {
+            for (var index = 0; index < cfsWays.length; index++) {
+                if (document[ cfsWays[index] ]) {
+                    cancelFullscreen = cfsWays[index]; break;
+                }
+            }
+            return document[cancelFullscreen]();
+        }
+        return {
+            requestFullScreen: requestFullScreen,
+            cancelFullScreen:  cancelFullScreen
+        };
+    })(document.documentElement);
 
 
     var LocalFileList = function() {
@@ -170,48 +214,6 @@
             }
         }
     };
-
-
-    // desktop browsers don't support touch events
-    var mobileOrDestop = function() {
-        return null === document.ontouchend;
-    };
-    // another way: not completed
-    var mobileOrDestop1 = function() {
-        var ug = navigator.userAgent;
-        var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
-        dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
-        // return true if userAgent fulfill desktop-browser conditions
-        //   and browser support AudioContext() [webkitAudioContext() included]
-        return NS.supports.audioContext && result !== -1;
-    };
-    // FullScreen
-    var supportFullScreen = (function(docElem) {
-        var fullscreen = cancelFullscreen = null;
-        var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
-            cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
-        var requestFullScreen = function( elem ) {
-            for (var index = 0; index < fsWays.length; index++) {
-                if (docElem[ fsWays[index] ]) {
-                    fullscreen = fsWays[index]; break;
-                }
-            }
-            if (!fullscreen) { return false; }
-            return elem[fullscreen]();
-        };
-        var cancelFullScreen = function() {
-            for (var index = 0; index < cfsWays.length; index++) {
-                if (document[ cfsWays[index] ]) {
-                    cancelFullscreen = cfsWays[index]; break;
-                }
-            }
-            return document[cancelFullscreen]();
-        }
-        return {
-            requestFullScreen: requestFullScreen,
-            cancelFullScreen:  cancelFullScreen
-        };
-    })(document.documentElement);
 
 
     // AudioContext

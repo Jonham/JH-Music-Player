@@ -376,13 +376,13 @@ hr.divider {
 }
 #view-lyric span.middle {
 	position: absolute;
-	top: 50%;
 	left: 50%;
+	bottom: 0;
 }
 #view-canvas {
 	position: absolute;
-	top: -20px;
 	left: -150px;
+	bottom: 0;
 }
 
 span.song-opt-grp {

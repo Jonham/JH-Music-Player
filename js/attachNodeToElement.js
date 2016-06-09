@@ -297,7 +297,6 @@ var addDOMElementNodeProperty = function() {
         },
         bind: function( songlist ) {
             if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
-                console.log('menuSonglist bind.');
                 songlist.output = function( arrTitles ) {
                     menuSonglist.node.update( arrTitles );
                 };

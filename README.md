@@ -33,8 +33,8 @@ And you're welcome to fork and issue whatever come up in your mind.
         BUGS: attachNodeToElement.js:300 drag.js:73
     - [x] UC browser : unique input[type=file], crack down when select any kind of files
         BUGS: attachNodeToElement.js:300 drag.js:73    
-    **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.
-    I've catch errors both in rangeTime and rangeVolume.
+        **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.I've catch errors both in rangeTime and rangeVolume.
+    - [ ] onResize() don't work on browser don't support AudioContext
 02. **Song** and **SongList**
     - [ ] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
     - [ ] songlist **mode** detail completion

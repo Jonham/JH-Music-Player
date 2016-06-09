@@ -18,7 +18,7 @@ var v = function( height, width, gain ) {
 
     analyser.fftSize = 512; // range: [32, 32768]
     var bufferLength = analyser.frequencyBinCount;
-    console.log("bufferLength: " + bufferLength);
+    // console.log("bufferLength: " + bufferLength);
 
 
     var dataArray = new Uint8Array(bufferLength);
