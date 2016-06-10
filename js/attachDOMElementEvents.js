@@ -110,6 +110,7 @@ var attachDOMElementEvents = function() {
 
             target.node.show();
             coverMask.node.show();
+            NS.util.router.push('clearShowup');
         };
     };
     var bindBtntoMenu = function(btnSelector, menuSelector) {
@@ -162,6 +163,7 @@ var attachDOMElementEvents = function() {
     $click(barSubControlSystemPage, function(e) {
         pageSystem.node.hideLeft();
         pageMain.node.showRight();
+        NS.util.router.push('pageSystem');
     });
 
     //onEVENTS-07: bind up onBtnCommments

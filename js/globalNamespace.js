@@ -1313,12 +1313,27 @@
             });
         },
     };
+
+    var Router = (function() {
+        var Router = function() {
+
+            this.push = function( page ) {
+                if (page === '' + page) {
+                    history.pushState(page, null);
+                    console.log('pushState ' + page);
+                }
+            };
+            return this;
+        };
+        return new Router();
+    }());
     ns.util = {
         formatTimestamp: formatTimestamp,
         preloadImage:    preloadImage,
         isFile:          isFile,
         isOneFile:       isOneFile,
         isLyric:         isLyric,
+        router:         Router,
     };
 })(window);
 

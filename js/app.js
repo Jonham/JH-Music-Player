@@ -15,6 +15,24 @@ window.onload = function() {
 
     onSizeChange()();
 	onFileLoad();
+
+    $on(window, 'popstate', function(e) {
+        // console.log(e.state);
+        switch (e.state) {
+            case 'pageSystem':
+                console.log('pageSystem');
+                $('#btn-back').click();
+                break;
+            case 'clearShowup':
+                NS.stackShowup.releaseAll();
+                console.log('clearShowup');
+                // var coverMask = $('.mask');
+                // coverMask.click();
+                break;
+            default:
+
+        }
+    });
 };
 
 var onSongOptionsGroup = function() {
@@ -36,8 +54,7 @@ var onSongOptionsGroup = function() {
 			},
 		onCommentsClick = function(e) {
 				e.stopPropagation();
-				dConsole.log('show comments');
-				commentsCount.innerHTML = 99;
+				// commentsCount.innerHTML = 99;
 			};
 
 	// add listener on their parent and switch on e.target
