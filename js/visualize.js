@@ -16,7 +16,7 @@ var v = function( height, width, gain ) {
     var WIDTH  = canvas.width  = width  || 300;
 
 
-    analyser.fftSize = 512; // range: [32, 32768]
+    analyser.fftSize = 128; // range: [32, 32768]
     var bufferLength = analyser.frequencyBinCount;
     // console.log("bufferLength: " + bufferLength);
 

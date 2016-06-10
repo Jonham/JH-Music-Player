@@ -906,6 +906,7 @@ ul#lyric {
 	height: 3em;
 	width: 100%;
 	padding: .2em .5em;
+	margin-top: .4em;
 	box-sizing: border-box;
 	border-bottom: 1px solid rgba(100,100,100,0.2);
 }
@@ -962,7 +963,7 @@ ul#lyric {
 .tag-songMessage {
 	display: inline-block;
 	position: absolute;
-	margin: .5em .4em;
+	margin: .4em .4em;
 }
 .tag-songMessage span {
 	display: block;

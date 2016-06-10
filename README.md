@@ -12,16 +12,16 @@ And you're welcome to fork and issue whatever come up in your mind.
 <hr>
 
 ## Features going to add
-1. **WebSocket**, with the help of _[Pusher](https://pusher.com/)_: makes **Remote Controls**.
-2. **Canvas**: visual display of music.
+1. [added] **Canvas**: visual display of music.
+2. **WebSocket**, with the help of _[Pusher](https://pusher.com/)_: makes **Remote Controls**.
 3. generate music (or noises) by pure JavaScript (*AudioContext*): DJ music playing platform
 4. analyse and regnize *beats* and *tones*.
 5. Audio recording using **WebRTC** or AudioContext output
 6. scripts making to Video or audio: add time tags and fix accuration.
-7. some other UI besides NetEase one.
+7. more **UI** besides NetEase one.
 8. **History API** for using return button on browsers to route between each page and menu
-9. lyric search Engine or Song message search Engine, further album cover search engine
-10. make AJAX audio loading as a alternate plan when user device don't support AudioContext
+9. **Online Engine** lyric search Engine or Song message search Engine, further album cover search engine
+10. **Alternate Plan** make AJAX audio loading as a alternate plan when user device don't support AudioContext
 11. **"Functional HTML DOM Elements"** constructions
 12. **Event-Driven** or **State-Driven** mode.
 
@@ -92,3 +92,8 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] mask layer for avoiding mistake touches and clicks
 14. **Integration**
     - [ ] bind up related blocks
+15. **Canvas** for Audio Visualization
+    - [ ] animation delay on poor supported Devices
+    - [ ] more display styles
+16. **Lyric**
+    - [x] empty lines display: filled with '...'
