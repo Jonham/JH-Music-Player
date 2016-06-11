@@ -1083,11 +1083,19 @@
             return me;
         },
         setBackgroundTo: function setBackgroundTo( target ) {
-            if(!$.isDOMElement(target)) { return false; }
+            if(!$.isDOMElement(target) && !$.isDOMElement(target[0])) { return false; }
             var me = this;
             if (!me.states.readFile) { me.readFile(function(){ me.setBackgroundTo( target ); }); return me; }
 
-            target.style.backgroundImage = 'url(' + me._buffer + ")";
+            // var createStyle = NS.util.createStyle;
+            // createStyle.createTag('.icon-userIcon: { background-image: url("' + me._buffer + '") !important;')
+            //            .insert();
+            if (_.isArray(target)) {
+                _.each(target, function(item){ item.style.backgroundImage = 'url(' + me._buffer + ")"; });
+            } else {
+                target.style.backgroundImage = 'url(' + me._buffer + ")";
+            }
+            return me;
         },
     }
     var isCover = function( cover ) { return cover && cover.constructor && cover.constructor === AlbumCover; };
@@ -1261,10 +1269,7 @@
     };
     ns.album = {
         defaults: {
-            toCover: [
-                $('#page-main'),
-                $.toArray( $('.view-albumCover') )
-            ],
+            toCover: [ $('#page-main') ].concat( $.toArray( $('.view-albumCover') ) ),
         },
         AlbumCover: AlbumCover,
         list: {},
@@ -1300,17 +1305,18 @@
                 me.start( me.list[ title ] );
             }
         },
-        start: function( cover ) {
+        start: function( cover ){
             var me = ns.album;
-            _.each(me.defaults.toCover, function( elem ){
-                if (_.isArray( elem )) {
+            var elem = me.defaults.toCover;
+            if (_.isArray( elem )) {
+                cover.readFile(function(){
                     _.each(elem, function(item) {
-                        cover.readFile(function(){ cover.setBackgroundTo( item ); });
+                        cover.setBackgroundTo( item );
                     });
-                } else {
-                    cover.readFile(function(){ cover.setBackgroundTo( elem ); });
-                }
-            });
+                });
+            } else {
+                cover.readFile(function(){ cover.setBackgroundTo( elem ); });
+            }
         },
     };
 
@@ -1328,13 +1334,36 @@
         };
         return new Router();
     }());
+    var createStyle = (function(){
+        var CreateStyleTag = function() {
+            var me = this;
+
+            me.tags = [];
+            me.createTag = function( content ) {
+                me.tags.push(content);
+                return me;
+            };
+            me.insert = function() {
+                var tag = document.createElement('style');
+                tag.innerHTML = me.tags.join('');
+                document.body.appendChild(tag);
+                return me;
+            };
+
+            return me;
+        };
+
+        return new CreateStyleTag();
+    }());
+
     ns.util = {
         formatTimestamp: formatTimestamp,
         preloadImage:    preloadImage,
         isFile:          isFile,
         isOneFile:       isOneFile,
         isLyric:         isLyric,
-        router:         Router,
+        router:          Router,
+        createStyle:     createStyle,
     };
 })(window);
 
