@@ -1,11 +1,11 @@
 window.onload = function() {
-    var aImageURL = [
-        'style/icons/favorited-w.svg',
-        'style/icons/mode-loop-w.svg',
-        'style/icons/mode-repeatone-w.svg',
-        'style/icons/mode-shuffle-w.svg',
-    ];
-    NS.util.preloadImage(aImageURL);
+    // var aImageURL = [
+    //     'style/icons/favorited-w.svg',
+    //     'style/icons/mode-loop-w.svg',
+    //     'style/icons/mode-repeatone-w.svg',
+    //     'style/icons/mode-shuffle-w.svg',
+    // ];
+    // NS.util.preloadImage(aImageURL);
 
 
     // if window receive 'click' event, it will pop up all callback functions in stackShowup
@@ -46,8 +46,8 @@ var onSongOptionsGroup = function() {
 				e.stopPropagation();
 				favorite.className =
 					favoriteState ?
-						'favorite btnToggle':
-						'favorited btnToggle';
+						'favorite icon icon-favorite_border':
+						'favorited icon icon-favorite';
 						// favorite.classList.toggle('favorite');
 						// favorite.classList.toggle('favorited');
 				favoriteState = !favoriteState;

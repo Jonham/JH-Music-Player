@@ -256,11 +256,18 @@ var attachDOMElementEvents = function() {
 
     //onEVENTS-12: #pageSystem subpage
     var subpagesSystem = $(pageSystem, '.subpage-container'),
-        subpagesBtns = $(pageSystem, '.icon-group');
-        _.each($(subpagesBtns, 'span'), function(v,i){v.dataset.index=i;});
+        subpagesBtns = $(pageSystem, '.icon-group'),
+        spans = $(subpagesBtns, 'span');
+        _.each(spans, function(v,i){v.dataset.index=i;});
+        var focusOneSpan = function( index ) {
+            _.each(spans, function(span){span.classList.remove('icon-focus');});
+            spans[index].classList.add('icon-focus');
+        };
         $click(subpagesBtns, function(e) {
             if (e.target.tagName === 'SPAN') {
-                switch (e.target.dataset.index) {
+                var index = e.target.dataset.index;
+                focusOneSpan(index);
+                switch (index) {
                     case "0":
                         subpagesSystem.node.turnTo1();
                         break;

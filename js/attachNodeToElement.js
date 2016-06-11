@@ -403,8 +403,12 @@ var addDOMElementNodeProperty = function() {
                     });
                 },
         update: function( mode ) {
-            var path = function(name) { return 'url("./style/icons/mode-'+ name.toLowerCase() + '-w.svg")'; }
-            btnPlayMode.style.backgroundImage = path(mode); }
+            var map = {
+                'SHUFFLE': 'icon icon-shuffle',
+                'LOOP': 'icon icon-repeat',
+                'REPEATONE': 'icon icon-repeat_one'
+            };
+            btnPlayMode.className = map[mode]; }
     });
     NS.dom.coverMask = attachNodeTo( coverMask, {
         covered: false,
