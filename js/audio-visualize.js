@@ -1,14 +1,13 @@
-var v = function( height, width, gain ) {
+var audioVisualizer = function( height, width, gain ) {
 
     var ctx = NS.audio.ctx,
-        headGain = NS.audio.headGain;
+        headGain = NS.audio.headGain,
+        audioVisualizer = null,
+        filledColor = 'rgb(0,0,0)';
 
     var analyser = ctx.createAnalyser();
-    if (gain && gain.connect) {
-        gain.connect(analyser);
-    } else {
-        headGain.connect(analyser);
-    }
+    if (gain && gain.connect) { gain.connect(analyser); }
+    else { headGain.connect(analyser); }
 
     var canvas = $('#view-canvas'),
         canvasCtx = canvas.getContext('2d');
@@ -16,9 +15,8 @@ var v = function( height, width, gain ) {
     var WIDTH  = canvas.width  = width  || 300;
 
 
-    analyser.fftSize = 128; // range: [32, 32768]
+    analyser.fftSize = 256; // range: [32, 32768]
     var bufferLength = analyser.frequencyBinCount;
-    // console.log("bufferLength: " + bufferLength);
 
 
     var dataArray = new Uint8Array(bufferLength);
@@ -42,7 +40,7 @@ var v = function( height, width, gain ) {
         for (var i = 0; i < bufferLength; i++) {
             barHeight = dataArray[i];
 
-            canvasCtx.fillStyle = 'rgb(0,0,0)';
+            canvasCtx.fillStyle = filledColor;
             canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
 
             x += barWidth + 1;
@@ -50,4 +48,10 @@ var v = function( height, width, gain ) {
     };
 
     draw();
+
+    return {
+        timer: audioVisualizer,
+        analyser: analyser,
+        setColor: function(color) { filledColor = color || '#555'; },
+    };
 }

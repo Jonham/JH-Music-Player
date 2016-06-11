@@ -13,11 +13,13 @@ window.onload = function() {
         switch (from) {
             case 'page-main':
                 if (dest === 'page-system') { $('#btn-back').click(); }
+                var length = history.length;
+                history.go(1 - length);
+                NS.util.router.push('page-system');
             break;
             case 'page-comments':
                 if (dest === 'page-main') {
-                    $(
-                        $('#page-comments'),'.btn-back').click(); }
+                    $( $('#page-comments'),'.btn-back').click(); }
             break;
             default:
                 NS.stackShowup.releaseAll();
@@ -32,5 +34,5 @@ window.onload = function() {
 
     onSizeChange()();
 	onFileLoad();
-
+    NS.audio.visualizer = audioVisualizer();
 };
