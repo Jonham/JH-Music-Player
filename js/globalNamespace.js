@@ -271,7 +271,7 @@
                 analyseFilename: false,
                 readFile: false,
                 decode: false,
-                createBufferSource: false
+                createBufferSource: false,
             };
 
             me.context = ctx; // AudioContext
@@ -522,7 +522,6 @@
                         me.timeupdate();
                     }
                     else {
-                        console.log('connect here?');
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
                             me.bufferSourceNode.start(0);
@@ -629,7 +628,6 @@
                     me.__TIMEUPDATE = true;
                 };
                 audioContextTimeupdate();
-
             },
             toString: function() { return '[object Song]'},
         };
@@ -986,7 +984,7 @@
                 ul.appendChild(li);
             });
             return ul.innerHTML;
-        }
+        },
     }
     var isLyric = function( lyric ) {
         return lyric && lyric.constructor && lyric.constructor === Lyric;
@@ -1265,7 +1263,10 @@
             else { // no match
                 me.end();
             }
-        }
+        },
+        refresh: function() {
+
+        },
     };
     ns.album = {
         defaults: {
