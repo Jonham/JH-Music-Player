@@ -43,8 +43,6 @@ var v = function( height, width, gain ) {
             barHeight = dataArray[i];
 
             canvasCtx.fillStyle = 'rgb(0,0,0)';
-            // canvasCtx.fillStyle = 'rgb(' + (255 - barHeight) + ',' + (255 - barHeight) + ',' + (255 -barHeight) +')';
-            // canvasCtx.fillRect(x, 0, barWidth, barHeight / 2);
             canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
 
             x += barWidth + 1;
