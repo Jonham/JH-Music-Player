@@ -37,6 +37,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] onResize() don't work on browser don't support AudioContext
 02. **Song** and **SongList**
     - [ ] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
+    - [ ] play multi songs when user click .nextSong btn for many times before last song asynchronous actions ready
     - [ ] songlist **mode** detail completion
     - [x] songlist .next, .play, .pause, .stop ...
     - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
@@ -97,3 +98,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] more display styles
 14. **Lyric**
     - [x] empty lines display: filled with '...'
+15. **History API**
+    - [x] basic pushState() return to PageSystem and close menu or sidebar
+    - [x] states interruptions: close menu will also return to pageSystem
+    - [ ] destop alt+arrow will cause some faults when state overwrite

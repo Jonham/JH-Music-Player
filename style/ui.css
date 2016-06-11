@@ -367,7 +367,6 @@ hr.divider {
     border-radius: 10em;
     border: black 2.5em solid;
 
-    /*background-image: url('../OneRepublic.jpg');*/
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50%;
@@ -923,7 +922,6 @@ ul#lyric {
 	display: inline-block;
 	background-repeat: no-repeat;
 	background-size: contain;
-	/*background-image: url('../OneRepublic.jpg');*/
 	background-position: 50%;
 	padding: 1.5em;
 	margin: 0;

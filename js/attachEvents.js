@@ -20,7 +20,7 @@ var attachDOMElementEvents = function() {
         menuLyricOption.node.toggle();
 		NS.stackShowup.push(function() { menuLyricOption.node.hide();} ); // auto close in 3s
     });
-    // btn on menuLyricOption
+    // btns on menuLyricOption
     (function(){
         var _G = {
             'btnRangeLyric' : {
@@ -49,10 +49,12 @@ var attachDOMElementEvents = function() {
                     if (me.state) {
                         $('#lyric').style.display = 'none';
                         this.innerHTML = '显示歌词';
+                        NS.audio.visualizer.setColor('white');
                     }
                     else {
                         $('#lyric').style.display = '';
                         this.innerHTML = '关闭歌词';
+                        NS.audio.visualizer.setColor();
                     }
                     me.state = !me.state;
                 },
@@ -82,10 +84,35 @@ var attachDOMElementEvents = function() {
             $click(item.target, item.onclick);
         })
     }());
-    // $click(menuLyricOption, function(e) {
-    //     menuLyricOption.node.toggle();
-    //     dConsole.log(e.target.innerHTML);
-    // });
+
+    // btns on #pageMain SongOptionsGroup
+    (function() {
+        var wrapper = $('span.song-opt-grp'),
+            favorite = $(wrapper, '#btnFavorite'),
+            btnComments = $(wrapper, '.btn-comments'),
+            	commentsCount = $(btnComments, 'span');
+
+    	var favoriteState = false,
+    		onFavoriteClick = function(e) {
+    				e.stopPropagation();
+    				favorite.className =
+    					favoriteState ?
+    						'favorite icon icon-favorite_border':
+    						'favorited icon icon-favorite';
+    						// favorite.classList.toggle('favorite');
+    						// favorite.classList.toggle('favorited');
+    				favoriteState = !favoriteState;
+    			},
+    		onCommentsClick = function(e) {
+    				e.stopPropagation();
+    				// commentsCount.innerHTML = 99;
+    			};
+
+    	// add listener on their parent and switch on e.target
+    	$click(favorite, onFavoriteClick);
+    	$click(btnComments, onCommentsClick);
+    }());
+
 
 
     // coverMask is helper layer to all menu here
@@ -110,7 +137,8 @@ var attachDOMElementEvents = function() {
 
             target.node.show();
             coverMask.node.show();
-            NS.util.router.push('clearShowup');
+
+            NS.util.router.push(target.id);
         };
     };
     var bindBtntoMenu = function(btnSelector, menuSelector) {
@@ -163,7 +191,7 @@ var attachDOMElementEvents = function() {
     $click(barSubControlSystemPage, function(e) {
         pageSystem.node.hideLeft();
         pageMain.node.showRight();
-        NS.util.router.push('pageSystem');
+        NS.util.router.push('page-main');
     });
 
     //onEVENTS-07: bind up onBtnCommments
@@ -171,6 +199,7 @@ var attachDOMElementEvents = function() {
     $click(btnComments, function(e) {
         pageMain.node.hideLeft();
         pageComments.node.showRight();
+        NS.util.router.push('page-comments');
     });
     $click(btnCommentsBack, function(e) {
         pageComments.node.hideRight();
