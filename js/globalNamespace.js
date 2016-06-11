@@ -524,6 +524,7 @@
                     else {
                         // use connect to handle all asynchronous functions
                         me.connect( function() {
+                            if (NS.audio.currentPlayingSong !== me) { return false; }
                             me.bufferSourceNode.start(0);
                             me.getDuration();
                             tagTotalTime.innerHTML = format( me.duration );
