@@ -7,21 +7,27 @@ window.onload = function() {
 
     // history API supports
     $on(window, 'popstate', function(e) {
-        var state = NS.util.router.state,
-        dest = e.state;
+        var from = NS.util.router.state,
+            dest = e.state;
 
-        switch (state) {
+        switch (from) {
             case 'page-main':
-            if (dest === 'page-system') { $('#btn-back').click(); }
+                if (dest === 'page-system') { $('#btn-back').click(); }
+            break;
+            case 'page-comments':
+                if (dest === 'page-main') {
+                    $(
+                        $('#page-comments'),'.btn-back').click(); }
             break;
             default:
-            NS.stackShowup.releaseAll();
+                NS.stackShowup.releaseAll();
         }
 
-        // console.log('state: ' + state + "  dest: " + dest);
+        // console.log('From: ' + from + "==> " + dest);
         NS.util.router.state = dest;
     });
     // pushState on Where we are
+    // init history: page-system as init page
     NS.util.router.push('page-system');
 
     onSizeChange()();

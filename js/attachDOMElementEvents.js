@@ -201,6 +201,7 @@ var attachDOMElementEvents = function() {
     $click(btnComments, function(e) {
         pageMain.node.hideLeft();
         pageComments.node.showRight();
+        NS.util.router.push('page-comments');
     });
     $click(btnCommentsBack, function(e) {
         pageComments.node.hideRight();
