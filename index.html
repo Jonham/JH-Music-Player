@@ -21,6 +21,7 @@
 
     <!-- using ?xxxx to make browser update css file 1 -->
     <link rel="stylesheet" href="style/ui.css?0003">
+    <link rel="stylesheet" href="style/fonts.css">
 </head>
 <body>
     <div id="viewport">
@@ -32,12 +33,12 @@
         <div id="page-main" class="page ease-p3 icon-userIcon page-hide-right">
             <div id="main">
                 <nav class='header row'>
-                    <span id="btn-back" class='left btn btn-back'></span>
+                    <span id="btn-back" class='left btn btn-back icon icon-keyboard_backspace'></span>
                     <span id="tag-songMessage">
                         <span id="tag-songTitle" class="tag-title">The Saltwater Room</span>
                         <span id="tag-songArtist" class="tag-artist">Owl City</span>
                     </span>
-                    <span id="btn-share" class='right btn btn-share'></span>
+                    <span id="btn-share" class='right btn icon icon-share'></span>
                 </nav>
 
                 <div id="volume" class='row ease-p6'>
@@ -69,7 +70,7 @@
                         </span>
 
                         <div id="container-fileOption" class='layer-2'>
-                            <span id="btn-lyricOption"></span>
+                            <span id="btn-lyricOption" class="icon-more_vert"></span>
                             <div id="menu-lyricOption" class='ease-p3 menu-hidetoRB'>
                                 <span class="menu-item btn-rangeLyric">歌词调整</span>
                                 <span class="menu-item btn-editLyric">歌词编辑</span>
@@ -82,9 +83,9 @@
                     <div id='view-album' style="display:none;">
                         <span class='view-albumCover icon-userIcon ease-p6 btn'></span>
                         <span class='song-opt-grp'>
-                            <span id='btnFavorite' class="favorite btnToggle btn"></span>
-                            <span class="btn-comments btn"><span>0</span></span>
-                            <span class="btn-fileOpt btn"></span>
+                            <span id='btnFavorite' class="icon icon-favorite_border favorite btnToggle btn"></span>
+                            <span class="btn-comments icon icon-comment btn"><span>0</span></span>
+                            <span class="btn-fileOpt btn icon icon-more_vert"></span>
                         </span>
                     </div>
                 </div>
@@ -105,11 +106,11 @@
 
                     <div id='controls' class="container row ease-p6">
                         <audio src=""></audio>
-                        <span id="btn-playMode" class='left'></span>
-                        <span id="btn-preSong"></span>
-                        <span class="btn btn-play icon-btn-pause-w"></span>
-                        <span class="btn btn-nextSong"></span>
-                        <span id="btn-songlist" class='right'></span>
+                        <span id="btn-playMode" class='icon icon-repeat'></span>
+                        <span id="btn-preSong" class="icon icon-skip_previous"></span>
+                        <span class="btn btn-play icon icon-play_arrow"></span>
+                        <span class="btn btn-nextSong icon icon-skip_next"></span>
+                        <span id="btn-songlist" class='icon icon-format_list_bulleted'></span>
                     </div>
 
                 </div>
@@ -118,10 +119,10 @@
 
         <div id="page-system" class="page ease-p3">
             <span class="header">
-                <span class="btn icon icon-menu-w"></span>
+                <span class="btn icon icon-menu-w icon-menu"></span>
                 <span class="icon-group">
-                    <span class="btn icon icon-netease"></span>
-                    <span class="btn icon icon-music"></span>
+                    <span class="btn icon icon-account_balance icon-focus"></span>
+                    <span class="btn icon icon-audiotrack"></span>
                     <span class="btn icon icon-people"></span>
                 </span>
                 <span class="btn icon icon-search"></span>
@@ -152,7 +153,7 @@
                 <div class="page-hide-right ease-p3">
                     <span id="subpage-people" class="sub-page">
                         <span class="person btn">
-                            <span class="icon icon-userIcon"></span>
+                            <span class="icon-userIcon icon-image"></span>
                             <span class="tag">
                                 <span class="userName">Jonham</span>
                                 <span class="lastMessage">Hi!</span>
@@ -171,9 +172,9 @@
                     <span class="tag-songArtist tag-artist">Owl City</span>
                 </span>
                 <span class="view-controls right">
-                    <span class="btn btn-songlist"></span>
-                    <span class="btn btn-play icon-btn-pause-r"></span>
-                    <span class="btn btn-nextSong"></span>
+                    <span class="btn btn-songlist icon-format_list_bulleted"></span>
+                    <span class="btn btn-play icon-play_arrow"></span>
+                    <span class="btn btn-nextSong icon-skip_next"></span>
                 </span>
 
                 <span class="range">
@@ -199,17 +200,17 @@
 
         <div id="menu-share" class="menu ease-p3 menu-hide">
             <ul id="ulShare">
-                <li><span class="icon icon-shareToYun"></span>
+                <li><span class="icon icon-cloud_queue"></span>
                             <span class="btn-shareToYun btn">分享到云音乐</span></li>
-                <li><span class="icon icon-shareToMsg"></span>
+                <li><span class="icon icon-mail_outline"></span>
                             <span class="btn btn-shareToMsg">私信分享</span></li>
-                <li><span class="icon icon-shareToTencent"></span>
+                <li><span class="icon-image icon-shareToTencent"></span>
                             <span class="btn btn-shareToTencent">微信、QQ分享</span></li>
-                <li><span class="icon icon-shareToYixin"></span>
+                <li><span class="icon-image icon-shareToYixin"></span>
                             <span class="btn btn-shareToYixin">易信分享</span></li>
-                <li><span class="icon icon-shareToURL"></span>
+                <li><span class="icon icon-link"></span>
                             <span class="btn btn-shareToURL">复制链接</span></li>
-                <li><span class="icon icon-shareToOtherWays"></span>
+                <li><span class="icon icon-more_horiz"></span>
                             <span class="btn btn-shareToOtherWays">其他</span></li>
             </ul>
         </div>
@@ -217,31 +218,31 @@
         <div id="menu-fileOpt" class="menu ease-p3 menu-hide">
             <span class="tag-title">The Saltwater Room</span>
             <ul id="ulFileOpt">
-                <li><span class="icon icon-addTo"></span>
+                <li><span class="icon icon-create_new_folder"></span>
                                 <span class="addTo">收藏到歌单</span></li>
-                <li><span class="btn icon icon-download"></span>
+                <li><span class="btn icon icon-get_app"></span>
                                 <span class="btn download">下载</span></li>
-                <li><span class="icon icon-tag-artist"></span>
+                <li><span class="icon icon-person"></span>
                                 <span class='tag-artist-wrapper'>歌手：
                                         <span class="btn inline tag-artist">Owl City</span></span></li>
-                <li><span class="icon icon-tag-album"></span>
+                <li><span class="icon icon-album"></span>
                                 <span class='tag-album'>专辑：
                                         <span class="btn inline value">The Saltwater Room</span></span></li>
-                <li><span class="icon icon-btn-audioQuality"></span>
+                <li><span class="icon icon-wifi_tethering"></span>
                                 <span id="btn-audioQuality">音质：
                                         <span class="btn inline value">自动选择</span></span></li>
-                <li><span class="icon icon-btn-proposeAlike"></span>
+                <li><span class="icon icon-audiotrack"></span>
                                 <span id="btn-proposeAlike" class="btn">相似推荐</span></li>
-                <li><span class="icon icon-btn-stopAtTime"></span>
+                <li><span class="icon icon-schedule"></span>
                                 <span id="btn-stopAtTime" class="btn">定时停止播放</span></li>
-                <li><span class="icon icon-btn-drivingMode"></span>
+                <li><span class="icon icon-directions_car"></span>
                                 <span id="btn-drivingMode" class="btn">打开驾驶模式</span></li>
             </ul>
         </div>
 
         <div id="page-comments" class="page ease-p3 page-hide-right">
             <span class="header">
-                <span class="btn btn-back"></span>
+                <span class="btn btn-back icon icon-keyboard_backspace"></span>
                 <span class="tag tag-commentCount">99</span>
             </span>
             <span class="bar-sub-controls">
@@ -250,44 +251,44 @@
                     <span class="tag-songTitle tag-title">The Saltwater Room</span>
                     <span class="tag-songArtist tag-artist">Owl City</span>
                 </span>
-                <span class="btn btn-moreMessage icon icon-right-arrow"></span>
+                <span class="btn btn-moreMessage icon icon-keyboard_arrow_right"></span>
             </span>
             <span class="tag-message">精彩评论</span>
             <div id="list-comments">
                 <span>
-                    <span class="view-commentUserIcon"></span>
+                    <span class="view-commentUserIcon icon icon-person"></span>
                     <span class="container-comment">
                         <span class="tag-commentUser">Jonham</span>
                         <span class="tag-commentDate">2016年5月31日</span>
                         <span class="tag-commentContent">Live in the Saltwater Room with you. This comments should be longest. And may go throught 3 or 4 lines.</span>
-                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb-up"></span></span>
+                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb_up"></span></span>
                     </span>
                 </span>
                 <span>
-                    <span class="view-commentUserIcon"></span>
+                    <span class="view-commentUserIcon icon icon-person"></span>
                     <span class="container-comment">
                         <span class="tag-commentUser">Jonham</span>
                         <span class="tag-commentDate">2016年5月31日</span>
                         <span class="tag-commentContent">Live in the Saltwater Room with you.</span>
-                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb-up"></span></span>
+                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb_up"></span></span>
                     </span>
                 </span>
                 <span>
-                    <span class="view-commentUserIcon"></span>
+                    <span class="view-commentUserIcon icon icon-person"></span>
                     <span class="container-comment">
                         <span class="tag-commentUser">Jonham</span>
                         <span class="tag-commentDate">2016年5月31日</span>
                         <span class="tag-commentContent">Live in the Saltwater Room with you.</span>
-                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb-up"></span></span>
+                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb_up"></span></span>
                     </span>
                 </span>
                 <span>
-                    <span class="view-commentUserIcon"></span>
+                    <span class="view-commentUserIcon icon icon-person"></span>
                     <span class="container-comment">
                         <span class="tag-commentUser">Jonham</span>
                         <span class="tag-commentDate">2016年5月31日</span>
                         <span class="tag-commentContent">Live in the Saltwater Room with you.</span>
-                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb-up"></span></span>
+                        <span class="tag-commentAgreeCount">999<span class="icon icon-thumb_up"></span></span>
                     </span>
                 </span>
             </div>
@@ -296,37 +297,37 @@
         <div id="sidebar-left" class="sidebar ease-p3 sidebar-hide">
             <span id="tag-userMessage">
                 <span class="view-userMessage left">
-                    <span class="container-userIcon"><span class="icon icon-userIcon round-icon"></span></span>
+                    <span class="container-userIcon"><span class="icon-userIcon round-icon"></span></span>
                     <span class="tag-userName">Jonham</span>
                     <span class="tag-userRank">Lv.6</span>
                 </span>
-                <span class="btn-marks">600积分</span>
+                <span class="btn-marks icon-database">600积分</span>
             </span>
             <ul>
-                <li><span class="icon icon-mail"></span>
+                <li><span class="icon icon-mail_outline"></span>
                                 <span class="label-userMsg">我的消息</span></li>
-                <li><span class="icon icon-cart"></span>
+                <li><span class="icon icon-shopping_cart"></span>
                                 <span class="label-marksHall">积分商城</span>
                                             <span class="tag">600积分</span></li>
-                <li><span class="icon icon-package"></span>
+                <li><span class="icon icon-local_mall"></span>
                                 <span class="label-package">付费音乐包</span></li>
-                <li><span class="icon icon-free"></span>
+                <li><span class="icon icon-wifi_tethering"></span>
                                 <span class="label-free">在线听歌免流量</span></li>
-                <li><span class="icon icon-mic"></span>
+                <li><span class="icon icon-mic icon-keyboard_voice"></span>
                                 <span class="label-listen">听歌识曲</span></li>
-                <li><span class="icon icon-cloth"></span>
+                <li><span class="icon icon-phonelink_setup"></span>
                                 <span class="label-display">主题换肤</span>
                                             <span class="tag">官方红</span></li>
-                <li><span class="icon icon-bulb"></span>
+                <li><span class="icon icon-lightbulb_outline"></span>
                                 <span class="label-nightMode">夜间模式</span>
                                             <span class="btn-switch"></span></li>
-                <li><span class="icon icon-btn-stopAtTime"></span>
+                <li><span class="icon icon-schedule"></span>
                                 <span class="label-countdown">定时停止播放</span></li>
-                <li><span class="icon icon-clock"></span>
+                <li><span class="icon icon-alarm"></span>
                                 <span class="label-clock">音乐闹钟</span></li>
-                <li><span class="icon icon-btn-drivingMode"></span>
+                <li><span class="icon icon-directions_car"></span>
                                 <span class="label-driving">驾驶模式</span></li>
-                <li><span class="icon icon-cloud"></span>
+                <li><span class="icon icon-cloud_queue"></span>
                                 <span class="label-cloudDisk">我的音乐云盘</span></li>
             </ul>
             <span class="bottom">

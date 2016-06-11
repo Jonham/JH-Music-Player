@@ -2,8 +2,8 @@
 JH Music Player use _Modern Browsers_ feature *AudioContext* and *FileReader* to make a web-base music player that can load lyric, audio, image[album cover] files from local file system.    
 You can simply drag files to the browser when you're using desktop browsers, or use _File-Input button_ to add your files on your phones.     
 
-Its current UI design is imitating one of the most popular music players called 'Cloud Music' from NetEase.    
-Its most icons come from [Material Icons](https://design.google.com/icons/) by Google.   
+Current UI design is imitating one of the most popular music players called 'Cloud Music' from NetEase.    
+Icons come from [Material Icons](https://design.google.com/icons/) by Google, and [Octicons](https://github.com/primer/octicons) by GitHub. Generated as font using [IcoMoon App](https://icomoon.io/app).   
 _(this project was first started as a lyric file parser and display.)_    
 
 visit [JH Music Player](http://music.jonham.cn/) (http://music.jonham.cn/) to enjoy your music.    
@@ -53,47 +53,47 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] `<input type='file>` display
     - [x] highlight Ranges objects
     - [x] #page-comments needs basic framework setup
-04. **dConsole** window display
+02. **dConsole** window display
     - [x] dConsole display when button 'show console' was pressed
     - [x] display in FullScreen mode. [ change as a float window on the head of viewport]
-05. **FullScreen** API
+03. **FullScreen** API
     - [x] FullScreen API for devices
     - [ ] FullScreen Event listeners on other state change
     - [ ] to hide FullScreen button when is not available
-06. **Icons** and Display
+04. **Icons** and Display
     - [x] Icons for each Page and Menu items
     - [x] sub-controls bar in #page-system ( btn-play circle display)
-    - [ ] zip up _svg_ files of icon
+    - [x] zip up _svg_ files of icon
     - [ ] images and icons preload
-10. **Events**
+05. **Events**
     - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
-07. **touch** events:
+06. **touch** events:
     - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
     - [ ] wait and react until animations stop
-08. **lyric** and cover
+07. **lyric** and cover
     - [x] lyric loader and _timeupdate_ event for AudioContext decoded audio
+    - [x] lyric Empty lines handling
     - [ ] lyric and album image load when another start
     - [ ] lyric parser for compressed lyric files
-    - [ ] lyric Empty lines handling
-09. **control** funcs and buttons
+08. **control** funcs and buttons
     - [x] play, nextSong buttons to work on SongList
     - [x] mute and volume controls on SongList
-11. main parts display: Pages, menus, sidebar
+09. main parts display: Pages, menus, sidebar
     - [x] #sidebar-left bottom position
     - [x] #page-comments .btn-back position to highlight
     - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
-12. **Supports** among browsers
+10. **Supports** among browsers
     - [ ] controls in mainpage display in iPhone4 (narrow in width)
     - [ ] supports information for all kind of Browsers
     - [ ] supports for Devices like iPhone or other weak supports of HTML5, to provide a alternate options to load a remote file and lyric to enjoy the player
-13. **mask layer**
+11. **mask layer**
     - [x] mask layer for avoiding mistake touches and clicks
-14. **Integration**
+12. **Integration**
     - [ ] bind up related blocks
-15. **Canvas** for Audio Visualization
+13. **Canvas** for Audio Visualization
     - [ ] animation delay on poor supported Devices
     - [ ] more display styles
-16. **Lyric**
+14. **Lyric**
     - [x] empty lines display: filled with '...'
