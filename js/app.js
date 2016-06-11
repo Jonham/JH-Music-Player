@@ -17,22 +17,22 @@ window.onload = function() {
 	onFileLoad();
 
     $on(window, 'popstate', function(e) {
-        // console.log(e.state);
-        switch (e.state) {
-            case 'pageSystem':
-                console.log('pageSystem');
-                $('#btn-back').click();
-                break;
-            case 'clearShowup':
-                NS.stackShowup.releaseAll();
-                console.log('clearShowup');
-                // var coverMask = $('.mask');
-                // coverMask.click();
+        var state = NS.util.router.state,
+            dest = e.state;
+
+        switch (state) {
+            case 'page-main':
+                if (dest === 'page-system') { $('#btn-back').click(); }
                 break;
             default:
-
+                NS.stackShowup.releaseAll();
         }
+
+        console.log('state: ' + state + "  dest: " + dest);
+        NS.util.router.state = dest;
     });
+    // pushState on Where we are
+    NS.util.router.push('page-system');
 };
 
 var onSongOptionsGroup = function() {

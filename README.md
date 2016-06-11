@@ -97,3 +97,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] more display styles
 14. **Lyric**
     - [x] empty lines display: filled with '...'
+15. **History API**
+    - [x] basic pushState() return to PageSystem and close menu or sidebar
+    - [x] states interruptions: close menu will also return to pageSystem
+    - [ ] destop alt+arrow will cause some faults when state overwrite

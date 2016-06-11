@@ -1316,11 +1316,12 @@
 
     var Router = (function() {
         var Router = function() {
-
-            this.push = function( page ) {
+            var me = this;
+            me.state = null;
+            me.push = function( page ) {
                 if (page === '' + page) {
                     history.pushState(page, null);
-                    console.log('pushState ' + page);
+                    me.state = page;
                 }
             };
             return this;
