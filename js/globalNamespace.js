@@ -1332,7 +1332,7 @@
                     me.state = page;
                 }
             };
-            return this;
+            return me;
         };
         return new Router();
     }());

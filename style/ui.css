@@ -691,6 +691,9 @@ ul#lyric {
     bottom: 0;
     text-align: left;
 }
+#menu-share a { text-decoration: none; color: black; }
+#menu-share a:visited { text-decoration: none; color: black }
+#menu-share a:active { text-decoration: none; color: black }
 #menu-fileOpt {
     height: 65%;
     top:35%;

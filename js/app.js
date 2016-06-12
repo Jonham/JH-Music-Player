@@ -1,3 +1,10 @@
+var mainControls = $('#controls'),
+    btnPlay = $(mainControls, '.btn-play'),
+    audio = $('audio'),
+    tagTotalTime = $('#tag-totalTime'),
+    tagCurrentTime = $('#tag-currentTime'),
+    lyric = $id('lyric');
+
 window.onload = function() {
 
     // if window receive 'click' event, it will pop up all callback functions in stackShowup

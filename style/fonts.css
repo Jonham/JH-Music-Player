@@ -332,4 +332,5 @@
 }
 .icon-repo-forked:before {
     content: "\f002";
+    padding: 0 3.5px;
 }

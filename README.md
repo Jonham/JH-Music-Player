@@ -12,18 +12,21 @@ And you're welcome to fork and issue whatever come up in your mind.
 <hr>
 
 ## Features going to add
-1. [added] **Canvas**: visual display of music.
-2. **WebSocket**, with the help of _[Pusher](https://pusher.com/)_: makes **Remote Controls**.
+
+1. **WebSocket**, with the help of _[Pusher](https://pusher.com/)_: makes **Remote Controls**.
 3. generate music (or noises) by pure JavaScript (*AudioContext*): DJ music playing platform
 4. analyse and regnize *beats* and *tones*.
 5. Audio recording using **WebRTC** or AudioContext output
 6. scripts making to Video or audio: add time tags and fix accuration.
 7. more **UI** besides NetEase one.
-8. **History API** for using return button on browsers to route between each page and menu
 9. **Online Engine** lyric search Engine or Song message search Engine, further album cover search engine
-10. **Alternate Plan** make AJAX audio loading as a alternate plan when user device don't support AudioContext
 11. **"Functional HTML DOM Elements"** constructions
 12. **Event-Driven** or **State-Driven** mode.
+
+
+- [x] **Canvas**: visual display of music.
+- [x] **History API** for using return button on browsers to route between each page and menu
+- [x] **Alternate Plan** make AJAX audio loading as a alternate plan when user device don't support AudioContext    
 
 <hr>
 
@@ -50,24 +53,10 @@ And you're welcome to fork and issue whatever come up in your mind.
 
 ## Bugs need fix
 
-01. main DOM elements display
-    - [x] `<input type='file>` display
-    - [x] highlight Ranges objects
-    - [x] #page-comments needs basic framework setup
-02. **dConsole** window display
-    - [x] dConsole display when button 'show console' was pressed
-    - [x] display in FullScreen mode. [ change as a float window on the head of viewport]
 03. **FullScreen** API
     - [x] FullScreen API for devices
     - [ ] FullScreen Event listeners on other state change
     - [ ] to hide FullScreen button when is not available
-04. **Icons** and Display
-    - [x] Icons for each Page and Menu items
-    - [x] sub-controls bar in #page-system ( btn-play circle display)
-    - [x] zip up _svg_ files of icon
-    - [ ] images and icons preload
-05. **Events**
-    - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
 06. **touch** events:
     - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
@@ -75,30 +64,46 @@ And you're welcome to fork and issue whatever come up in your mind.
 07. **lyric** and cover
     - [x] lyric loader and _timeupdate_ event for AudioContext decoded audio
     - [x] lyric Empty lines handling
+    - [x] empty lines display: filled with '...'
     - [ ] lyric and album image load when another start
     - [ ] lyric parser for compressed lyric files
-08. **control** funcs and buttons
-    - [x] play, nextSong buttons to work on SongList
-    - [x] mute and volume controls on SongList
 09. main parts display: Pages, menus, sidebar
     - [x] #sidebar-left bottom position
     - [x] #page-comments .btn-back position to highlight
     - [x] FOR ALL: add max-height or max-width to each
     - [ ] FOR ALL: display style and position when on Desktop
-10. **Supports** among browsers
-    - [ ] controls in mainpage display in iPhone4 (narrow in width)
-    - [ ] supports information for all kind of Browsers
-    - [ ] supports for Devices like iPhone or other weak supports of HTML5, to provide a alternate options to load a remote file and lyric to enjoy the player
-11. **mask layer**
-    - [x] mask layer for avoiding mistake touches and clicks
 12. **Integration**
     - [ ] bind up related blocks
 13. **Canvas** for Audio Visualization
     - [ ] animation delay on poor supported Devices
     - [ ] more display styles
-14. **Lyric**
-    - [x] empty lines display: filled with '...'
-15. **History API**
+14. **History API**
     - [x] basic pushState() return to PageSystem and close menu or sidebar
     - [x] states interruptions: close menu will also return to pageSystem
     - [ ] destop alt+arrow will cause some faults when state overwrite
+10. **Supports** among browsers
+    - [ ] controls in mainpage display in iPhone4 (narrow in width)
+    - [ ] supports information for all kind of Browsers
+    - [ ] supports for Devices like iPhone or other weak supports of HTML5, to provide a alternate options to load a remote file and lyric to enjoy the player
+15. **Alternate Plan**
+    - [x] for devices don't support import media files and lyric files (like iPhone)
+    - [ ] for devices don't support AudioContext
+01. main DOM elements display
+    - [x] `<input type='file>` display
+    - [x] highlight Ranges objects
+    - [x] #page-comments needs basic framework setup
+02. **dConsole** window display
+    - [x] dConsole display when button 'show console' was pressed
+    - [x] display in FullScreen mode. [ change as a float window on the head of viewport]
+04. **Icons** and Display
+    - [x] Icons for each Page and Menu items
+    - [x] sub-controls bar in #page-system ( btn-play circle display)
+    - [x] zip up _svg_ files of icon
+    - [x] images and icons preload
+05. **Events**
+    - [x] rangeTime throw error when drag event happened before the audio is playing:SOLUTION:just unbind the function when there is no audio playing
+08. **control** funcs and buttons
+    - [x] play, nextSong buttons to work on SongList
+    - [x] mute and volume controls on SongList
+11. **mask layer**
+    - [x] mask layer for avoiding mistake touches and clicks
