@@ -160,6 +160,7 @@
         me.messageArray = [];
         me.debugingArray = [];
         me.errorArray = [];
+        var ALERT_ONCE = true;
 
 		me.output = null;
 		if (isDOMElement(box)) { me.output = box; }
@@ -185,6 +186,8 @@
             };
             me.errorArray.push(error);
             me.log( error.name + ": " +getKeyWords(error) );
+            
+            if (ALERT_ONCE) { alert('A Alarm on Error Occur.'); ALERT_ONCE = false; }
         };
 
 		me.init = function(newBox) {
