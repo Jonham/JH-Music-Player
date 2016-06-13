@@ -833,7 +833,9 @@ ul#lyric {
 	box-sizing: border-box;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	/* wechat live on this ?*/
+	overflow-y: scroll; 
+	/*overflow: hidden;*/
 	position: absolute;
 }
 #page-system > .subpage-container {
@@ -847,7 +849,7 @@ ul#lyric {
 	position: absolute;
 	width: 100%;
 	height: 90%;
-	overflow-y: scroll;
+	/*overflow-y: scroll;*/
 }
 .sub-page {
 	display: inline-block;
@@ -1288,5 +1290,4 @@ span.header {
 ::-webkit-scrollbar {
 	display: none;
 }
-
 /* add Firefox supports that hide all scroll bars */

@@ -298,6 +298,7 @@ var attachDOMElementEvents = function() {
                 focusOneSpan(index);
                 switch (index) {
                     case "0":
+                        // JH-bugs: Wechat can make this from case '2'
                         subpagesSystem.node.turnTo1();
                         break;
                     case "1":
