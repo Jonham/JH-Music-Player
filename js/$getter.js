@@ -22,7 +22,12 @@
     }
 
     // event listener add and remove
-    w.$on = function (elem, method, callback) { return elem.addEventListener(method, callback, false); };
+    w.$on = function (elem, method, callback) {
+        var methodArray = method.split(' ');
+        _.each(methodArray, function( mth ) {
+            elem.addEventListener(mth, callback, false);
+        });
+    };
     w.$stopPropagation = function(elem, method) {var fn = function(e) {e.stopPropagation();};  w.$on(elem, method, fn);};
     w.$preventDefault = function(elem, method) {var fn = function(e) {e.preventDefault();};  w.$on(elem, method, fn);};
 
