@@ -604,30 +604,50 @@ var addDOMElementNodeProperty = function() {
         btnFullScreen = $('#btn-fullscreen'),
         fullscreen = NS.supports.fullscreen,
         state_FullScreen = false;
-    var fullscreenListener = function(e) {
-        if (state_FullScreen) {
-            fullscreen.cancelFullScreen( viewport );
-            btnFullScreen.innerHTML = "Go FullScreen Now!";
-            state_FullScreen = false;
+
+    var fsELEM = (function(){
+        var a = ['webkitFullscreenElement','mozFullScreenElement','fullScreenElement'];
+        for (var i = 0, l=a.length; i < l; i++) {
+            if (document[ a[i] ] !== undefined) { return a[i]; }
         }
-        else {
-            fullscreen.requestFullScreen( viewport );
+    }());
+
+    var onFSchange =function(e) {
+        if (document[fsELEM]) { // FullScreen
             btnFullScreen.innerHTML = "Exit FullScreen.";
             state_FullScreen = true;
         }
+        else {
+            btnFullScreen.innerHTML = "Go FullScreen Now!";
+            state_FullScreen = false;
+        }
     };
-    $click(btnFullScreen, fullscreenListener);
+    $on(document, 'webkitfullscreenchange mozfullscreenchange fullscreenchange', onFSchange);
+    $on(window, 'keyup', function(e){
+        var b = document.body,
+            s = window.screen;
+
+        if (e.keyCode !== 122) { console.log('F11');return false; } // F11
+        if (!state_FullScreen) {
+            btnFullScreen.innerHTML = "Exit FullScreen. (Press F11)";
+            state_FullScreen = true;
+        }
+        else {
+            btnFullScreen.innerHTML = "Go FullScreen Now!";
+            state_FullScreen = false;
+        }
+    });
+
+    $click(btnFullScreen, function(e) {
+        if (state_FullScreen) { fullscreen.cancelFullScreen(); }
+        else                  { fullscreen.requestFullScreen( viewport ); }
+    });
     // $on(viewport, 'dblclick', fullscreenListener);
 
     //BINDUP-05: button #btn-showConsole
-    var btnShowConsole = $('#btn-showConsole'),
-        ConsoleMAX = false;
-    $click(btnShowConsole, function(e) {
-        dConsole.output.node.max();
-    });
-    $click(dConsole.output, function(e) {
-        dConsole.output.node.min();
-    });
+    var btnShowConsole = $('#btn-showConsole');
+    $click( btnShowConsole, function(e) { dConsole.output.node.max(); });
+    $click(dConsole.output, function(e) { dConsole.output.node.min(); });
 
     //BINDUP-06: audio control buttons
     var btnPlaySystem = $(pageSystem, '.btn-play'),

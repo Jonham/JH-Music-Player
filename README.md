@@ -39,9 +39,9 @@ And you're welcome to fork and issue whatever come up in your mind.
         **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.I've catch errors both in rangeTime and rangeVolume.
     - [ ] onResize() don't work on browser don't support AudioContext
 02. **Song** and **SongList**
-    - [ ] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
-    - [ ] play multi songs when user click .nextSong btn for many times before last song asynchronous actions ready
     - [ ] songlist **mode** detail completion
+    - [x] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
+    - [x] play multi songs when user click .nextSong btn for many times before last song asynchronous actions ready
     - [x] songlist .next, .play, .pause, .stop ...
     - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
     - [x] songlist: play-modes, counts
@@ -53,10 +53,6 @@ And you're welcome to fork and issue whatever come up in your mind.
 
 ## Bugs need fix
 
-03. **FullScreen** API
-    - [x] FullScreen API for devices
-    - [ ] FullScreen Event listeners on other state change
-    - [ ] to hide FullScreen button when is not available
 06. **touch** events:
     - [x] cancel browsers default gestures detection ( e.preventDefault, e.stopPropagation )
     - [ ] prevent continuing clicks
@@ -76,7 +72,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [ ] bind up related blocks
 13. **Canvas** for Audio Visualization
     - [ ] animation delay on poor supported Devices
-    - [ ] more display styles
+    - [ ] more display styles [black, white]
 14. **History API**
     - [x] basic pushState() return to PageSystem and close menu or sidebar
     - [x] states interruptions: close menu will also return to pageSystem
@@ -88,6 +84,10 @@ And you're welcome to fork and issue whatever come up in your mind.
 15. **Alternate Plan**
     - [x] for devices don't support import media files and lyric files (like iPhone)
     - [ ] for devices don't support AudioContext
+03. **FullScreen** API
+    - [x] FullScreen API for devices
+    - [x] FullScreen Event listeners on other state change
+    - [x] to hide FullScreen button when is not available
 01. main DOM elements display
     - [x] `<input type='file>` display
     - [x] highlight Ranges objects

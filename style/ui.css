@@ -183,6 +183,8 @@ body, #viewport {
 #viewport {
     box-sizing: border-box;
     position: absolute;
+	top: 0;
+	left: 0;
     display: block;
     width: 100%;
     height: 100%;
@@ -247,6 +249,7 @@ nav {
 	max-height: 1.3em;
 	display: block;
 	overflow: hidden;
+	white-space: nowrap;
 }
 #tag-songMessage {
 	width: 100%;

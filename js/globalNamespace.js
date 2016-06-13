@@ -1373,6 +1373,6 @@
 (function(w) {
     // for mobile browser debug
     var elem = $dom('div#dConsole');
-	document.body.appendChild(elem);
+    $('#viewport').appendChild(elem);
 	w.dConsole = new DebugConsole(elem);
 })(window);
