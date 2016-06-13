@@ -1,3 +1,4 @@
+"use strict"
 // XMLHttpRequest object polyfill
 if (window.XMLHttpRequest === undefined) {
 	window.XMLHttpRequest = function() {
@@ -42,3 +43,13 @@ if (!window.AudioContext) {
         clearTimeout(id);
     };
 })();
+
+
+// JH-debuging toolbox
+// var jh = [];
+// $on(window, 'error', function(e){
+//     e.stopPropagation();
+//     e.preventDefault();
+//     // alert(e.message);
+//     jh.push(e);
+// });

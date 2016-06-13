@@ -70,15 +70,15 @@ var onFileLoad = function() {
 
         switch (loadingMode) {
             case 1: // media file
-                dConsole.log('onFileRead: loading ' + file.name);
+                Toast.log('loading ' + file.name);
                 callback( new NS.audio.Song( file ), loadingMode );
                 break;
             case 2: // pure-text file Lyric
-                dConsole.log('onFileRead: loading ' + file.name);
+                Toast.log('loading ' + file.name);
                 callback( new NS.lyric.Lyric( file ), loadingMode );
                 break;
             case 3:
-                dConsole.log('onFileRead: loading ' + file.name);
+                Toast.log('loading ' + file.name);
                 callback( new NS.album.AlbumCover( file ), loadingMode );
                 // fr.readAsDataURL(file);
                 break;
@@ -111,7 +111,7 @@ var onFileLoad = function() {
 
             // if there is other song on the songlist, add this song to the list too
             if (songlist.length > 1) {
-                dConsole.log('audioLoader: song added to Playlist.');
+                Toast.log('a new song added to Playlist.');
                 return false;
             }
 
@@ -127,7 +127,7 @@ var onFileLoad = function() {
         var handleLyricFile = function( lyric ) {
             NS.lyric.push(lyric);
             lyric.decode();
-            dConsole.log(lyric.fileName + ' added to NS.lyric.list.');
+            Toast.log(lyric.fileName + ' added to Lyrics list.');
         };
 
         // image file loader

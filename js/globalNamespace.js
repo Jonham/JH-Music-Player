@@ -215,7 +215,11 @@
 
 
     // AudioContext
-    var supportAudioContext = function() { return !!window.AudioContext; };
+    var supportAudioContext = function() {
+        // JH-debuging make browser act like mobile one which support no AudioContext
+        // return false;
+        return !!window.AudioContext;
+    };
     // this contains Song(), SongList()
     // create
     var audioCtx = function() { // Global NameSpace AudioContext Initial
@@ -353,11 +357,14 @@
                 // main work
                 me.ASYNCHRONOUS = true;
 
+                Toast.log('reading file: ' + me.fileName);
                 var fr = new FileReader();
                 fr.readAsArrayBuffer( me._file );
                 fr.onload = function(e) {
                     me._buffer = fr.result;
                     me.states.readFile = true;
+
+                    Toast.log(me.title + ' loaded.', 'fast');
                     console.log('Song: ' + me.title + ' loaded.');
 
                     me.ASYNCHRONOUS = false;
@@ -381,9 +388,11 @@
                 // main work
                 me.ASYNCHRONOUS = true;
                 // decode using AudioContext
+                Toast.log('decoding audio: ' + me.title);
                 ctx.decodeAudioData(me._buffer, function( audioBuffer ) {
                     me._audioBuffer = audioBuffer;
                     me.states.decode = true;
+                    Toast.log(me.title + ' decoded.');
 
                     me.ASYNCHRONOUS = false;
                     typeof(callback) === 'function' && callback();
@@ -560,6 +569,7 @@
                 // console.log('play at time ' + time);
                 me.timeupdate();
 
+                NS.lyric.refresh();
                 return me;
             },
             stop: function() {
@@ -725,25 +735,26 @@
             };
 
             songlist.play = function( index ) {
+                var me = songlist;
                 var index = +index;
-                if (_.isNumber(index) && index < songlist.length) {
-                    songlist[index].play(0);
-                    songlist.playing = index;
-                    songlist.next = (index + 1) >= songlist.length? 0: (index + 1);
-                    songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
+                if (_.isNumber(index) && index < me.length) {
+                    me[index].play(0);
+                    me.playing = index;
+                    Toast.log('next song: ' + me[index].title );
+                    me.next = (index + 1) >= me.length? 0: (index + 1);
+                    me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
                 }
                 else {
                     var index = 0;
-                    songlist[index].play(0);
-                    songlist.playing = index;
-                    songlist.next = (index + 1) >= songlist.length? 0: (index + 1);
-                    songlist.pre = (index - 1) < 0? (songlist.length - 1): (index - 1);
+                    me[index].play(0);
+                    me.playing = index;
+                    me.next = (index + 1) >= me.length? 0: (index + 1);
+                    me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
                 }
             };
-            songlist.playNext = function() {
-                // JH-todo: songlist should has a modes and playNext should add supports to that
-                songlist.play(songlist.next); };
-            songlist.playPre = function() { songlist.play( songlist.pre ); };
+            // JH-todo: songlist should has a modes and playNext should add supports to that
+            songlist.playNext = function() { songlist.play(songlist.next); };
+            songlist.playPre = function()  { songlist.play( songlist.pre ); };
             return songlist;
         };
         var songlist = new SongList();
@@ -1089,6 +1100,8 @@
             // var createStyle = NS.util.createStyle;
             // createStyle.createTag('.icon-userIcon: { background-image: url("' + me._buffer + '") !important;')
             //            .insert();
+            Toast.log('new album cover already set.');
+
             if (_.isArray(target)) {
                 _.each(target, function(item){ item.style.backgroundImage = 'url(' + me._buffer + ")"; });
             } else {
@@ -1260,13 +1273,24 @@
             var me = ns.lyric;
             if (me.list[ title ]) { // match
                 me.start( me.list[ title ] );
+                Toast.log('lyric found.', 'middle');
             }
             else { // no match
                 me.end();
+                Toast.log('no match lyric.', 'middle');
             }
         },
         refresh: function() {
-
+            var me = ns.lyric;
+            if (!me.currentView) {
+                return false;
+            }
+            else {
+                var lines = $(me.currentView, '.focus');
+                _.each(lines, function( l ){
+                    l.classList.remove('focus');
+                });
+            }
         },
     };
     ns.album = {
@@ -1372,7 +1396,10 @@
 // initial global parameters
 (function(w) {
     // for mobile browser debug
-    var elem = $dom('div#dConsole');
-    $('#viewport').appendChild(elem);
+    var elem = $('div#dConsole');
 	w.dConsole = new DebugConsole(elem);
+
+    // for state message Toast
+    var toastbox = $('div#toastmessage');
+    w.Toast = new ToastObject( toastbox );
 })(window);

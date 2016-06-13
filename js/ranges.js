@@ -74,6 +74,10 @@ var onSizeChange = function() {
 
         rangeTime.style.width = length +'px';
         rangeVolume.style.width = length + 'px';
+        // JH-need move: modified canvas width as well
+        if (NS.audio && NS.audio.visualizer) {
+            NS.audio.visualizer.setSize( length, length/4 );
+        }
 
         setTimeout( callback, 1100); // transition-duration: 1000
     }; // resizeRange()

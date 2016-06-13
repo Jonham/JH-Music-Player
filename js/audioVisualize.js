@@ -4,6 +4,8 @@ var audioVisualizer = function( height, width, gain ) {
         headGain = NS.audio.headGain,
         audioVisualizer = null,
         filledColor = 'rgb(0,0,0)';
+    // if AudioContext is not support return false;
+    if (!ctx) { return false; }
 
     var analyser = ctx.createAnalyser();
     if (gain && gain.connect) { gain.connect(analyser); }
@@ -53,5 +55,9 @@ var audioVisualizer = function( height, width, gain ) {
         timer: audioVisualizer,
         analyser: analyser,
         setColor: function(color) { filledColor = color || '#555'; },
+        setSize: function(width, height) {
+            WIDTH = canvas.width = width;
+            HEIGHT = canvas.height = height;
+            canvas.style.left = -(WIDTH / 2) + 'px';}
     };
 }

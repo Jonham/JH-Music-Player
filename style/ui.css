@@ -395,11 +395,6 @@ span.song-opt-grp {
 span.song-opt-grp > span {
     display: inline-block;
     position: relative;
-    /*padding: .8em;
-    margin: 0 1em;*/
-    /*background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50%;*/
 
             animation-duration: .3s;
     -webkit-animation-duration: .3s;
@@ -838,7 +833,9 @@ ul#lyric {
 	box-sizing: border-box;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	/* wechat live on this ?*/
+	overflow-y: scroll;
+	/*overflow: hidden;*/
 	position: absolute;
 }
 #page-system > .subpage-container {
@@ -852,7 +849,7 @@ ul#lyric {
 	position: absolute;
 	width: 100%;
 	height: 90%;
-	overflow-y: scroll;
+	/*overflow-y: scroll;*/
 }
 .sub-page {
 	display: inline-block;
@@ -1169,6 +1166,8 @@ input[type=file]:before {
 	z-index: -1;
 	text-align: center;
 }
+
+/* hide input file style */
 ::-ms-browse, [type='file'] {
 	display: none;
 }
@@ -1226,7 +1225,24 @@ button#btn-tryout {
 	max-height: none !important;
 	display: block !important;
 }
+div.center {
+	position: fixed;
+	width: 100%;
+	bottom: 8em;
+	left: 0;
+	text-align: center;
+}
+#toastmessage {
+	display: inline-block;
 
+	padding: .4em 2em;
+	background-color: rgba(100,100,100,.8);
+	color: black;
+	border-radius: .2em;
+}
+#toastmessage.hidden {
+	display: none;
+}
 
 
 
@@ -1282,50 +1298,8 @@ span.header {
 	font-size: 2.5em;
 	vertical-align: sub;
 }
-/*.icon-btn-pause-w { background-image: url('icons/play-w.svg'); }*/
-/*.icon-btn-play-w { background-image: url('icons/pause-w.svg'); }*/
-/*.icon-btn-pause-r { background-image: url('icons/play-r.svg'); }*/
-/*.icon-btn-play-r { background-image: url('icons/pause-r.svg'); }*/
-
-
-/*.icon-right-arrow { background-image: url('icons/arrow-right-w.svg'); }
-.icon-thumb-up { background-image: url('icons/thumb-up-w.svg')}
-/* system page */
-/*.icon-menu-w { background-image: url('icons/menu-w.svg')}
-.icon-netease { background-image: url('icons/home-w.svg')}
-.icon-music { background-image: url('icons/music-w.svg')}
-.icon-people { background-image: url('icons/people-w.svg')}
-.icon-search { background-image: url('icons/search-w.svg')}*/
-
 .icon-shareToTencent { background-image: url('icons/wechat-g.png'); }
 .icon-shareToYixin { background-image: url('icons/yixin_logo.png'); }
-
-/* share menu */
-/*.icon-shareToYun { background-image: url('icons/cloud-b.svg'); }
-.icon-shareToMsg { background-image: url('icons/mail-b.svg'); }
-.icon-shareToURL { background-image: url('icons/link-b.svg'); }
-.icon-shareToOtherWays { background-image: url('icons/more-horiz-b.svg'); }*/
-
-/* file option menu */
-/*.icon-addTo { background-image: url('icons/addtolist-b.svg'); }
-.icon-download { background-image: url('icons/download-b.svg'); }
-.icon-tag-artist { background-image: url('icons/person-b.svg'); }
-.icon-tag-album { background-image: url('icons/album-b.svg'); }
-.icon-btn-audioQuality { background-image: url('icons/pc-b.svg'); }
-.icon-btn-proposeAlike { background-image: url('icons/audio-b.svg'); }
-.icon-btn-stopAtTime { background-image: url('icons/schedule-b.svg'); }
-.icon-btn-drivingMode { background-image: url('icons/driving-b.svg'); }*/
-
-/* sidebar left */
-/*.icon-mail { background-image: url('icons/mail-b.svg'); }
-.icon-cart { background-image: url('icons/cart-b.svg'); }
-.icon-package { background-image: url('icons/package-b.svg'); }
-.icon-free { background-image: url('icons/inbox-b.svg'); }
-.icon-mic { background-image: url('icons/mic-b.svg'); }
-.icon-cloth { background-image: url('icons/setup-b.svg'); }
-.icon-bulb { background-image: url('icons/bulb-b.svg'); }
-.icon-clock { background-image: url('icons/clock-b.svg'); }
-/*.icon-cloud { background-image: url('icons/cloud-b.svg'); }*/
 
 
 
@@ -1333,3 +1307,4 @@ span.header {
 ::-webkit-scrollbar {
 	display: none;
 }
+/* add Firefox supports that hide all scroll bars */

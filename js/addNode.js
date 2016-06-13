@@ -627,7 +627,7 @@ var addDOMElementNodeProperty = function() {
         var b = document.body,
             s = window.screen;
 
-        if (e.keyCode !== 122) { console.log('F11');return false; } // F11
+        if (e.keyCode !== 122) { return false; } // F11
         if (!state_FullScreen) {
             btnFullScreen.innerHTML = "Exit FullScreen. (Press F11)";
             state_FullScreen = true;
