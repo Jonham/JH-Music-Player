@@ -24,6 +24,7 @@
     // event listener add and remove
     w.$on = function (elem, method, callback) {
         var methodArray = method.split(' ');
+        if (!elem) { return false;}
         _.each(methodArray, function( mth ) {
             elem.addEventListener(mth, callback, false);
         });
@@ -201,6 +202,7 @@
             e.preventDefault();
             e.stopPropagation();
             me.error(e);
+            me.log(e.error.toString());
             // me.log(e.filename + ":" + e.colno + '>>' + e.message);
         });
 		return this;

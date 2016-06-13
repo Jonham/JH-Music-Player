@@ -1,4 +1,5 @@
-var list = NS.audio.songlist;
+// in case AudioContext don't supported
+var list = NS.audio.songlist || { init:function(){} };
 list.init();
 NS.dom.menuSonglist.node.bind( list );
 var lyric = NS.lyric;

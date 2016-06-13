@@ -4,6 +4,8 @@ var audioVisualizer = function( height, width, gain ) {
         headGain = NS.audio.headGain,
         audioVisualizer = null,
         filledColor = 'rgb(0,0,0)';
+    // if AudioContext is not support return false;
+    if (!ctx) { return false; }
 
     var analyser = ctx.createAnalyser();
     if (gain && gain.connect) { gain.connect(analyser); }

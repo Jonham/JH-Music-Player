@@ -215,7 +215,11 @@
 
 
     // AudioContext
-    var supportAudioContext = function() { return !!window.AudioContext; };
+    var supportAudioContext = function() {
+        // JH-debuging make browser act like mobile one which support no AudioContext
+        // return false;
+        return !!window.AudioContext;
+    };
     // this contains Song(), SongList()
     // create
     var audioCtx = function() { // Global NameSpace AudioContext Initial
@@ -223,16 +227,7 @@
             // alert("WoW! your browser doesn't support the tech: AudioContext.\n我的天！ 你的浏览器居然不支持音频解析，赶紧升级到最新版本!\n或者，你可以尝试用QQ浏览器, Firefox 或者 Chrome浏览器。\n要更好地体验黑科技，建议您使用电脑版的浏览器。");
             alert("WoW! your browser doesn't support the tech: AudioContext.\nFor more joy, please open this player in Destop Browsers.");
             // polyfill NS.audio.ctx...
-            return {
-                Song: Song, // Song creator function
-                SongList: SongList, // SongList creator function
-
-                ctx: ctx,
-                headGain: headGain,
-                songlist: songlist,
-                currentPlayingSong: currentPlayingSong,
-                controller: controller,
-            };
+            return false;
         }
 
         var ctx = new AudioContext();
