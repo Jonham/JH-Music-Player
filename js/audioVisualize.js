@@ -53,5 +53,9 @@ var audioVisualizer = function( height, width, gain ) {
         timer: audioVisualizer,
         analyser: analyser,
         setColor: function(color) { filledColor = color || '#555'; },
+        setSize: function(width, height) {
+            WIDTH = canvas.width = width;
+            HEIGHT = canvas.height = height;
+            canvas.style.left = -(WIDTH / 2) + 'px';}
     };
 }
