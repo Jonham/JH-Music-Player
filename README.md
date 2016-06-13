@@ -37,7 +37,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] UC browser : unique input[type=file], crack down when select any kind of files
         BUGS: attachNodeToElement.js:300 drag.js:73    
         **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.I've catch errors both in rangeTime and rangeVolume.
-    - [ ] onResize() don't work on browser don't support AudioContext
+    - [x] onResize() don't work on browser don't support AudioContext
 02. **Song** and **SongList**
     - [ ] songlist **mode** detail completion
     - [x] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
@@ -78,7 +78,7 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] states interruptions: close menu will also return to pageSystem
     - [ ] destop alt+arrow will cause some faults when state overwrite
 10. **Supports** among browsers
-    - [ ] controls in mainpage display in iPhone4 (narrow in width)
+    - [x] controls in mainpage display in iPhone4 (narrow in width)
     - [ ] supports information for all kind of Browsers
     - [ ] supports for Devices like iPhone or other weak supports of HTML5, to provide a alternate options to load a remote file and lyric to enjoy the player
 15. **Alternate Plan**
