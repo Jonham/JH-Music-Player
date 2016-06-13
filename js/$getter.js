@@ -154,7 +154,7 @@
 
     // debug message on browser
     w.DebugConsole = function( box ){
-		if (this === window) { return new debugConsole(box); }
+		if (this === window) { return new DebugConsole(box); }
 
 		var me = this;
         me.messageArray = [];
@@ -186,7 +186,7 @@
             };
             me.errorArray.push(error);
             me.log( error.name + ": " +getKeyWords(error) );
-            
+
             if (ALERT_ONCE) { alert('A Alarm on Error Occur.'); ALERT_ONCE = false; }
         };
 
@@ -210,4 +210,50 @@
         });
 		return this;
 	};
+
+    // toast states on screen
+    w.ToastObject = function( box ) {
+        if (this === window) { return new Toast(box); }
+
+		var me = this;
+        me._timer = null;
+
+		me.output = null;
+		if (isDOMElement(box)) { me.output = box; }
+
+        me.init = function(newBox) {
+            if (!isDOMElement(newBox)) { return false; }
+            // remove previous box
+            var o = me.output;
+            isDOMElement(o)? o.parentNode.removeChild(o): null;
+
+            o = newBox;
+        };
+
+        // log msg on me.messageArray
+		me.log = function( msg,duration ) {
+			if (me.output) { me.output.innerHTML = msg; }
+            me.output.classList.remove('hidden');
+
+            var stringToTime = {
+                slow:   5,
+                middle: 3,
+                fast:   1
+            };
+            if (stringToTime[ duration ]) {
+                duration = stringToTime[ duration ];
+            }
+            else {
+                duration = _.isNumber(duration)? duration: 5;
+            }
+
+            clearTimeout(me._timer);
+            me._timer = setTimeout(function() {
+                me.output.classList.add('hidden');
+            }, duration * 1000);
+		};
+
+
+		return me;
+    };
 })(window);

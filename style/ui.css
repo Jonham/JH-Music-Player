@@ -1225,7 +1225,24 @@ button#btn-tryout {
 	max-height: none !important;
 	display: block !important;
 }
+div.center {
+	position: fixed;
+	width: 100%;
+	bottom: 8em;
+	left: 0;
+	text-align: center;
+}
+#toastmessage {
+	display: inline-block;
 
+	padding: .4em 2em;
+	background-color: rgba(100,100,100,.8);
+	color: black;
+	border-radius: .2em;
+}
+#toastmessage.hidden {
+	display: none;
+}
 
 
 

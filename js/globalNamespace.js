@@ -1376,7 +1376,10 @@
 // initial global parameters
 (function(w) {
     // for mobile browser debug
-    var elem = $dom('div#dConsole');
-    $('#viewport').appendChild(elem);
+    var elem = $('div#dConsole');
 	w.dConsole = new DebugConsole(elem);
+
+    // for state message Toast
+    var toastbox = $('div#toastmessage');
+    w.Toast = new ToastObject( toastbox );
 })(window);
