@@ -684,9 +684,8 @@
                 }
             });
 
-            songlist.push = function(){ // overwrite native Array.push to fulfill testing
-                var args = Array.prototype.slice.apply(arguments);
-                args.forEach(function(value) {
+            songlist.push = function() { // overwrite native Array.push to fulfill testing
+                _.each(arguments, function(value) {
                     if ( isSong(value) && value.states.init ) {
                         Array.prototype.push.call(songlist, value);
                         value.analyseFilename();
@@ -737,20 +736,15 @@
             songlist.play = function( index ) {
                 var me = songlist;
                 var index = +index;
-                if (_.isNumber(index) && index < me.length) {
-                    me[index].play(0);
-                    me.playing = index;
-                    Toast.log('next song: ' + me[index].title );
-                    me.next = (index + 1) >= me.length? 0: (index + 1);
-                    me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
-                }
-                else {
-                    var index = 0;
-                    me[index].play(0);
-                    me.playing = index;
-                    me.next = (index + 1) >= me.length? 0: (index + 1);
-                    me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
-                }
+                index = ( _.isNumber(index) && index < me.length)? index: 0;
+
+                me[index].play(0);
+                me.playing = index;
+                me.next = (index + 1) >= me.length? 0: (index + 1);
+                me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
+
+                Toast.log('next song: ' + me[index].title );
+                $('#menu-songlist').node.current( index );
             };
             // JH-todo: songlist should has a modes and playNext should add supports to that
             songlist.playNext = function() { songlist.play(songlist.next); };

@@ -170,7 +170,6 @@ var attachDOMElementEvents = function() {
             var songlist = NS.audio.songlist;
 
             songlist.play(index);
-            $('#menu-songlist').node.current(+index);
         }
     });
 

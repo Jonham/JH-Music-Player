@@ -674,9 +674,19 @@ ul#lyric {
 	color: red;
 }
 #menu-songlist li.current:before {
-	content: " ";
+	font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    content: "\e050";
 	display: inline-block;
-	background-color: red;
+	padding-right: .5em;
 }
 
 

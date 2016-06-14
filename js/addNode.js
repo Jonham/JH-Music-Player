@@ -282,7 +282,7 @@ var addDOMElementNodeProperty = function() {
             var songlist = $('#songlist'),
                 viewCount = $(menuSonglist, '.count'),
                 temp = $wrap('ul');
-            _.each(arrMessage, function(value, index, array){
+            _.each(arrMessage, function(value, index){
                 temp.add(
                     $wrap('li').html(value.title)
                                .data('index', index)
@@ -294,6 +294,7 @@ var addDOMElementNodeProperty = function() {
                     .html( temp.html() );
             // update #menuSonglist song counts
             viewCount.innerHTML = arrMessage.length;
+            menuSonglist.node.current( NS.audio.songlist? NS.audio.songlist.playing: 0 );
         },
         bind: function( songlist ) {
             if ( typeof(songlist) !== 'object' || songlist.MODES !== undefined ) {
@@ -305,6 +306,8 @@ var addDOMElementNodeProperty = function() {
         current: function( index ) {
             var me = menuSonglist;
             var last = $(me, '.current');
+
+            // remove last span.current current class
             if (last && _.isNumber(last.length) ) {
                 _.each(last, function(item){ item.classList.remove('current');});
             } else {
