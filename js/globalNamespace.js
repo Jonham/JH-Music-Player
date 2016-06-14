@@ -1265,7 +1265,8 @@
             if (!me.currentView) { me.bindView(me.defaults.currentView); }
 
             var ul = $(me.currentView, 'ul');
-            ul.innerHTML = '<span class="btn" style="color:rgba(255,255,255,0.6);" onclick="$(\'input[type=file]\').click();">Click option button to add a lyric file.</span>';
+            ul.innerHTML =
+            '<span style="position:absolute;top:50%;width:100%;left:0;text-align:center;"><span class="btn" style="color:rgba(255,255,255,0.6);" onclick="$(\'input[type=file]\').click();">Click option button to add a lyric file.</span></span>';
         },
         lookup: function( title ) {
             var me = ns.lyric;
