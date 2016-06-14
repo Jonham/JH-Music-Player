@@ -181,7 +181,7 @@
         me.error = function(error) {
             var getKeyWords = function(error) {
                 var reg = /([^\/]*?\.js):(\d+):(\d+)/img;
-                var arr = error.stack.match(reg);
+                var arr = error.stack? error.stack.match(reg): error.error.stack.match(reg);
                 return arr.join("_");
             };
             me.errorArray.push(error);
@@ -201,13 +201,13 @@
 
         // redirect all error message onto me.log
         // mainly for mobile device without console
-        $on(window, 'error', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            me.error(e);
-            me.log(e.error.toString());
-            // me.log(e.filename + ":" + e.colno + '>>' + e.message);
-        });
+        // $on(window, 'error', function(e) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     me.error(e);
+        //     me.log(e.error.toString());
+        //     // me.log(e.filename + ":" + e.colno + '>>' + e.message);
+        // });
 		return this;
 	};
 

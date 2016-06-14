@@ -645,9 +645,51 @@
         var isSong = function( song ) {
             return song && song.constructor && song.constructor === Song;
         }
+        var Emitter = function() {
+                // JH-bug: create 'event' listener
+                var _events = {};
+                this.addEvent = this.on = function( eventType,listener ) {
+                    if (!_events[ eventType ]) {
+                        _events[eventType] = [];
+                        _events[eventType].push( listener );
+                    }
+                    else {
+                        var list = _events[eventType];
+                        var alreadyIn = false;
+                        _.each(list, function(fn) {
+                            if (listener === fn) { alreadyIn = true; }
+                        });
+
+                        if (! alreadyIn ) {
+                            list.push(listener);
+                        }
+                    }
+                };
+                this.trigger = function( eventType,msg ) {
+                    var list = _events[ eventType ];
+                    if (!list || list.length === 0) { return false; }
+                    _.each(list, function(fn) {
+                        fn( msg );
+                    });
+                };
+                this.removeEvent = this.off = function( eventType,listener ) {
+                    var list = _events[ eventType ];
+                    if (!list || list.length === 0) { return false; }
+
+                    if (listener === undefined) { _events[ eventType ] = []; return false;}
+                    _events[ eventType ] = _.filter(list,
+                        function(fn) {
+                            if (fn !== listener) { return true; }
+                        });
+
+                    };
+                return this;
+            }
+
         // extendable songlist
         var SongList = function() {
             var songlist = [];
+            Emitter.call(songlist);
 
             songlist.pre = 0;
             songlist.next = 1; // index for next one
@@ -673,6 +715,9 @@
                 get: function(){return _mode;},
                 set: function(mode){
                     var InModes = false;
+                    if (mode === 'SHUFFLE') {
+                        _songlist.init();
+                    }
                     songlist.MODES.forEach(function(value){
                         if (mode === value) {
                             InModes = true;
@@ -695,6 +740,7 @@
                             songlist.output( songlist.message() );
                         }
 
+                        songlist.trigger('push',{title: value.title});
                         return songlist;
                     }
                     console.warn('You\'re trying to push a object not Song instance or uninit Song to SongList');
@@ -715,21 +761,82 @@
             };
 
             // private function to generate next song index by songlist.mode
-            var _whichIsNext = function() { // generate next song index
+            var _songlist = {
+                index: 0,
+                value: 0,
+                list: [],
+
+                init: function() {
+                    // don't not cover already played one
+                    var generateNumberArray = function( length ){
+                        var arr = [];
+                        for (var i = 0; i < length; i++ ){
+                            arr.push(i);
+                        }
+                        return arr;
+                    };
+                    var shuffleCurrentList = function( list ) {
+                        return list.sort(
+                            function(){ return Math.round( Math.random() * 2 -1 ); } );
+                        };
+
+                    this.list = generateNumberArray( songlist.length );
+                    this.list = shuffleCurrentList( this.list );
+
+                    return this;
+                },
+                findIndex: function(v){
+                    var me = this.list;
+                    if (v > me.length) { return -1; }
+
+                    for (var i = 0; i < me.length; i++) {
+                        if (me[i] === v) {
+                            return i;
+                        }
+                    }
+                },
+                pre: function(){
+                    var i = this.index - 1, max = this.list.length - 1;
+                    var index = i < 0? max: i;
+
+                    return this.list[ index ]; // return the 'value' of songlist
+                },
+                next: function(){
+                    var i = this.index + 1, max = this.list.length - 1;
+                    var index = i > max? 0: i;
+
+                    return this.list[ index ];
+                },
+                turnNext: function( last ){
+                    this.value = last;
+                    this.index = this.findIndex( last );
+
+                    songlist.next = this.next();
+                    songlist.pre = this.pre();
+                },
+            }; // only store index of songs
+            songlist.on('push', function(){
+                _songlist.init();
+            });
+
+            var _nextsong = function( last ) { // generate next song index
                 var me = songlist,
                     mode = me.mode;
+                me.playing = last;
+
                 switch (mode) {
-                    case 'LOOP':
-
-                        break;
                     case 'SHUFFLE':
-
+                        _songlist.turnNext( last );
                         break;
                     case 'REPEATONE':
-
+                        me.next = last;
+                        me.pre = (last - 1) < 0? (me.length - 1): (last - 1);
                         break;
+                    case 'LOOP':
                     default:
-
+                        me.next = (last + 1) >= me.length? 0: (last + 1);
+                        me.pre = (last - 1) < 0? (me.length - 1): (last - 1);
+                        break;
                 }
             };
 
@@ -739,9 +846,7 @@
                 index = ( _.isNumber(index) && index < me.length)? index: 0;
 
                 me[index].play(0);
-                me.playing = index;
-                me.next = (index + 1) >= me.length? 0: (index + 1);
-                me.pre = (index - 1) < 0? (me.length - 1): (index - 1);
+                _nextsong( index );
 
                 Toast.log('next song: ' + me[index].title );
                 $('#menu-songlist').node.current( index );
@@ -749,6 +854,7 @@
             // JH-todo: songlist should has a modes and playNext should add supports to that
             songlist.playNext = function() { songlist.play(songlist.next); };
             songlist.playPre = function()  { songlist.play( songlist.pre ); };
+
             return songlist;
         };
         var songlist = new SongList();
