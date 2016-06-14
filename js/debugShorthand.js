@@ -7,6 +7,8 @@ var lyric = NS.lyric;
 var btnTryout = $('#btn-tryout'),
     btnTryoutState = true;
 $click(btnTryout, function(e) {
+    Toast.log('Loading a Tryout Audio and Lyric file.', 10);
+
     var load = function( path, callback, responseType ) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', path);
