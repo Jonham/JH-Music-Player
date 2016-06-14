@@ -170,7 +170,6 @@ var attachDOMElementEvents = function() {
             var songlist = NS.audio.songlist;
 
             songlist.play(index);
-            $('#menu-songlist').node.current(+index);
         }
     });
 
@@ -225,13 +224,7 @@ var attachDOMElementEvents = function() {
         viewDisk = $(viewAlbum, '.view-albumCover'),
         viewLyric = $('#view-lyric');
     $click( viewDisk, function() { viewContainer.node.toggle(); });
-    $click( viewLyric, function(e) {
-        // if (e.target.tagName == 'LI') {
-        //     // when click on Lyric lines stop turning
-        //     return false;
-        // }
-        viewContainer.node.toggle();
-    });
+    $click( viewLyric, function(e) { viewContainer.node.toggle(); });
 
     //onEVENTS-10: audio controls buttons
     (function() {

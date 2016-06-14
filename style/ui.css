@@ -272,11 +272,8 @@ hr.divider {
 }
 
 .speaker {
-    margin-left: 2em;
-    background-image: url('icons/speaker-w.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    padding: .6em;
+    margin-left: 2.4em;
+    padding: 0;
     padding-top: 0;
     opacity: .6;
 
@@ -677,9 +674,19 @@ ul#lyric {
 	color: red;
 }
 #menu-songlist li.current:before {
-	content: " ";
+	font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    content: "\e050";
 	display: inline-block;
-	background-color: red;
+	padding-right: .5em;
 }
 
 
