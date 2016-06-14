@@ -1213,9 +1213,7 @@
             var lyricHightlightOriginTop = 160;
             var OFFSET = 0; // for lyric to show earlier
 
-            me.bindLyric(lyric, function() {
-                me.bindView( me.defaults.currentView );
-            });
+            me.bindLyric(lyric, function() { me.bindView( me.defaults.currentView ); });
 
             var lrc = lyric[0];
             var timetags = lrc.timeTags;
@@ -1273,11 +1271,11 @@
             var me = ns.lyric;
             if (me.list[ title ]) { // match
                 me.start( me.list[ title ] );
-                Toast.log('lyric found.', 'middle');
+                Toast.log('lyric found.', 'fast');
             }
             else { // no match
                 me.end();
-                Toast.log('no match lyric.', 'middle');
+                Toast.log('no match lyric.', 'fast');
             }
         },
         refresh: function() {

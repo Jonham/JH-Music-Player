@@ -272,11 +272,8 @@ hr.divider {
 }
 
 .speaker {
-    margin-left: 2em;
-    background-image: url('icons/speaker-w.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    padding: .6em;
+    margin-left: 2.4em;
+    padding: 0;
     padding-top: 0;
     opacity: .6;
 
