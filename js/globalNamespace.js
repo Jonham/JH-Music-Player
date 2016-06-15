@@ -62,9 +62,9 @@
 
 
     // desktop browsers don't support touch events
-    var mobileOrDestop = function() { return null === document.ontouchend; };
+    var isMobile = function() { return null === document.ontouchend; };
     // another way: not completed
-    var mobileOrDestop1 = function() {
+    var isMobile1 = function() {
         var ug = navigator.userAgent;
         var result = ug.search(/windows|x11|Mac.*(^iphone)/ig);
         dConsole.log(result === -1? 'Use input[type=file] to add files' : 'Drag&Drop files onto me!');
@@ -72,8 +72,9 @@
         //   and browser support AudioContext() [webkitAudioContext() included]
         return NS.supports.audioContext && result !== -1;
     };
+
     // FullScreen
-    var supportFullScreen = (function(docElem) {
+    var supportFullscreen = (function(docElem) {
         var fullscreen = cancelFullscreen = null;
         var fsWays = ['requestFullScreen', 'mozRequestFullScreen', 'webkitRequestFullScreen'],
             cfsWays = ['cancelFullscreen', 'mozCancelFullScreen', 'webkitCancelFullScreen'];
@@ -644,7 +645,9 @@
         };
         var isSong = function( song ) {
             return song && song.constructor && song.constructor === Song;
-        }
+        };
+
+        // a complementation of Events
         var Emitter = function() {
                 // JH-bug: create 'event' listener
                 var _events = {};
@@ -857,7 +860,6 @@
 
             return songlist;
         };
-        var songlist = new SongList();
 
         return {
             Song: Song, // Song creator function
@@ -865,7 +867,7 @@
 
             ctx: ctx,
             headGain: headGain,
-            songlist: songlist,
+            songlist: new SongList(),
             currentPlayingSong: currentPlayingSong,
             controller: controller,
         }
@@ -1223,10 +1225,11 @@
         }
     };
 
-    ns.supports = {};
-    ns.supports.audioContext = supportAudioContext();
-    ns.supports.mobile = mobileOrDestop();
-    ns.supports.fullscreen = supportFullScreen; // call requestFullScreen/cancelFullScreen
+    ns.supports = {
+        audioContext: supportAudioContext(),
+        mobile: isMobile(),
+        fullscreen: supportFullscreen
+    };
 
     ns.audio = audioCtx();
     ns.lyric = {

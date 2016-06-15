@@ -4,6 +4,7 @@
 /screenshots
 /static
 /Notes
+/src
 
 /**/*.jh
 *.txt
