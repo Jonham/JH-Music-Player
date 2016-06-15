@@ -225,6 +225,12 @@ var attachDOMElementEvents = function() {
         viewLyric = $('#view-lyric');
     $click( viewDisk, function() { viewContainer.node.toggle(); });
     $click( viewLyric, function(e) { viewContainer.node.toggle(); });
+    NS.audio.songlist.on('play', function(e) {
+        viewDisk.node.turnOn();
+    });
+    NS.audio.songlist.on('pause stop', function(e) {
+        viewDisk.node.turnOff();
+    });
 
     //onEVENTS-10: audio controls buttons
     (function() {
@@ -236,12 +242,19 @@ var attachDOMElementEvents = function() {
         var timeOfAudioContext = 0,
             stateAudioLoading = false;
 
+        var btn = btnPlayGroup[0];
+        NS.audio.songlist.on('play', function(e) {
+            btn.node.pause();
+        });
+        NS.audio.songlist.on('pause stop', function(e) {
+            btn.node.play();
+        });
+
         var onPlaySong = function(e) {
             e.stopPropagation();
 
             var song = NS.audio.currentPlayingSong,
-                format = NS.util.formatTimestamp,
-                btn = btnPlayGroup[0];
+                format = NS.util.formatTimestamp;
 
             if (!song) { // no song, load one?
                 $('input[type=file]').click();
@@ -253,16 +266,14 @@ var attachDOMElementEvents = function() {
                     timeOfAudioContext = NS.audio.ctx.currentTime;
 
                     song.play();
-                    btn.node.play();
                 }
                 else {
                     song.pause();
-                    btn.node.pause();
                 }
             }
         };
         var onNextSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playNext(); };
-        var onPreSong = function( e ) { e.stopPropagation(); NS.audio.songlist.playPre(); };
+        var onPreSong = function( e ) { e.stopPropagation();  NS.audio.songlist.playPre(); };
 
         $click(btnPre, onPreSong);
         _.each(btnNextGroup, function( btnNextsong ) { $click(btnNextsong, onNextSong); });

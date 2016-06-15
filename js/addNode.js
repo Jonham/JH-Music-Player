@@ -657,18 +657,18 @@ var addDOMElementNodeProperty = function() {
         btnPlayMainpage = $(pageMain, '.btn-play');
     NS.dom.btnPlay = attachNodeTo( btnPlayMainpage, {
         play: function() {
-            btnPlaySystem.classList.add('icon-btn-play-r');
-            btnPlaySystem.classList.remove('icon-btn-pause-r');
+            btnPlaySystem.classList.add('icon-play_arrow');
+            btnPlaySystem.classList.remove('icon-pause');
 
-            btnPlayMainpage.classList.add('icon-btn-play-w');
-            btnPlayMainpage.classList.remove('icon-btn-pause-w');
+            btnPlayMainpage.classList.add('icon-play_arrow');
+            btnPlayMainpage.classList.remove('icon-pause');
         },
         pause: function() {
-            btnPlaySystem.classList.add('icon-btn-pause-r');
-            btnPlaySystem.classList.remove('icon-btn-play-r');
+            btnPlaySystem.classList.add('icon-pause');
+            btnPlaySystem.classList.remove('icon-play_arrow');
 
-            btnPlayMainpage.classList.add('icon-btn-pause-w');
-            btnPlayMainpage.classList.remove('icon-btn-play-w');
+            btnPlayMainpage.classList.add('icon-pause');
+            btnPlayMainpage.classList.remove('icon-play_arrow');
         }
     });
     btnPlaySystem.node = btnPlayMainpage.node;
