@@ -101,6 +101,65 @@
         };
     })(document.documentElement);
 
+    // a complementation of Events
+    var Emitter = function() {
+            // JH-bug: create 'event' listener
+            var _events = {};
+            this.addEvent = this.on = function( eventType,listener ) {
+                var eventArray = eventType.split(' ');
+                // handle each eventtype  that in 'play pause'
+                _.each(eventArray, function(e) {
+                    if (!_events[ e ]) {
+                        _events[e] = [];
+                        _events[e].push( listener );
+                    }
+                    else {
+                        var list = _events[e];
+                        var alreadyIn = false;
+                        _.each(list, function(fn) {
+                            if (listener === fn) { alreadyIn = true; }
+                        });
+
+                        if (! alreadyIn ) {
+                            list.push(listener);
+                        }
+                    }
+                });
+            };
+            this.trigger = function( eventType,msg ) {
+                var list = _events[ eventType ];
+                if (!list || list.length === 0) { return false; }
+                _.each(list, function(fn) {
+                    if (!_.isObject(msg)) {
+                        fn( {type: eventType} );
+                    }
+                    else {
+                        fn( _.extend(msg, {type: eventType}) );
+                    }
+                });
+            };
+            this.removeEvent = this.off = function( eventType,listener ) {
+                var eventArray = eventType.split(' ');
+                _.each(eventArray, function(e) {
+                    var list = _events[ e ];
+                    if (!list || list.length === 0) { return false; }
+
+                    if (listener === undefined) { _events[ e ] = []; return false;}
+                    _events[ e ] = _.filter(list,
+                        function(fn) {
+                            if (fn !== listener) { return true; }
+                        });
+                });
+            };
+            return this;
+    };
+    // a static method on Emitter
+    Emitter.attachTo = function( o ) {
+        if(!_.isObject(o)) { return false; }
+        Emitter.call(o);
+        return o;
+    };
+
 
     var LocalFileList = function() {
 
@@ -325,6 +384,9 @@
                     me.size = file.size;
                     me.type = file.type;
 
+                    // add event emitter on Song
+                    Emitter.attachTo( me );
+
                     // analyseFilename for SongList update information
                     me.analyseFilename(); // filling title,artist
 
@@ -478,8 +540,6 @@
                 var tagTotalTime = $('#tag-totalTime'),
                     format = NS.util.formatTimestamp;
 
-                // view works
-                NS.dom.viewDisk.node.turnOn();
                 // console.warn(me.title + me.artist);
                 NS.dom.tagSongMessage.node.update( me.title, me.artist );
                 // JH-bugs: me.artist is not defined
@@ -496,6 +556,7 @@
                         tagTotalTime.innerHTML = format( me.duration );
 
                         me.timeupdate();
+                        me.trigger('play',{title: me.title});
 
                         me.PAUSED = false;
                         me.STOPPED = false;
@@ -513,6 +574,7 @@
 
                             me.currentTime = 0;
                             me.timeupdate();
+                            me.trigger('play',{title: me.title});
                         });
                         return me;
                     }
@@ -530,6 +592,7 @@
 
                         me.currentTime = 0;
                         me.timeupdate();
+                        me.trigger('play',{title: me.title});
                     }
                     else {
                         // use connect to handle all asynchronous functions
@@ -541,6 +604,7 @@
 
                             me.currentTime = 0;
                             me.timeupdate();
+                            me.trigger('play',{title: me.title});
                         });
                     }
 
@@ -588,6 +652,7 @@
 
                     me.output.disconnect();
                     me.bufferSourceNode.stop(0);
+                    me.trigger('stop',{title: me.title});
                 }
                 return me;
             },
@@ -601,6 +666,7 @@
 
                 cancelAnimationFrame( me.__timer );
                 me.__TIMEUPDATE = false;
+                me.trigger('pause',{title: me.title});
 
                 return me;
             },
@@ -647,52 +713,11 @@
             return song && song.constructor && song.constructor === Song;
         };
 
-        // a complementation of Events
-        var Emitter = function() {
-                // JH-bug: create 'event' listener
-                var _events = {};
-                this.addEvent = this.on = function( eventType,listener ) {
-                    if (!_events[ eventType ]) {
-                        _events[eventType] = [];
-                        _events[eventType].push( listener );
-                    }
-                    else {
-                        var list = _events[eventType];
-                        var alreadyIn = false;
-                        _.each(list, function(fn) {
-                            if (listener === fn) { alreadyIn = true; }
-                        });
-
-                        if (! alreadyIn ) {
-                            list.push(listener);
-                        }
-                    }
-                };
-                this.trigger = function( eventType,msg ) {
-                    var list = _events[ eventType ];
-                    if (!list || list.length === 0) { return false; }
-                    _.each(list, function(fn) {
-                        fn( msg );
-                    });
-                };
-                this.removeEvent = this.off = function( eventType,listener ) {
-                    var list = _events[ eventType ];
-                    if (!list || list.length === 0) { return false; }
-
-                    if (listener === undefined) { _events[ eventType ] = []; return false;}
-                    _events[ eventType ] = _.filter(list,
-                        function(fn) {
-                            if (fn !== listener) { return true; }
-                        });
-
-                    };
-                return this;
-            }
-
         // extendable songlist
         var SongList = function() {
             var songlist = [];
-            Emitter.call(songlist);
+            // add events emitter on songlist
+            Emitter.attachTo(songlist);
 
             songlist.pre = 0;
             songlist.next = 1; // index for next one
@@ -732,26 +757,34 @@
                 }
             });
 
-            songlist.push = function() { // overwrite native Array.push to fulfill testing
-                _.each(arguments, function(value) {
-                    if ( isSong(value) && value.states.init ) {
-                        Array.prototype.push.call(songlist, value);
-                        value.analyseFilename();
+            // overwrite native Array.push to fulfill testing
+            songlist.push = function() {
+                var me = songlist;
+                _.each(arguments, function(song) {
+                    if ( isSong(song) && song.states.init ) {
+                        Array.prototype.push.call(me, song);
+                        song.analyseFilename();
 
                         // callback functions when update
-                        if (typeof(songlist.output) === 'function') {
-                            songlist.output( songlist.message() );
+                        if (typeof(me.output) === 'function') {
+                            me.output( me.message() );
                         }
 
-                        songlist.trigger('push',{title: value.title});
-                        return songlist;
+                        me.trigger('push',{title: song.title});
+                        song.on('play pause stop', function(e) {
+                            me.trigger(e.type, e);
+                        });
+                        return me;
                     }
                     console.warn('You\'re trying to push a object not Song instance or uninit Song to SongList');
-                    return songlist;
+                    return me;
                 });
             };
+
+            // this function will be complemented when this songlist is binded
             songlist.output = function() {};
 
+            // generate song messages in this list
             songlist.message = function( itemCount ) {
                 var songMessage = [];
                 songlist.forEach(function(song) {
@@ -761,7 +794,7 @@
                     }); // every Song will invoke Song.analyseFilename() before push into SongList
                 });
                 return songMessage;//.splice(0, itemCount > 0? itemCount: undefined);
-            };
+            }; // songlist.message ends
 
             // private function to generate next song index by songlist.mode
             var _songlist = {
@@ -818,6 +851,7 @@
                     songlist.pre = this.pre();
                 },
             }; // only store index of songs
+
             songlist.on('push', function(){
                 _songlist.init();
             });
@@ -852,14 +886,28 @@
                 _nextsong( index );
 
                 Toast.log('next song: ' + me[index].title );
+
                 $('#menu-songlist').node.current( index );
             };
-            // JH-todo: songlist should has a modes and playNext should add supports to that
-            songlist.playNext = function() { songlist.play(songlist.next); };
-            songlist.playPre = function()  { songlist.play( songlist.pre ); };
+            songlist.playNext = function() {
+                var me = songlist;
+                var index = songlist.next;
+                songlist.play( index );
+
+                me.trigger( 'playnext',
+                        {index: index, title: me[index].title});
+            };
+            songlist.playPre = function() {
+                var me = songlist;
+                var index = songlist.pre;
+                songlist.play( index );
+
+                me.trigger( 'playprevious',
+                        {index: index, title: me[index].title});
+            };
 
             return songlist;
-        };
+        }; // end of SongList
 
         return {
             Song: Song, // Song creator function
@@ -1485,13 +1533,14 @@
     }());
 
     ns.util = {
-        formatTimestamp: formatTimestamp,
-        preloadImage:    preloadImage,
-        isFile:          isFile,
-        isOneFile:       isOneFile,
-        isLyric:         isLyric,
-        router:          Router,
-        createStyle:     createStyle,
+        formatTimestamp:formatTimestamp,
+        preloadImage:   preloadImage,
+        isFile:         isFile,
+        isOneFile:      isOneFile,
+        isLyric:        isLyric,
+        createStyle:    createStyle,
+        Emitter:        Emitter,
+        router:         Router,
     };
 })(window);
 

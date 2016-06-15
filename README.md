@@ -21,9 +21,9 @@ And you're welcome to fork and issue whatever come up in your mind.
 7. more **UI** besides NetEase one.
 9. **Online Engine** lyric search Engine or Song message search Engine, further album cover search engine
 11. **"Functional HTML DOM Elements"** constructions
-12. **Event-Driven** or **State-Driven** mode.
 
 
+- [x] **Event-Driven** or **State-Driven** mode.
 - [x] **Canvas**: visual display of music.
 - [x] **History API** for using return button on browsers to route between each page and menu
 - [x] **Alternate Plan** make AJAX audio loading as a alternate plan when user device don't support AudioContext    
@@ -47,6 +47,8 @@ And you're welcome to fork and issue whatever come up in your mind.
     - [x] songlist: play-modes, counts
     - [x] song.timeOffset records ctx.currentTime when song begin
     - [x] requestAnimationFrame() to update audio time19. - [ ] open-screen animation :::: need more tests
+03. **Event-Driven** Emitter need add listenTo or others method
+
 
 <hr>
 
