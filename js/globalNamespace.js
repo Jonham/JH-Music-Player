@@ -420,7 +420,7 @@
                 // main work
                 me.ASYNCHRONOUS = true;
 
-                Toast.log('reading file: ' + me.fileName);
+                Toast.log('reading file: ' + me.fileName, 10);
                 var fr = new FileReader();
                 fr.readAsArrayBuffer( me._file );
                 fr.onload = function(e) {
@@ -451,7 +451,7 @@
                 // main work
                 me.ASYNCHRONOUS = true;
                 // decode using AudioContext
-                Toast.log('decoding audio: ' + me.title);
+                Toast.log('decoding audio: ' + me.title, 10);
                 ctx.decodeAudioData(me._buffer, function( audioBuffer ) {
                     me._audioBuffer = audioBuffer;
                     me.states.decode = true;
