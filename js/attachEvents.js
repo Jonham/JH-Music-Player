@@ -49,12 +49,12 @@ var attachDOMElementEvents = function() {
                     if (me.state) {
                         $('#lyric').style.display = 'none';
                         this.innerHTML = '显示歌词';
-                        NS.audio.visualizer.setColor('white');
+                        // NS.audio.visualizer.setColor('white');
                     }
                     else {
                         $('#lyric').style.display = '';
                         this.innerHTML = '关闭歌词';
-                        NS.audio.visualizer.setColor();
+                        // NS.audio.visualizer.setColor();
                     }
                     me.state = !me.state;
                 },
