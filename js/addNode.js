@@ -527,9 +527,12 @@ var addDOMElementNodeProperty = function() {
             var removeSubfix = function(v) {
                 if (!_.isString(v) ) { return v; }
                 var r = v.split('.');
-                if (r[ r.length-1 ].length > 3) { // subfix must less than 3 charactors
+                // if it's just a string
+                if (r.length === 1) { return v; }
+                if (r[ r.length-1 ].length !== 3) { // subfix must less than 3 charactors
                     return r.join('.');
-                } else {
+                }
+                else { // if it's with '.mp3', pop '.mp3' out
                     r.pop();
                     return r.join('.');
                 }

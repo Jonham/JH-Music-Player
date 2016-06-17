@@ -16,7 +16,8 @@ $click(btnTryout, function(e) {
         xhr.onerror = function(e) { throw Error( e.toString() ); };
         if (responseType) { xhr.responseType = responseType; }
         xhr.send();
-    }
+    };
+    
     if (btnTryoutState) {
         btnTryoutState = false;
 
