@@ -1362,7 +1362,7 @@
             // setup for scroll lyrics
             var offsetTop = "";
             var lyricHightlightOriginTop = 160;
-            var OFFSET = 0; // for lyric to show earlier
+            var OFFSET = 0.5; // for lyric to show earlier
 
             me.bindLyric(lyric, function() { me.bindView( me.defaults.currentView ); });
 
