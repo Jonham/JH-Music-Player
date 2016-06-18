@@ -39,8 +39,8 @@ And you're welcome to fork and issue whatever come up in your mind.
         **Solution**: the crack down on both browser may due to the fact that browser receive unhandled errors.I've catch errors both in rangeTime and rangeVolume.
     - [x] onResize() don't work on browser don't support AudioContext
 02. **Song** and **SongList**
+    - [ ] **!IMPROTANT** songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
     - [x] songlist **mode** detail completion
-    - [x] songlist occur when playing in mobile device, which loading file will take more time, that all songs don't play but just looping between others
     - [x] play multi songs when user click .nextSong btn for many times before last song asynchronous actions ready
     - [x] songlist .next, .play, .pause, .stop ...
     - [x] songlist .playNext, .playPre and related songlist.next and songlist.pre
