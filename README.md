@@ -1,4 +1,5 @@
-# JH Music Player _(jh-lrc)_
+# JH Music Player
+_(former name as jh-lrc)_
 JH Music Player use _Modern Browsers_ feature *AudioContext* and *FileReader* to make a web-base music player that can load lyric, audio, image[album cover] files from local file system.    
 You can simply drag files to the browser when you're using desktop browsers, or use _File-Input button_ to add your files on your phones.     
 
